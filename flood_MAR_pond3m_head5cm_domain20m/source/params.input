@@ -1,0 +1,73 @@
+[Problem]
+Name = floodmar_pond3m_head5cm_720h
+InitialOxygenProfileFile = oxygen_initial_2880.dat
+PondStartupRampTime = 3600
+AtmosphericOxygenDiffusionCoefficient = 1e-6
+AtmosphericGasPressureFactor = 1.0
+
+[Grid]
+File = floodmar_pond.msh
+Verbose = true
+
+[TimeLoop]
+# Three recharge/drainage cycles; all values are seconds.
+TEnd = 2592000
+DtInitial = 1.08
+MaxTimeStepSize = 60
+OutputInterval = 21600
+
+[Newton]
+MaxRelativeShift = 1e-7
+MaxSteps = 18
+
+[LinearSolver]
+ResidualReduction = 1e-8
+
+[Vtk]
+AddVelocity = true
+
+[SpatialParams]
+Temperature = 298.15
+
+[SpatialParams.Sand1]
+Swr = 0.12737
+Snr = 0.0
+VanGenuchtenAlpha = 3.2631e-4
+VanGenuchtenN = 3.47614
+VanGenuchtenL = 0.5
+
+[SpatialParams.LoamySand]
+Swr = 0.11077
+Snr = 0.0
+VanGenuchtenAlpha = 3.9769e-4
+VanGenuchtenN = 2.03252
+VanGenuchtenL = 0.5
+
+[SpatialParams.Sand2]
+Swr = 0.12576
+Snr = 0.0
+VanGenuchtenAlpha = 7.2400e-4
+VanGenuchtenN = 3.01351
+VanGenuchtenL = 0.5
+
+[SpatialParams.Loam]
+Swr = 0.13300
+Snr = 0.0
+VanGenuchtenAlpha = 1.0197e-4
+VanGenuchtenN = 1.49217
+VanGenuchtenL = 0.5
+
+[SpatialParams.SandyLoam]
+Swr = 0.13203
+Snr = 0.0
+VanGenuchtenAlpha = 2.0394e-4
+VanGenuchtenN = 1.40886
+VanGenuchtenL = 0.5
+
+[SpatialParams.Sand3]
+Swr = 0.11077
+Snr = 0.0
+VanGenuchtenAlpha = 3.5690e-4
+VanGenuchtenN = 2.03252
+VanGenuchtenL = 0.5
+
