@@ -1,0 +1,63 @@
+<?xml version="1.0"?> 
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian"> 
+<Collection> 
+<DataSet timestep="0" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00000.vtu"/> 
+<DataSet timestep="21618.3" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00001.vtu"/> 
+<DataSet timestep="43200" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00002.vtu"/> 
+<DataSet timestep="64828.9" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00003.vtu"/> 
+<DataSet timestep="86764.2" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00004.vtu"/> 
+<DataSet timestep="108048" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00005.vtu"/> 
+<DataSet timestep="129660" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00006.vtu"/> 
+<DataSet timestep="151288" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00007.vtu"/> 
+<DataSet timestep="172877" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00008.vtu"/> 
+<DataSet timestep="194520" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00009.vtu"/> 
+<DataSet timestep="216023" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00010.vtu"/> 
+<DataSet timestep="237612" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00011.vtu"/> 
+<DataSet timestep="259262" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00012.vtu"/> 
+<DataSet timestep="280901" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00013.vtu"/> 
+<DataSet timestep="302535" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00014.vtu"/> 
+<DataSet timestep="324050" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00015.vtu"/> 
+<DataSet timestep="345600" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00016.vtu"/> 
+<DataSet timestep="367300" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00017.vtu"/> 
+<DataSet timestep="388810" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00018.vtu"/> 
+<DataSet timestep="410633" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00019.vtu"/> 
+<DataSet timestep="432335" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00020.vtu"/> 
+<DataSet timestep="453671" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00021.vtu"/> 
+<DataSet timestep="475289" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00022.vtu"/> 
+<DataSet timestep="496819" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00023.vtu"/> 
+<DataSet timestep="518491" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00024.vtu"/> 
+<DataSet timestep="540154" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00025.vtu"/> 
+<DataSet timestep="561713" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00026.vtu"/> 
+<DataSet timestep="583344" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00027.vtu"/> 
+<DataSet timestep="604932" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00028.vtu"/> 
+<DataSet timestep="626694" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00029.vtu"/> 
+<DataSet timestep="648085" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00030.vtu"/> 
+<DataSet timestep="669875" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00031.vtu"/> 
+<DataSet timestep="691475" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00032.vtu"/> 
+<DataSet timestep="713075" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00033.vtu"/> 
+<DataSet timestep="734675" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00034.vtu"/> 
+<DataSet timestep="756275" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00035.vtu"/> 
+<DataSet timestep="777875" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00036.vtu"/> 
+<DataSet timestep="799475" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00037.vtu"/> 
+<DataSet timestep="821075" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00038.vtu"/> 
+<DataSet timestep="842675" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00039.vtu"/> 
+<DataSet timestep="864000" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00040.vtu"/> 
+<DataSet timestep="885603" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00041.vtu"/> 
+<DataSet timestep="907271" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00042.vtu"/> 
+<DataSet timestep="929049" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00043.vtu"/> 
+<DataSet timestep="950853" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00044.vtu"/> 
+<DataSet timestep="972278" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00045.vtu"/> 
+<DataSet timestep="993785" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00046.vtu"/> 
+<DataSet timestep="1.01538e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00047.vtu"/> 
+<DataSet timestep="1.03704e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00048.vtu"/> 
+<DataSet timestep="1.05863e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00049.vtu"/> 
+<DataSet timestep="1.0805e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00050.vtu"/> 
+<DataSet timestep="1.10218e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00051.vtu"/> 
+<DataSet timestep="1.12339e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00052.vtu"/> 
+<DataSet timestep="1.14499e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00053.vtu"/> 
+<DataSet timestep="1.16659e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00054.vtu"/> 
+<DataSet timestep="1.18803e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00055.vtu"/> 
+<DataSet timestep="1.2096e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00056.vtu"/> 
+<DataSet timestep="1.23121e+06" group="" part="0" name="" file="drywell_d122cm_umfpack_chopped_robust_4d6d_720h-00057.vtu"/> 
+</Collection> 
+</VTKFile> 
