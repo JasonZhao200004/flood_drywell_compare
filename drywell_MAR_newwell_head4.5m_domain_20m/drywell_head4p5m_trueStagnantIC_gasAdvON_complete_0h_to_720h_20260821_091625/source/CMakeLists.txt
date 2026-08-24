@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+add_input_file_links(FILES
+    params.input
+    floodmar_nonames.msh
+    oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+)
+dumux_add_test(
+    NAME floodmar_head4p5m_hydrusmatch_trueStagnant
+    LABELS porousmediumflow 2pnc floodmar dispersion hydrusmatch stagnant_o2
+    SOURCES main_hydrusmatch.cc
+    COMPILE_DEFINITIONS TYPETAG=FloodMarHydrusMatch
+    COMMAND floodmar_head4p5m_hydrusmatch_trueStagnant
+    CMD_ARGS params.input
+)
+target_link_libraries(floodmar_head4p5m_hydrusmatch_trueStagnant PRIVATE Dune::UGGrid)
+
+dumux_add_test(
+    NAME floodmar_head4p5m_trueStagnantIC_gasAdvON
+    LABELS porousmediumflow 2pnc floodmar dispersion gas_advection oxygenIC
+    SOURCES main_gasAdvON.cc
+    COMPILE_DEFINITIONS TYPETAG=FloodMar
+    COMMAND floodmar_head4p5m_trueStagnantIC_gasAdvON
+    CMD_ARGS params.input
+)
+
+target_link_libraries(
+    floodmar_head4p5m_trueStagnantIC_gasAdvON
+    PRIVATE
+    Dune::UGGrid
+)
+
+
+# Restart-capable robust 4.5 m drywell executable.
+dumux_add_test(
+    NAME floodmar_head4p5m_trueStagnantIC_gasAdvON_restart_v4
+    SOURCES main_umfpack_chopped_restart_v4.cc
+)
+
+target_link_libraries(
+    floodmar_head4p5m_trueStagnantIC_gasAdvON_restart_v4
+    PRIVATE
+    Dune::UGGrid
+)
+
+target_compile_definitions(
+    floodmar_head4p5m_trueStagnantIC_gasAdvON_restart_v4
+    PRIVATE
+    TYPETAG=FloodMarRestartV4
+)

@@ -1,0 +1,17 @@
+HYDRUS to DuMuX oxygen IC conversion
+=====================================
+HYDRUS mesh: /home/zhe_zhao/hydrus_12m_ic_conversion/Meshtria.txt
+HYDRUS concentration: /home/zhe_zhao/hydrus_12m_ic_conversion/Conc1.TXT
+HYDRUS first time: 0.0
+HYDRUS parser: packed
+Input and output concentration unit: g/cm3
+HYDRUS node count: 24384
+DuMuX profile rows: 601
+DuMuX elevation range: 0..30 m
+New IC min: 1.291825e-12 g/cm3
+New IC max: 8.17946e-06 g/cm3
+New IC p99: 7.74317e-06 g/cm3
+Old IC p99: 6.449168841e-06 g/cm3
+Profile RMSE versus old IC: 8.711789605e-07 g/cm3
+Largest depth-bin radial p95-p05 spread: 1.701125e-07 g/cm3
+Output: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/formalmodel_dispersion_d122cm_radius20m_head12m/oxygen_initial_hydrus_0h.dat
