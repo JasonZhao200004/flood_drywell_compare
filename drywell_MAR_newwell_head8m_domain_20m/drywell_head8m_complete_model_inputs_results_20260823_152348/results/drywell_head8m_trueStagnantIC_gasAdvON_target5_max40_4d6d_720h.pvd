@@ -1,0 +1,9 @@
+<?xml version="1.0"?> 
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian"> 
+<Collection> 
+<DataSet timestep="0" group="" part="0" name="" file="drywell_head8m_trueStagnantIC_gasAdvON_target5_max40_4d6d_720h-00000.vtu"/> 
+<DataSet timestep="21610.8" group="" part="0" name="" file="drywell_head8m_trueStagnantIC_gasAdvON_target5_max40_4d6d_720h-00001.vtu"/> 
+<DataSet timestep="43200" group="" part="0" name="" file="drywell_head8m_trueStagnantIC_gasAdvON_target5_max40_4d6d_720h-00002.vtu"/> 
+<DataSet timestep="64817.2" group="" part="0" name="" file="drywell_head8m_trueStagnantIC_gasAdvON_target5_max40_4d6d_720h-00003.vtu"/> 
+</Collection> 
+</VTKFile> 
