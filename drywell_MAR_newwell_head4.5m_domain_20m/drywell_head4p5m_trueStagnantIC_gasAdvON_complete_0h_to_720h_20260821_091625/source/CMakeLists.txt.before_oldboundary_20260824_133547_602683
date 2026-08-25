@@ -47,24 +47,3 @@ target_compile_definitions(
     PRIVATE
     TYPETAG=FloodMarRestartV4
 )
-
-# Controlled old-boundary comparison: all current 20 m model mechanisms are
-# retained; only the drywell wall returns to the legacy whole-face midpoint
-# wet/dry rule.
-dumux_add_test(
-    NAME floodmar_head4p5m_oldboundary_gasAdvON_restart_v4
-    SOURCES main_oldboundary_restart_v4.cc
-)
-
-target_link_libraries(
-    floodmar_head4p5m_oldboundary_gasAdvON_restart_v4
-    PRIVATE
-    Dune::UGGrid
-)
-
-target_compile_definitions(
-    floodmar_head4p5m_oldboundary_gasAdvON_restart_v4
-    PRIVATE
-    TYPETAG=FloodMarOldBoundaryRestartV4
-)
-
