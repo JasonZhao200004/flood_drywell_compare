@@ -1,0 +1,29 @@
+8 m HEAD — 720 h PRODUCTION RUN SUMMARY
+==========================================
+
+Completion status:
+COMPLETE
+
+Simulation:
+0–720 h
+
+Original output files:
+721 VTUs
+
+Archived output:
+121 VTUs
+0–720 h every 6 h
+
+Solver final check:
+Newton failures = 9
+Linear failures = 0
+Fatal-like messages = 0
+
+The archived VTUs are the nearest original DuMuX
+outputs to the nominal 6 h target times.
+
+No spatial or temporal interpolation was used to
+modify the archived VTU fields.
+
+See TIME_MAPPING_6h.tsv for the precise simulation
+time represented by each archived file.

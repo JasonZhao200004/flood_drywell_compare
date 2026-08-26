@@ -1,0 +1,74 @@
+8 m HEAD — FINAL 720 h PRODUCTION RUN
+========================================
+
+Executable used:
+
+floodmar_head4p5m_oldboundary_gasAdvON_phaseguard_v2_facedisp
+
+Runtime overrides:
+
+-Grid.File floodmar_nonames.msh
+-Restart.Enable false
+-Problem.Name drywell_head8m_phaseguardV2_faceSymDisp_gasAdvON_720h_1h
+-Problem.InitialOxygenProfileFile oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+-Problem.DrywellInjectionHead 800
+-Problem.DrywellStartupRampTime 1800
+
+-Problem.EnableGasPhaseOxygenAdvection true
+
+-Dispersion.LongitudinalDispersivity 0.50
+-Dispersion.TransverseDispersivity 0.05
+-Dispersion.ApplyToGasPhase false
+-Dispersion.IncludeDrywellBoundaryVelocity false
+
+-TimeLoop.TEnd 2592000
+-TimeLoop.DtInitial 1.08
+-TimeLoop.MaxTimeStepSize 360
+-TimeLoop.OutputInterval 3600
+
+-Newton.MaxRelativeShift 1e-4
+-Newton.MaxSteps 18
+-Newton.MaxTimeStepDivisions 15
+-Newton.TargetSteps 6
+-Newton.UseLineSearch false
+
+-Newton.EnableChop true
+-Newton.ChopMaxPressureChange 2e4
+-Newton.ChopMaxSaturationChange 0.10
+-Newton.ChopMaxLiquidMoleFractionChange 1e-5
+-Newton.ChopMaxGasMoleFractionChange 0.05
+-Newton.ChopSaturationBuffer 0
+
+-PrimaryVariableSwitch.GasAppearanceTolerance 0.02
+-PrimaryVariableSwitch.LiquidAppearanceTolerance 0.02
+-PrimaryVariableSwitch.AppearanceSaturation 1e-4
+-PrimaryVariableSwitch.Verbosity 0
+
+-LinearSolver.ResidualReduction 1e-8
+-Vtk.Precision Float64
+
+
+KEY CASE DEFINITION
+===================
+
+Drywell injection head = 800 cm = 8.0 m above drywell bottom.
+
+Drywell bottom:
+z = 14 m
+
+Maximum imposed water-surface elevation:
+z = 22 m
+
+Ground surface:
+z = 30 m
+
+Therefore maximum drywell water level is approximately:
+8 m below ground surface.
+
+Gas O2 advection = ON.
+PhaseGuard V2 = ON.
+Face-symmetric CCTpfa mechanical dispersion = ON.
+alphaL = 0.50 m.
+alphaT = 0.05 m.
+Gas mechanical dispersion = OFF.
