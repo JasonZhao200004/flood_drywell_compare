@@ -1,0 +1,16 @@
+*.log
+*.out
+*.err
+
+.DS_Store
+Thumbs.db
+*~
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+*.o
+*.so
+*.dylib
