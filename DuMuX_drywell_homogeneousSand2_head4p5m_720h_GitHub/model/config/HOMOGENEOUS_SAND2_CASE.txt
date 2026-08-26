@@ -1,0 +1,50 @@
+HOMOGENEOUS SAND2 DRYWELL SENSITIVITY CASE
+============================================
+
+Material:
+Entire domain = original Layer 3 / Sand2
+
+Hydraulic properties:
+Intrinsic permeability = 1.925e-12 m2
+Porosity               = 0.381022
+
+Van Genuchten:
+alpha = 7.2400e-4 1/Pa
+n     = 3.01351
+l     = 0.5
+Swr   = 0.12576
+Snr   = 0.0
+
+Initial water content:
+Uniform over entire domain
+
+theta_w(t=0) = 0.116926651515 m3/m3
+
+Definition:
+Depth-average of the ORIGINAL layered model's
+Layer-3 / Sand2 initial water content over
+11.5–17.5 m below ground surface.
+
+Equivalent Sand2 initial pressure head:
+-29.770236344729 cm
+
+Oxygen initial condition:
+UNCHANGED
+
+oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+Formal physics retained:
+- Gas O2 advection ON
+- PhaseGuard V2
+- Face-symmetric CCTpfa mechanical dispersion
+- alphaL = 0.50 m
+- alphaT = 0.05 m
+- Gas mechanical dispersion OFF
+
+Drywell:
+head = 450 cm = 4.5 m
+
+Schedule:
+4 d wet + 6 d drain
+3 cycles
+720 h total

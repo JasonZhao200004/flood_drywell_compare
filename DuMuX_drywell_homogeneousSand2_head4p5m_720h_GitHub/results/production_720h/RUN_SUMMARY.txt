@@ -1,0 +1,74 @@
+HOMOGENEOUS SAND2 — 720 h RUN SUMMARY
+=======================================
+
+STATUS
+------
+
+COMPLETE
+
+
+MODEL
+-----
+
+Entire domain:
+Original Layer-3 / Sand2 texture
+
+Initial volumetric water content:
+0.116926652 m3/m3 everywhere
+
+Equivalent initial pressure head:
+-29.770236345 cm
+
+O2 IC:
+Original validated 2-D TRUE-stagnant O2 IC
+(unchanged)
+
+
+OPERATION
+---------
+
+Drywell head:
+4.5 m
+
+Schedule:
+4 d wet + 6 d drain
+
+Cycles:
+3
+
+Simulation duration:
+720 h
+
+
+OUTPUT
+------
+
+Original PVD datasets:
+721
+
+Archived VTUs:
+121
+
+Archive times:
+0, 6, 12, ..., 720 h
+
+Maximum archive time offset:
+5.500000000 min
+
+No temporal or spatial interpolation was applied
+to archived VTU fields.
+
+
+SOLVER
+------
+
+Newton failures:
+11
+
+Linear failures:
+0
+
+Fatal/abort/exception messages:
+0
+
+The simulation reached 720 h and terminated normally.

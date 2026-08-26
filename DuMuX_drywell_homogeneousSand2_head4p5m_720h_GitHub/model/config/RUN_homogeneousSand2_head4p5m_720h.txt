@@ -1,0 +1,199 @@
+HOMOGENEOUS SAND2 — 4.5 m HEAD — FINAL 720 h RUN
+===================================================
+
+Executable target
+-----------------
+
+floodmar_head4p5m_homogeneousSand2_uniformIC_phaseguard_v2_facedisp
+
+
+Problem.Name
+------------
+
+drywell_homogeneousSand2_uniformThetaIC_head4p5m_4d6d_gasAdvON_720h_1h
+
+
+GEOMETRY
+--------
+
+Axisymmetric domain radius:
+20 m
+
+Domain depth:
+30 m
+
+Ground surface:
+z = 30 m
+
+Drywell radius:
+0.61 m
+
+Drywell bottom:
+z = 14 m
+
+
+HOMOGENEOUS MATERIAL
+--------------------
+
+Entire porous-medium domain:
+Original Layer 3 / Sand2 material
+
+Intrinsic permeability:
+1.925e-12 m2
+
+Porosity:
+0.381022
+
+This replaces the original six-layer stratigraphy
+ONLY for this homogeneous sensitivity case.
+
+
+INITIAL WATER CONDITION
+-----------------------
+
+Uniform volumetric water content:
+
+theta_w = 0.116926652 m3/m3
+
+Equivalent Sand2 pressure head:
+
+h = -29.770236345 cm
+
+This value represents the mean initial water content
+of the original layered model's Layer 3 / Sand2
+interval (11.5–17.5 m below ground surface).
+
+
+INITIAL OXYGEN CONDITION
+------------------------
+
+UNCHANGED from the validated layered production model.
+
+File:
+
+oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+The original two-dimensional (r,z) TRUE-stagnant
+oxygen IC is retained.
+
+It is NOT homogenized.
+
+
+DRYWELL OPERATION
+-----------------
+
+DrywellInjectionHead:
+450 cm = 4.5 m above drywell bottom
+
+Maximum water elevation:
+z = 18.5 m
+
+Schedule:
+4 d wet + 6 d drain
+
+Cycle length:
+240 h
+
+Number of cycles:
+3
+
+Total duration:
+720 h
+
+
+TRANSPORT / NUMERICS
+--------------------
+
+Gas O2 advection:
+ON
+
+Liquid mechanical dispersion:
+ON
+
+Gas mechanical dispersion:
+OFF
+
+Longitudinal dispersivity:
+0.50 m
+
+Transverse dispersivity:
+0.05 m
+
+PhaseGuard:
+V2
+
+Mechanical dispersion:
+Face-symmetric CCTpfa formulation
+
+Drywell boundary velocity contribution to
+mechanical dispersion:
+OFF
+
+
+RUNTIME OVERRIDES
+-----------------
+
+-Grid.File floodmar_nonames.msh
+
+-Restart.Enable false
+
+-Problem.Name drywell_homogeneousSand2_uniformThetaIC_head4p5m_4d6d_gasAdvON_720h_1h
+
+-Problem.InitialOxygenProfileFile
+oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+-Problem.DrywellInjectionHead 450
+
+-Problem.DrywellStartupRampTime 1800
+
+-Problem.EnableGasPhaseOxygenAdvection true
+
+-Dispersion.LongitudinalDispersivity 0.50
+
+-Dispersion.TransverseDispersivity 0.05
+
+-Dispersion.ApplyToGasPhase false
+
+-Dispersion.IncludeDrywellBoundaryVelocity false
+
+-TimeLoop.TEnd 2592000
+
+-TimeLoop.DtInitial 1.08
+
+-TimeLoop.MaxTimeStepSize 360
+
+-TimeLoop.OutputInterval 3600
+
+-Newton.MaxRelativeShift 1e-4
+
+-Newton.MaxSteps 18
+
+-Newton.MaxTimeStepDivisions 15
+
+-Newton.TargetSteps 6
+
+-Newton.UseLineSearch false
+
+-Newton.EnableChop true
+
+-Newton.ChopMaxPressureChange 2e4
+
+-Newton.ChopMaxSaturationChange 0.10
+
+-Newton.ChopMaxLiquidMoleFractionChange 1e-5
+
+-Newton.ChopMaxGasMoleFractionChange 0.05
+
+-Newton.ChopSaturationBuffer 0
+
+-PrimaryVariableSwitch.GasAppearanceTolerance 0.02
+
+-PrimaryVariableSwitch.LiquidAppearanceTolerance 0.02
+
+-PrimaryVariableSwitch.AppearanceSaturation 1e-4
+
+-PrimaryVariableSwitch.Verbosity 0
+
+-LinearSolver.ResidualReduction 1e-8
+
+-Vtk.Precision Float64

@@ -1,0 +1,18 @@
+# Runtime logs
+*.log
+*.out
+*.err
+
+# Build products
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.o
+*.so
+*.dylib
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*~
