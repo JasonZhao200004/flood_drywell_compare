@@ -1,0 +1,96 @@
+FLOOD-MAR POND CASE
+=====================
+
+BASELINE
+--------
+
+Derived directly from the current validated layered
+drywell production model.
+
+Only pond geometry / VariHead location / injection head
+are changed.
+
+
+DOMAIN
+------
+
+Axisymmetric radius:
+20 m
+
+Depth:
+30 m
+
+Six original soil layers:
+UNCHANGED
+
+
+POND GEOMETRY
+-------------
+
+Radius:
+5.0 m
+
+Excavation depth:
+0.10 m
+
+Ground elevation:
+z = 30.00 m
+
+Pond bottom:
+z = 29.90 m
+
+
+POND HEAD
+---------
+
+Injection head:
+5 cm above pond bottom
+
+Water elevation:
+z = 29.95 m
+
+
+VARIHEAD BOUNDARY
+-----------------
+
+Horizontal pond bottom:
+r = 0 to 5 m
+z = 29.90 m
+
+Vertical pond side:
+ONLY lower 5 cm:
+r = 5 m
+z = 29.90 to 29.95 m
+
+Upper pond side:
+r = 5 m
+z = 29.95 to 30.00 m
+NO-FLOW
+
+
+UNCHANGED FROM DRYWELL PRODUCTION MODEL
+---------------------------------------
+
+- six-layer stratigraphy
+- hydraulic parameters
+- initial water condition
+- 2-D TRUE-stagnant O2 initial condition
+- atmospheric gas/O2 boundary on land surface
+- bottom free drainage
+- outer no-flow boundary
+- symmetry axis
+- O2 inflow concentration
+- O2 reaction
+- gas O2 advection ON
+- liquid molecular diffusion
+- gas molecular diffusion
+- liquid mechanical dispersion
+- gas mechanical dispersion OFF
+- alphaL = 0.50 m
+- alphaT = 0.05 m
+- PhaseGuard V2
+- face-symmetric CCTpfa dispersion
+- 30-minute startup ramp
+- 4 d wet / 6 d drain schedule
+- 5-hour wet/drain transitions
+- 3-cycle 720 h production design

@@ -1,0 +1,78 @@
+DuMuX Flood-MAR production case
+===============================
+
+Run name:
+floodmar_pond5m_depth10cm_head5cm_layered_4d6d_smooth5to0_fluxSmooth0p5cm_gasAdvON_720h_1h
+
+Geometry
+--------
+Axisymmetric domain:
+r = 0–20 m
+z = 0–30 m
+
+Pond radius:
+5.0 m
+
+Pond excavation depth:
+0.10 m
+
+Pond bottom elevation:
+z = 29.90 m
+
+Injection ponding head:
+5 cm above pond bottom
+
+Water surface at full ponding:
+z = 29.95 m
+
+Hydraulic boundary
+------------------
+Pond bottom:
+r = 0–5 m, z = 29.90 m
+
+Wetted pond side:
+r = 5 m, z = 29.90–29.95 m
+
+Head schedule:
+4 d wet / 6 d drainage cycle
+
+Drain transition:
+5 cm -> 0 cm smoothstep over 5 h
+
+Dry state:
+-25 cm
+
+Robin-flux dryout regularization:
+0.5 cm smooth transition to zero liquid flux
+
+Physics
+-------
+Original six soil layers
+
+Gas-phase O2 advection:
+ON
+
+Liquid mechanical dispersion:
+alpha_L = 0.50 m
+alpha_T = 0.05 m
+
+Gas mechanical dispersion:
+OFF
+
+O2 initial condition:
+TRUE-stagnant 2880 h pre-equilibrated O2 IC
+
+Numerics
+--------
+TEnd = 720 h
+MaxDt = 360 s
+Original output interval ≈ 1 h
+
+This package contains:
+- source/configuration files
+- initial-condition file if located
+- full run log
+- original full PVD
+- 0, 6, 12, ..., 720 h VTU snapshots
+- filtered 6 h PVD
+- nominal-to-actual output-time mapping
