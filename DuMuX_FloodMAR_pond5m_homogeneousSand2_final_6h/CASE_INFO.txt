@@ -1,0 +1,251 @@
+DuMuX Flood-MAR homogeneous Sand2 production sensitivity
+=========================================================
+
+Run name
+--------
+floodmar_pond5m_depth10cm_head5cm_homogeneousSand2_uniformThetaIC_4d6d_smooth5to0_fluxSmooth0p5cm_gasAdvON_720h_1h
+
+Executable target
+-----------------
+floodmar_pond5m_depth10cm_head5cm_homogeneousSand2_uniformIC_phaseguard_v2_facedisp
+
+
+GEOMETRY
+========
+
+Axisymmetric domain:
+r = 0–20 m
+z = 0–30 m
+
+Original ground surface:
+z = 30.00 m
+
+Pond radius:
+5.0 m
+
+Pond excavation depth:
+0.10 m
+
+Pond bottom:
+z = 29.90 m
+
+Maximum ponding head:
+5 cm
+
+Maximum water-surface elevation:
+z = 29.95 m
+
+
+HYDRAULIC BOUNDARY
+==================
+
+Wet pond bottom:
+r = 0–5 m, z = 29.90 m
+
+Wet vertical pond side:
+r = 5 m, z = 29.90–29.95 m
+
+Upper 5 cm pond wall:
+zero liquid flux
+
+Bottom domain boundary:
+free drainage
+
+Outer radial boundary:
+no flow
+
+Axis:
+axisymmetric no-flow condition
+
+
+TIME SCHEDULE
+=============
+
+Wet / drain schedule:
+4 d wet / 6 d drain
+
+Nominal full-head period:
+5 cm ponding
+
+Drain transition:
+5 cm -> 0 cm cubic smoothstep over 5 h
+
+Dry state:
+-25 cm
+
+Refill:
+0 cm -> 5 cm cubic smoothstep over 5 h
+
+Startup ramp:
+1800 s
+
+Liquid Robin dry-out regularization:
+final 0.5 cm
+
+For 0 < h < 0.5 cm:
+m = 3 s^2 - 2 s^3
+s = h / 0.5 cm
+
+For h >= 0.5 cm:
+m = 1
+
+For h <= 0:
+m = 0
+
+
+SOIL
+====
+
+Whole model domain:
+Homogeneous Sand2
+
+Intrinsic permeability:
+1.925e-12 m2
+
+Porosity:
+0.381022
+
+Van Genuchten parameters:
+alpha = 7.2400e-4 1/Pa
+n     = 3.01351
+L     = 0.5
+Swr   = 0.12576
+Snr   = 0.0
+
+
+INITIAL WATER STATE
+===================
+
+Uniform initial volumetric water content:
+
+theta = 0.11692665151505993
+
+Equivalent Sand2 pressure head:
+
+h = -29.770236344729383 cm
+
+Initial liquid saturation:
+
+Sl = 0.306876378568849
+
+
+OXYGEN / TRANSPORT
+==================
+
+O2 initial condition:
+oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+The O2 t=0 field is identical to the layered Flood-MAR baseline.
+
+Gas-phase O2 Darcy advection:
+ON
+
+Liquid mechanical dispersion:
+alpha_L = 0.50 m
+alpha_T = 0.05 m
+
+Gas mechanical dispersion:
+OFF
+
+O2 reaction:
+unchanged from production layered Flood-MAR model
+
+
+NUMERICS
+========
+
+Simulation duration:
+720 h
+
+TEnd:
+2592000 s
+
+Initial dt:
+1.08 s
+
+Maximum dt:
+360 s
+
+Production output interval:
+3600 s
+
+Newton MaxRelativeShift:
+1e-4
+
+Newton MaxSteps:
+18
+
+Newton MaxTimeStepDivisions:
+15
+
+Newton TargetSteps:
+6
+
+Line search:
+OFF
+
+Newton chop:
+ON
+
+Linear solver residual reduction:
+1e-8
+
+VTK precision:
+Float64
+
+
+720 h COMPLETION QC
+===================
+
+Final simulation time:
+720 h
+
+Final step number:
+7583
+
+Newton retries:
+9
+
+Linear failures:
+0
+
+Fatal markers:
+0
+
+NaN markers:
+0
+
+PVD datasets:
+721
+
+Missing VTU:
+0
+
+Wall-clock time:
+approximately 3.754 h
+
+Overall completion:
+PASS
+
+
+PACKAGE CONTENTS
+================
+
+source/
+  source code
+  homogeneous Sand2 spatial parameters
+  mesh
+  params.input
+  CMakeLists.txt
+
+initial_conditions/
+  TRUE-stagnant 2880 h O2 IC
+
+run_info/
+  complete formal 720 h log
+  original 1 h PVD reference
+
+results_6h/
+  0, 6, 12, ..., 720 h VTUs
+  reduced 6 h PVD
+  nominal-to-actual time mapping CSV
