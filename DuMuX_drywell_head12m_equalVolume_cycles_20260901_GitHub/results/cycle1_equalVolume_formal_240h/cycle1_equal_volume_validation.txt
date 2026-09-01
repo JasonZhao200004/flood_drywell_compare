@@ -1,0 +1,12 @@
+Cycle 1 equal-volume validation
+================================
+Flood MAR target                 = 3769.844000 m3
+Requested wet cutoff             = 176.490541000 h
+Accepted timestep before cutoff  = 176.400000000 h
+Accepted timestep after cutoff   = 176.500000000 h
+Crossing timestep width          = 0.100000000 h
+Injection rate at cutoff         = 12.143190 m3/h
+Calibrated V(cut)                = 3769.843994 m3
+Numerical event envelope         = 3768.744240 to 3769.958854 m3
+Maximum relative uncertainty     = 0.029173 %
+Status                           = PASS
