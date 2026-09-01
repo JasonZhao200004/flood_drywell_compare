@@ -1,0 +1,7 @@
+Cycle 2 10-day continuous-wetting calibration
+==============================================
+Flood MAR Cycle-2 target         = 3225.5750 m3
+Drywell Cycle-2 V after 240 h wet= 2235.2815 m3
+Shortfall                        = 990.2935 m3
+Drywell Q at absolute 480 h      = 7.733535 m3/h
+Equal-volume crossing            = NOT reached within Cycle-2 10-day wetting window
