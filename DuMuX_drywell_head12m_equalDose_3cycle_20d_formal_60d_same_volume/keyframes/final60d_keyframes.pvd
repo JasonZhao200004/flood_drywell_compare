@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian">
+  <Collection>
+    <DataSet timestep="0" group="" part="0" file="initial_target0.000000h_actual0.000000h.vtu" />
+    <DataSet timestep="176.023055556" group="" part="0" file="C1_wet_end_target176.490541h_actual176.023056h.vtu" />
+    <DataSet timestep="480" group="" part="0" file="C1_cycle_end_target480.000000h_actual480.000000h.vtu" />
+    <DataSet timestep="726.011111111" group="" part="0" file="C2_wet_end_target725.850602h_actual726.011111h.vtu" />
+    <DataSet timestep="960" group="" part="0" file="C2_cycle_end_target960.000000h_actual960.000000h.vtu" />
+    <DataSet timestep="1210.05" group="" part="0" file="C3_wet_end_target1210.359144h_actual1210.050000h.vtu" />
+    <DataSet timestep="1440" group="" part="0" file="C3_cycle_end_target1440.000000h_actual1440.000000h.vtu" />
+  </Collection>
+</VTKFile>

@@ -1,0 +1,195 @@
+================================================================================
+FINAL 60-DAY RUN COMPLETENESS
+================================================================================
+PVD             : /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/build-cmake/test/porousmediumflow/2p2c/drywell_head12m_equalDose_3cycle_20d_formal/drywell_head12m_equalDose_3cycle_20d_formal_60d.pvd
+outputs         : 1441
+first time [h]  : 0.0
+last time [h]   : 1440.0
+missing VTUs    : 0
+STATUS          : COMPLETE
+
+================================================================================
+C1 O2 RECOVERY
+================================================================================
+cycle start       = 0.000000000 h
+wet end           = 176.490541000 h
+cycle end         = 480.000000000 h
+wetting duration  = 176.490541 h = 7.353773 d
+drainage duration = 303.509459 h = 12.646227 d
+wet VTU bracket   = 176.023055556 -- 177.036111111 h
+max positive O2 enrichment = 3.91328370e-06
+10% plume threshold        = 3.91328370e-07
+
+--------------------------------------------------------------------------------
+FULL POSITIVE PLUME
+--------------------------------------------------------------------------------
+cells                 = 8015
+radial range          = 0.015 to 12.497 m
+z range               = 8.264 to 26.052 m
+end-wet integral      = 4.66491530e-03
+end-cycle integral    = 2.94960380e-08
+POSITIVE RESIDUAL     = 0.000632%
+POSITIVE RECOVERY     = 99.999368%
+cells still > 1% max = 0.835933%
+cells still > 5% max = 0.037430%
+cells still > 10% max = 0.012477%
+cells below cycle-start background = 98.178415%
+
+--------------------------------------------------------------------------------
+MAIN DRYWELL PLUME (z <= 27 m)
+--------------------------------------------------------------------------------
+cells                 = 8015
+radial range          = 0.015 to 12.497 m
+z range               = 8.264 to 26.052 m
+end-wet integral      = 4.66491530e-03
+end-cycle integral    = 2.94960380e-08
+POSITIVE RESIDUAL     = 0.000632%
+POSITIVE RECOVERY     = 99.999368%
+cells still > 1% max = 0.835933%
+cells still > 5% max = 0.037430%
+cells still > 10% max = 0.012477%
+cells below cycle-start background = 98.178415%
+
+--------------------------------------------------------------------------------
+C1 MAIN-PLUME DRAINAGE TRAJECTORY
+--------------------------------------------------------------------------------
+drain +   0.000 d : residual = 100.000000%
+drain +   1.000 d : residual =  51.080048%
+drain +   2.000 d : residual =  24.481713%
+drain +   3.000 d : residual =  10.035640%
+drain +   4.000 d : residual =   0.000732%
+drain +   5.000 d : residual =   0.000047%
+drain +   6.000 d : residual =   0.000037%
+drain +   7.000 d : residual =   0.000029%
+drain +   8.000 d : residual =   0.000023%
+drain +   9.000 d : residual =   0.000018%
+drain +  10.000 d : residual =   0.000014%
+drain +  11.000 d : residual =   0.000010%
+drain +  12.000 d : residual =   0.000008%
+drain +  12.646 d : residual =   0.000632%
+
+================================================================================
+C2 O2 RECOVERY
+================================================================================
+cycle start       = 480.000000000 h
+wet end           = 725.850601953 h
+cycle end         = 960.000000000 h
+wetting duration  = 245.850602 h = 10.243775 d
+drainage duration = 234.149398 h = 9.756225 d
+wet VTU bracket   = 725.025000000 -- 726.011111111 h
+max positive O2 enrichment = 4.69605174e-06
+10% plume threshold        = 4.69605174e-07
+
+--------------------------------------------------------------------------------
+FULL POSITIVE PLUME
+--------------------------------------------------------------------------------
+cells                 = 5295
+radial range          = 0.612 to 12.477 m
+z range               = 16.732 to 27.028 m
+end-wet integral      = 3.21970169e-03
+end-cycle integral    = 1.45599116e-03
+POSITIVE RESIDUAL     = 45.221306%
+POSITIVE RECOVERY     = 54.778694%
+cells still > 1% max = 82.436261%
+cells still > 5% max = 73.238905%
+cells still > 10% max = 64.891407%
+cells below cycle-start background = 2.983947%
+
+--------------------------------------------------------------------------------
+MAIN DRYWELL PLUME (z <= 27 m)
+--------------------------------------------------------------------------------
+cells                 = 5289
+radial range          = 0.612 to 12.477 m
+z range               = 16.732 to 26.981 m
+end-wet integral      = 3.21968416e-03
+end-cycle integral    = 1.45594460e-03
+POSITIVE RESIDUAL     = 45.220106%
+POSITIVE RECOVERY     = 54.779894%
+cells still > 1% max = 82.416336%
+cells still > 5% max = 73.208546%
+cells still > 10% max = 64.851579%
+cells below cycle-start background = 2.987332%
+
+--------------------------------------------------------------------------------
+C2 MAIN-PLUME DRAINAGE TRAJECTORY
+--------------------------------------------------------------------------------
+drain +   0.000 d : residual = 100.000000%
+drain +   1.000 d : residual =  50.848360%
+drain +   2.000 d : residual =  31.449639%
+drain +   3.000 d : residual =  22.811383%
+drain +   4.000 d : residual =  20.022240%
+drain +   5.000 d : residual =  21.182150%
+drain +   6.000 d : residual =  24.916707%
+drain +   7.000 d : residual =  29.927114%
+drain +   8.000 d : residual =  35.412906%
+drain +   9.000 d : residual =  41.038457%
+drain +   9.756 d : residual =  45.220106%
+
+================================================================================
+C3 O2 RECOVERY
+================================================================================
+cycle start       = 960.000000000 h
+wet end           = 1210.359144226 h
+cycle end         = 1440.000000000 h
+wetting duration  = 250.359144 h = 10.431631 d
+drainage duration = 229.640856 h = 9.568369 d
+wet VTU bracket   = 1210.050000000 -- 1211.030555556 h
+max positive O2 enrichment = 4.11770277e-06
+10% plume threshold        = 4.11770277e-07
+
+--------------------------------------------------------------------------------
+FULL POSITIVE PLUME
+--------------------------------------------------------------------------------
+cells                 = 4897
+radial range          = 0.619 to 9.700 m
+z range               = 16.535 to 26.225 m
+end-wet integral      = 2.04452756e-03
+end-cycle integral    = 9.08606633e-04
+POSITIVE RESIDUAL     = 44.440909%
+POSITIVE RECOVERY     = 55.559091%
+cells still > 1% max = 86.399837%
+cells still > 5% max = 81.233408%
+cells still > 10% max = 75.862773%
+cells below cycle-start background = 3.022259%
+
+--------------------------------------------------------------------------------
+MAIN DRYWELL PLUME (z <= 27 m)
+--------------------------------------------------------------------------------
+cells                 = 4897
+radial range          = 0.619 to 9.700 m
+z range               = 16.535 to 26.225 m
+end-wet integral      = 2.04452756e-03
+end-cycle integral    = 9.08606633e-04
+POSITIVE RESIDUAL     = 44.440909%
+POSITIVE RECOVERY     = 55.559091%
+cells still > 1% max = 86.399837%
+cells still > 5% max = 81.233408%
+cells still > 10% max = 75.862773%
+cells below cycle-start background = 3.022259%
+
+--------------------------------------------------------------------------------
+C3 MAIN-PLUME DRAINAGE TRAJECTORY
+--------------------------------------------------------------------------------
+drain +   0.000 d : residual = 100.000000%
+drain +   1.000 d : residual =  41.010371%
+drain +   2.000 d : residual =  19.466972%
+drain +   3.000 d : residual =  10.640743%
+drain +   4.000 d : residual =  10.480046%
+drain +   5.000 d : residual =  14.541485%
+drain +   6.000 d : residual =  20.229268%
+drain +   7.000 d : residual =  26.581033%
+drain +   8.000 d : residual =  33.202984%
+drain +   9.000 d : residual =  40.615315%
+drain +   9.568 d : residual =  44.440909%
+
+================================================================================
+FINAL 60-DAY O2 RECOVERY SUMMARY
+================================================================================
+Cycle        Wet [d]     Drain [d]     Main plume residual      Recovery
+C1          7.353773     12.646227               0.000632%    99.999368%
+C2         10.243775      9.756225              45.220106%    54.779894%
+C3         10.431631      9.568369              44.440909%    55.559091%
+
+Interpretation:
+Residual here means positive O2 enrichment relative to the cycle-start O2 field, evaluated inside the plume footprint defined at end-wetting.
+It should be interpreted as cycle-specific positive-plume persistence, not automatically as whole-field return to the original 0-h background.

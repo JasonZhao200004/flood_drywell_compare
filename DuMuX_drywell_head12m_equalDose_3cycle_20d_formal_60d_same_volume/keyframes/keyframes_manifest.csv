@@ -1,0 +1,8 @@
+label,target_time_h,actual_snapshot_time_h,offset_h,filename
+initial,0.0,0.0,0.0,initial_target0.000000h_actual0.000000h.vtu
+C1_wet_end,176.490541,176.02305555555554,-0.4674854444444634,C1_wet_end_target176.490541h_actual176.023056h.vtu
+C1_cycle_end,480.0,480.0,0.0,C1_cycle_end_target480.000000h_actual480.000000h.vtu
+C2_wet_end,725.850601953,726.0111111111111,0.16050915811104005,C2_wet_end_target725.850602h_actual726.011111h.vtu
+C2_cycle_end,960.0,960.0,0.0,C2_cycle_end_target960.000000h_actual960.000000h.vtu
+C3_wet_end,1210.359144226,1210.05,-0.30914422599994396,C3_wet_end_target1210.359144h_actual1210.050000h.vtu
+C3_cycle_end,1440.0,1440.0,0.0,C3_cycle_end_target1440.000000h_actual1440.000000h.vtu
