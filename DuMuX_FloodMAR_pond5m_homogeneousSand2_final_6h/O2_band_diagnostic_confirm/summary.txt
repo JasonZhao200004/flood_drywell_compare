@@ -1,0 +1,290 @@
+Homogeneous Flood-MAR O2 band diagnostic
+==========================================================================================
+
+PVD = /Users/zhaozhe/Documents/GitHub/floof_drywell_compare/DuMuX_FloodMAR_pond5m_homogeneousSand2_final_6h/results_6h/floodmar_pond5m_depth10cm_head5cm_homogeneousSand2_uniformThetaIC_4d6d_smooth5to0_fluxSmooth0p5cm_gasAdvON_720h_1h_6h.pvd
+
+Storage mode = actual molar bulk storage
+
+Interpretation criterion:
+If xO2_liq has a strong peak where Sgas approaches zero, but total bulk O2 does not exhibit a corresponding peak, the apparent dissolved-O2 band is more consistent with gas-liquid repartitioning/gas-phase disappearance than true local total-O2 accumulation.
+
+--------------------------------------------------------------------------------
+time_h = 0.000000
+radius_m = 0.500000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 3.425780785e-06
+Sliq_at_x_peak = 0.306876379
+Sgas_at_x_peak = 0.693123621
+pgas_at_x_peak_Pa = 1.000000000e+05
+xO2_gas_at_x_peak = 1.519692854e-01
+O2_liq_storage_at_x_peak = 2.216910410e-02
+O2_total_storage_at_x_peak = 1.641253916e+00
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.641253916e+00
+
+--------------------------------------------------------------------------------
+time_h = 0.000000
+radius_m = 1.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 3.432009199e-06
+Sliq_at_x_peak = 0.306876379
+Sgas_at_x_peak = 0.693123621
+pgas_at_x_peak_Pa = 1.000000000e+05
+xO2_gas_at_x_peak = 1.522455808e-01
+O2_liq_storage_at_x_peak = 2.220940976e-02
+O2_total_storage_at_x_peak = 1.644237880e+00
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.644237880e+00
+
+--------------------------------------------------------------------------------
+time_h = 0.000000
+radius_m = 2.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 3.475854501e-06
+Sliq_at_x_peak = 0.306876379
+Sgas_at_x_peak = 0.693123621
+pgas_at_x_peak_Pa = 1.000000000e+05
+xO2_gas_at_x_peak = 1.541905795e-01
+O2_liq_storage_at_x_peak = 2.249314393e-02
+O2_total_storage_at_x_peak = 1.665243683e+00
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.665243683e+00
+
+--------------------------------------------------------------------------------
+time_h = 0.000000
+radius_m = 3.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 3.571268122e-06
+Sliq_at_x_peak = 0.306876379
+Sgas_at_x_peak = 0.693123621
+pgas_at_x_peak_Pa = 1.000000000e+05
+xO2_gas_at_x_peak = 1.584231737e-01
+O2_liq_storage_at_x_peak = 2.311058989e-02
+O2_total_storage_at_x_peak = 1.710955300e+00
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.710955300e+00
+
+--------------------------------------------------------------------------------
+time_h = 0.000000
+radius_m = 4.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 3.639864670e-06
+Sliq_at_x_peak = 0.306876379
+Sgas_at_x_peak = 0.693123621
+pgas_at_x_peak_Pa = 1.000000000e+05
+xO2_gas_at_x_peak = 1.614661496e-01
+O2_liq_storage_at_x_peak = 2.355449571e-02
+O2_total_storage_at_x_peak = 1.743819152e+00
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.743819152e+00
+
+--------------------------------------------------------------------------------
+time_h = 72.080278
+radius_m = 0.500000
+xO2_liq_peak_depth_m = 4.866667
+xO2_liq_peak = 4.514450643e-06
+Sliq_at_x_peak = 0.998861800
+Sgas_at_x_peak = 0.001138200
+pgas_at_x_peak_Pa = 1.011157551e+05
+xO2_gas_at_x_peak = 1.980534134e-01
+O2_liq_storage_at_x_peak = 9.509029670e-02
+O2_total_storage_at_x_peak = 9.859396168e-02
+O2_total_peak_depth_m = 4.933333
+O2_total_peak = 1.117503749e-01
+
+--------------------------------------------------------------------------------
+time_h = 72.080278
+radius_m = 1.000000
+xO2_liq_peak_depth_m = 4.866667
+xO2_liq_peak = 4.491543895e-06
+Sliq_at_x_peak = 0.992104585
+Sgas_at_x_peak = 0.007895415
+pgas_at_x_peak_Pa = 1.013730991e+05
+xO2_gas_at_x_peak = 1.965482479e-01
+O2_liq_storage_at_x_peak = 9.396778620e-02
+O2_total_storage_at_x_peak = 1.181485292e-01
+O2_total_peak_depth_m = 4.933333
+O2_total_peak = 1.244121765e-01
+
+--------------------------------------------------------------------------------
+time_h = 72.080278
+radius_m = 2.000000
+xO2_liq_peak_depth_m = 4.866667
+xO2_liq_peak = 4.563732006e-06
+Sliq_at_x_peak = 0.998360339
+Sgas_at_x_peak = 0.001639661
+pgas_at_x_peak_Pa = 1.010336801e+05
+xO2_gas_at_x_peak = 2.003780812e-01
+O2_liq_storage_at_x_peak = 9.608007199e-02
+O2_total_storage_at_x_peak = 1.011824590e-01
+O2_total_peak_depth_m = 4.933333
+O2_total_peak = 1.174378505e-01
+
+--------------------------------------------------------------------------------
+time_h = 72.080278
+radius_m = 3.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.382482109e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004871403e+05
+xO2_gas_at_x_peak = 1.934665633e-01
+O2_liq_storage_at_x_peak = 9.241573746e-02
+O2_total_storage_at_x_peak = 9.241573746e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.241573746e-02
+
+--------------------------------------------------------------------------------
+time_h = 72.080278
+radius_m = 4.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.393227806e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004805113e+05
+xO2_gas_at_x_peak = 1.939537316e-01
+O2_liq_storage_at_x_peak = 9.264233743e-02
+O2_total_storage_at_x_peak = 9.264233743e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.264233743e-02
+
+--------------------------------------------------------------------------------
+time_h = 96.000000
+radius_m = 0.500000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.381175378e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004893726e+05
+xO2_gas_at_x_peak = 1.934045807e-01
+O2_liq_storage_at_x_peak = 9.238818182e-02
+O2_total_storage_at_x_peak = 9.238818182e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.238818182e-02
+
+--------------------------------------------------------------------------------
+time_h = 96.000000
+radius_m = 1.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.381277831e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004890368e+05
+xO2_gas_at_x_peak = 1.934097497e-01
+O2_liq_storage_at_x_peak = 9.239034228e-02
+O2_total_storage_at_x_peak = 9.239034228e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.239034228e-02
+
+--------------------------------------------------------------------------------
+time_h = 96.000000
+radius_m = 2.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.381699399e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004881192e+05
+xO2_gas_at_x_peak = 1.934301258e-01
+O2_liq_storage_at_x_peak = 9.239923208e-02
+O2_total_storage_at_x_peak = 9.239923208e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.239923208e-02
+
+--------------------------------------------------------------------------------
+time_h = 96.000000
+radius_m = 3.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.382711954e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004861411e+05
+xO2_gas_at_x_peak = 1.934786338e-01
+O2_liq_storage_at_x_peak = 9.242058429e-02
+O2_total_storage_at_x_peak = 9.242058429e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.242058429e-02
+
+--------------------------------------------------------------------------------
+time_h = 96.000000
+radius_m = 4.000000
+xO2_liq_peak_depth_m = 0.116667
+xO2_liq_peak = 4.393479311e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 1.004799125e+05
+xO2_gas_at_x_peak = 1.939659910e-01
+O2_liq_storage_at_x_peak = 9.264764103e-02
+O2_total_storage_at_x_peak = 9.264764103e-02
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.264764103e-02
+
+--------------------------------------------------------------------------------
+time_h = 102.001389
+radius_m = 0.500000
+xO2_liq_peak_depth_m = 0.433333
+xO2_liq_peak = 6.151344058e-06
+Sliq_at_x_peak = 0.993376299
+Sgas_at_x_peak = 0.006623701
+pgas_at_x_peak_Pa = 9.010409722e+04
+xO2_gas_at_x_peak = 3.028459228e-01
+O2_liq_storage_at_x_peak = 1.288568462e-01
+O2_total_storage_at_x_peak = 1.566394222e-01
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.123683182e+00
+
+--------------------------------------------------------------------------------
+time_h = 102.001389
+radius_m = 1.000000
+xO2_liq_peak_depth_m = 0.533333
+xO2_liq_peak = 5.870086111e-06
+Sliq_at_x_peak = 0.998600649
+Sgas_at_x_peak = 0.001399351
+pgas_at_x_peak_Pa = 9.066062634e+04
+xO2_gas_at_x_peak = 2.872248486e-01
+O2_liq_storage_at_x_peak = 1.236118628e-01
+O2_total_storage_at_x_peak = 1.292129539e-01
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 9.748546480e-01
+
+--------------------------------------------------------------------------------
+time_h = 102.001389
+radius_m = 2.000000
+xO2_liq_peak_depth_m = 0.766667
+xO2_liq_peak = 5.724782492e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 9.246301601e+04
+xO2_gas_at_x_peak = 2.746547963e-01
+O2_liq_storage_at_x_peak = 1.207211040e-01
+O2_total_storage_at_x_peak = 1.207211040e-01
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.127775609e+00
+
+--------------------------------------------------------------------------------
+time_h = 102.001389
+radius_m = 3.000000
+xO2_liq_peak_depth_m = 0.966667
+xO2_liq_peak = 5.389118049e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 9.411215750e+04
+xO2_gas_at_x_peak = 2.540201800e-01
+O2_liq_storage_at_x_peak = 1.136428792e-01
+O2_total_storage_at_x_peak = 1.136428792e-01
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.333366838e+00
+
+--------------------------------------------------------------------------------
+time_h = 102.001389
+radius_m = 4.000000
+xO2_liq_peak_depth_m = 1.766667
+xO2_liq_peak = 5.658867378e-06
+Sliq_at_x_peak = 1.000000000
+Sgas_at_x_peak = 0.000000000
+pgas_at_x_peak_Pa = 9.724642619e+04
+xO2_gas_at_x_peak = 2.581381053e-01
+O2_liq_storage_at_x_peak = 1.193313797e-01
+O2_total_storage_at_x_peak = 1.193313797e-01
+O2_total_peak_depth_m = 0.116667
+O2_total_peak = 1.509949051e+00
+

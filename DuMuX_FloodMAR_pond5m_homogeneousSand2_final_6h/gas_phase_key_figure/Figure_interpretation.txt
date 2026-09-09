@@ -1,0 +1,9 @@
+How to read this figure:
+1) If a white S_g=0.01 contour exists at wetting endpoints (96, 336, 576 h),
+   it marks the gas-disappearance front.
+2) If this contour disappears at drainage endpoints (240, 480, 720 h),
+   the shallow domain has returned to a two-phase condition.
+3) If the dissolved-O2 band is located along the same front, then the band is
+   most likely associated with gas-liquid repartitioning during wetting.
+4) This supports a physical mechanism, although the sharpness of the band may
+   still be numerically accentuated.
