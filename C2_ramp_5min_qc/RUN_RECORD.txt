@@ -1,0 +1,35 @@
+Flood-MAR C2 targeted high-frequency QC rerun
+=============================================
+
+Purpose
+-------
+Resolve the final C2 5-h shutdown ramp at 5-min spatial-output resolution for
+publication-grade cumulative injection reconstruction.
+
+History
+-------
+Original restart: 512.061111111 h
+Stage 1: 512.061111111 -> 574.000000000 h
+Stage 1 VTK interval: 21600 s (6 h)
+Stage 1 restart: floodmar_C2QC_final_restart_574h.dat
+
+Stage 2: 574.000000000 -> 581.664044805955 h
+Stage 2 VTK interval: 300 s (5 min)
+
+Final locked schedule
+---------------------
+C1 shutdown start = 96.000000000000 h
+C2 shutdown start = 576.164044805955 h
+C2 ramp end       = 581.164044805955 h
+C3 shutdown start = 1060.953978421305 h
+
+Numerics
+--------
+MaxTimeStepSize = 300 s
+DtInitial = 1.08 s
+LongitudinalDispersivity = 0.50 m
+TransverseDispersivity = 0.05 m
+Gas mechanical dispersion = false
+Gas-phase O2 advection = true
+
+This rerun does not replace or modify the archived 60-day final trajectory.

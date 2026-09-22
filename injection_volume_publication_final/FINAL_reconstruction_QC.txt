@@ -1,0 +1,33 @@
+Final Flood-MAR injection reconstruction QC
+==========================================
+
+C1 raw total      = 3957.230718652 m3
+C1 locked total   = 3957.230719000 m3
+C1 scale          = 1.000000000088
+
+C2 raw pre-ramp   = 3787.953827847 m3
+C2 locked pre     = 3788.462792016 m3
+C2 pre scale      = 1.000134363879
+C2 raw ramp       = 167.833879103 m3
+C2 locked ramp    = 167.835969530 m3
+C2 ramp scale     = 1.000012455332
+
+C3 raw pre-ramp   = 3751.319987064 m3
+C3 locked pre     = 3753.811353968 m3
+C3 pre scale      = 1.000664130736
+C3 raw ramp       = 200.083454584 m3
+C3 locked ramp    = 200.257378110 m3
+C3 ramp scale     = 1.000869254913
+
+Maximum scale deviation = 0.086925%
+QC STATUS = PASS (<=2%)
+
+Actual data sources
+-------------------
+C1 PVD: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/build-cmake/test/porousmediumflow/2p2c/floodmar_pond5m_head5cm_equalDose_3cycle_20d_oldformal/floodmar_pond5m_head5cm_C1C2formal_C3continuous_1140h.pvd
+C2 new 5-min PVD: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/build-cmake/test/porousmediumflow/2p2c/floodmar_pond5m_head5cm_equalDose_3cycle_20d_oldformal/floodmar_C2QC_final_574_to581p664_5min.pvd
+C3 continuous PVD: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/build-cmake/test/porousmediumflow/2p2c/floodmar_pond5m_head5cm_equalDose_3cycle_20d_oldformal/floodmar_C3continuous_955_to1030_5min.pvd
+C3 final candidate PVD: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/build-cmake/test/porousmediumflow/2p2c/floodmar_pond5m_head5cm_equalDose_3cycle_20d_oldformal/floodmar_C3auto_i08_t1060p953978_5min.pvd
+Drywell CSV: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_equalVolume_3cycle_20d_60d_GitHub/calibration/C1_continuous_volume.csv
+Drywell CSV: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_equalVolume_3cycle_20d_60d_GitHub/calibration/C2_continuous_volume.csv
+Drywell CSV: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_equalVolume_3cycle_20d_60d_GitHub/calibration/C3_continuous_volume.csv
