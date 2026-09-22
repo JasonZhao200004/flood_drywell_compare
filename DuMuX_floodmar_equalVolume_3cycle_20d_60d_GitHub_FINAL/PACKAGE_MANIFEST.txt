@@ -1,0 +1,11 @@
+Flood-MAR final GitHub package
+==============================
+Created: 2026-09-21T21:30:46
+Source: /Users/zhaozhe/Documents/GitHub/floof_drywell_compare/DuMuX_floodmar_equalVolume_3cycle_20d_60d_GitHub
+Destination: /Users/zhaozhe/Documents/GitHub/floof_drywell_compare/DuMuX_floodmar_equalVolume_3cycle_20d_60d_GitHub_FINAL
+VTUs: 241
+Hardlinks: 241
+Copies: 0
+Actual range: 0.000000000000 -> 1440.000000000000 h
+Max offset: 8.500000000 min
+Status: PASS
