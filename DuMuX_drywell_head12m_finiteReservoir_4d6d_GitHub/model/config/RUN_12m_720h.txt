@@ -1,0 +1,150 @@
+12 m HEAD — FINAL 720 h PRODUCTION RUN
+=========================================
+
+Executable:
+
+floodmar_head4p5m_oldboundary_gasAdvON_phaseguard_v2_facedisp
+
+
+CASE DEFINITION
+===============
+
+Problem.Name:
+drywell_head12m_phaseguardV2_faceSymDisp_gasAdvON_720h_1h
+
+DrywellInjectionHead:
+1200 cm = 12.0 m
+
+Drywell bottom:
+z = 14 m
+
+Maximum imposed water elevation:
+z = 14 + 12 = 26 m
+
+Ground surface:
+z = 30 m
+
+Maximum water level:
+approximately 4 m below ground surface.
+
+
+INITIAL CONDITION
+=================
+
+oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+
+TRANSPORT PHYSICS
+=================
+
+Gas O2 advection:
+ON
+
+Liquid mechanical dispersion:
+ON
+
+Gas mechanical dispersion:
+OFF
+
+Longitudinal dispersivity:
+0.50 m
+
+Transverse dispersivity:
+0.05 m
+
+PhaseGuard V2:
+ON
+
+Face-symmetric CCTpfa dispersion:
+ON
+
+
+RUNTIME OVERRIDES
+=================
+
+-Grid.File floodmar_nonames.msh
+
+-Restart.Enable false
+
+-Problem.Name drywell_head12m_phaseguardV2_faceSymDisp_gasAdvON_720h_1h
+
+-Problem.InitialOxygenProfileFile
+oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+
+-Problem.DrywellInjectionHead 1200
+
+-Problem.DrywellStartupRampTime 1800
+
+-Problem.EnableGasPhaseOxygenAdvection true
+
+-Dispersion.LongitudinalDispersivity 0.50
+
+-Dispersion.TransverseDispersivity 0.05
+
+-Dispersion.ApplyToGasPhase false
+
+-Dispersion.IncludeDrywellBoundaryVelocity false
+
+-TimeLoop.TEnd 2592000
+
+-TimeLoop.DtInitial 1.08
+
+-TimeLoop.MaxTimeStepSize 360
+
+-TimeLoop.OutputInterval 3600
+
+-Newton.MaxRelativeShift 1e-4
+
+-Newton.MaxSteps 18
+
+-Newton.MaxTimeStepDivisions 15
+
+-Newton.TargetSteps 6
+
+-Newton.UseLineSearch false
+
+-Newton.EnableChop true
+
+-Newton.ChopMaxPressureChange 2e4
+
+-Newton.ChopMaxSaturationChange 0.10
+
+-Newton.ChopMaxLiquidMoleFractionChange 1e-5
+
+-Newton.ChopMaxGasMoleFractionChange 0.05
+
+-Newton.ChopSaturationBuffer 0
+
+-PrimaryVariableSwitch.GasAppearanceTolerance 0.02
+
+-PrimaryVariableSwitch.LiquidAppearanceTolerance 0.02
+
+-PrimaryVariableSwitch.AppearanceSaturation 1e-4
+
+-PrimaryVariableSwitch.Verbosity 0
+
+-LinearSolver.ResidualReduction 1e-8
+
+-Vtk.Precision Float64
+
+
+FINAL RUN CHECK
+===============
+
+Simulation duration:
+720 h
+
+Original VTUs:
+721
+
+Newton failures:
+12
+
+Linear failures:
+0
+
+Fatal / abort / exception:
+0
+
+Status:
+COMPLETE

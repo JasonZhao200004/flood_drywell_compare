@@ -1,0 +1,6 @@
+build*/
+cmake-build*/
+*.pvtu
+*.swp
+*~
+.DS_Store
