@@ -1,0 +1,35 @@
+Same-schedule cumulative injection reconstruction
+================================================================================
+
+Drywell PVD:
+/Users/zhaozhe/Documents/GitHub/floof_drywell_compare/DuMuX_drywell_head12m_faceSymDisp_720h_GitHub/results/production_720h/DuMuX_head12m_720h_every6h.pvd
+
+Flood PVD:
+/Users/zhaozhe/Documents/GitHub/floof_drywell_compare/DuMuX_FloodMAR_pond5m_head5cm_final_6h/results_6h/floodmar_pond5m_depth10cm_head5cm_layered_4d6d_smooth5to0_fluxSmooth0p5cm_gasAdvON_720h_1h_6h.pvd
+
+Validated locked cycle totals [m3]
+Drywell: [2077.5, 2070.2, 1708.1]
+Flood  : [5268.3, 5275.4, 5535.1]
+
+Drywell raw reconstruction / scale
+C1: raw=2077.465345273, locked=2077.500000000, scale=1.000016681254
+C2: raw=2070.159387584, locked=2070.200000000, scale=1.000019618014
+C3: raw=1708.140527063, locked=1708.100000000, scale=0.999976274164
+
+Flood raw reconstruction / scale
+C1: raw=1637605.203427188, locked=5268.300000000, scale=0.003217075757
+C2: raw=1509291.135503222, locked=5275.400000000, scale=0.003495283233
+C3: raw=1689612.493797943, locked=5535.100000000, scale=0.003275958257
+
+Final values
+Drywell @720 h = 5855.800000000 m3
+Flood @720 h   = 16078.800000000 m3
+Flood/Drywell  = 2.745790498
+
+Flood Cycle-1 Vtarget diagnostic
+Flood cumulative @96 h  = 5157.100980662 m3
+Flood cumulative @101 h = 5268.300000000 m3
+96-101 h ramp contribution = 111.199019338 m3
+
+Interpretation:
+If Vtarget is defined as the first 4.000 days only, use the 96-h value. If the shutdown transition is treated as part of the operational wetting event, use the 101-h cycle total.
