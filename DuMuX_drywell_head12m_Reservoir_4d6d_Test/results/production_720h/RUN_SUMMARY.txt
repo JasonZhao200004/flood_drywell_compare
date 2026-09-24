@@ -1,0 +1,61 @@
+12 m HEAD — 720 h PRODUCTION RUN SUMMARY
+===========================================
+
+STATUS
+------
+
+COMPLETE
+
+
+SIMULATION
+----------
+
+Head:
+12.0 m
+
+Drywell head parameter:
+1200 cm
+
+Duration:
+720 h
+
+Cycles:
+3 x 240 h
+
+Original output:
+721 VTUs
+
+Archived output:
+121 VTUs
+
+Archive interval:
+6 h
+
+
+SOLVER
+------
+
+Newton failures:
+12
+
+Linear failures:
+0
+
+Fatal / abort / exception:
+0
+
+
+ARCHIVING
+---------
+
+The archived VTUs correspond to:
+
+0, 6, 12, ..., 720 h.
+
+For each target time, the nearest existing
+DuMuX output was copied.
+
+No field interpolation was performed.
+
+TIME_MAPPING_6h.tsv contains the actual
+DuMuX simulation time of every archived VTU.

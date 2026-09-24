@@ -1,0 +1,104 @@
+FINITE-RESERVOIR DRYWELL — 0-240 h DIAGNOSTIC RUN
+=================================================
+
+Executable:
+drywell_head12m_reservoir_4d6d
+
+0-96 h:
+Original successful production drywell wetting behavior.
+
+At 96 h:
+External supply is switched OFF.
+
+96-240 h:
+Water remaining in the 1.22 m diameter drywell is treated as a finite
+0-D reservoir.
+
+Reservoir geometry:
+radius = 0.61 m
+initial water depth/head = 12.0 m
+initial storage = 14.0278395168091 m3
+
+Reservoir update:
+V_new = max(0, V_old + Q_well * dt)
+
+Sign convention:
+Q_well < 0 : reservoir -> porous medium
+Q_well > 0 : porous medium -> reservoir
+
+The reservoir state is updated once after each accepted DuMuX timestep.
+
+RUNTIME OVERRIDES
+=================
+
+-Grid.File floodmar_nonames.msh
+-Restart.Enable false
+-Problem.Name reservoir_production_240h
+-Problem.InitialOxygenProfileFile oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+-Problem.DrywellInjectionHead 1200
+-Problem.DrywellStartupRampTime 1800
+-Problem.EnableGasPhaseOxygenAdvection true
+-Dispersion.LongitudinalDispersivity 0.50
+-Dispersion.TransverseDispersivity 0.05
+-Dispersion.ApplyToGasPhase false
+-Dispersion.IncludeDrywellBoundaryVelocity false
+-TimeLoop.TEnd 864000
+-TimeLoop.DtInitial 1.08
+-TimeLoop.MaxTimeStepSize 360
+-TimeLoop.OutputInterval 3600
+-Newton.MaxRelativeShift 1e-4
+-Newton.MaxSteps 18
+-Newton.MaxTimeStepDivisions 15
+-Newton.TargetSteps 6
+-Newton.UseLineSearch false
+-Newton.EnableChop true
+-Newton.ChopMaxPressureChange 2e4
+-Newton.ChopMaxSaturationChange 0.10
+-Newton.ChopMaxLiquidMoleFractionChange 1e-5
+-Newton.ChopMaxGasMoleFractionChange 0.05
+-Newton.ChopSaturationBuffer 0
+-PrimaryVariableSwitch.GasAppearanceTolerance 0.02
+-PrimaryVariableSwitch.LiquidAppearanceTolerance 0.02
+-PrimaryVariableSwitch.AppearanceSaturation 1e-4
+-PrimaryVariableSwitch.Verbosity 0
+-LinearSolver.ResidualReduction 1e-8
+-Vtk.Precision Float64
+
+DIAGNOSTIC RESULT
+=================
+
+96.0 h:
+head = 1200.000 cm
+storage = 14.0278395168091 m3
+
+96.1 h:
+head = 1021.79049799304 cm
+storage = 11.9445942713724 m3
+Q = -5.7867923484353e-03 m3/s
+
+240 h:
+head = 493.044651585202 cm
+storage = 5.76362603921524 m3
+Q = -2.26716033665672e-06 m3/s
+
+Reservoir empty by 240 h:
+NO
+
+First positive soil->well flux:
+t = 170.448184256282 h
+Q = +1.85944107563237e-07 m3/s
+
+Number of positive soil->well flux rows:
+203
+
+Discrete reservoir mass-balance residual:
+maximum absolute = 2.0358020824673417e-13 m3
+mean absolute    = 5.8237878020490105e-15 m3
+
+IMPORTANT NUMERICAL NOTE
+========================
+
+This 240 h case uses TimeLoop.MaxTimeStepSize = 360 s throughout.
+Post-96 h timestep sensitivity (for example 60 s and 30 s) has NOT yet
+been completed. Do not describe the 360 s falling-head trajectory as
+timestep-converged.
