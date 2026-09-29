@@ -1,0 +1,93 @@
+[TimeLoop]
+# HYDRUS formal simulation: 720 h.
+TEnd = 2592000
+# HYDRUS initial step: 0.0003 h = 1.08 s.
+DtInitial = 1.08
+# HYDRUS maximum step: 0.1 h = 360 s.
+MaxTimeStepSize = 360
+# 120 equally spaced print intervals over 720 h = every 6 h.
+OutputInterval = 21600
+
+[Grid]
+File = floodmar.msh
+Verbose = true
+
+[Problem]
+Name = drywell_radius20m_head12m_dispersion_720h
+InitialOxygenProfileFile = oxygen_initial_2880.dat
+AtmosphericOxygenDiffusionCoefficient = 1e-6
+AtmosphericGasPressureFactor = 1.0
+EnableGravity = true
+DrywellStartupRampTime = 43200
+DrywellInjectionHead = 1200
+
+[Dispersion]
+LongitudinalDispersivity = 0.50
+TransverseDispersivity = 0.05
+ApplyToGasPhase = false
+
+[Vtk]
+AddVelocity = true
+
+[Output]
+PlotFluidMatrixInteractions = false
+
+[LinearSolver]
+ResidualReduction = 1e-8
+
+[Newton]
+MaxRelativeShift = 1e-8
+MaxSteps = 18
+
+[Component]
+SolidDensity = 2700
+SolidThermalConductivity = 2.8
+SolidHeatCapacity = 790
+
+# alpha values converted from 1/cm to 1/Pa:
+# alpha_Pa = alpha_cm / 98.0665
+
+[SpatialParams.Sand1]
+VanGenuchtenAlpha = 3.2631e-4
+VanGenuchtenN = 3.47614
+VanGenuchtenL = 0.5
+Swr = 0.12737
+Snr = 0.0
+
+[SpatialParams.LoamySand]
+VanGenuchtenAlpha = 3.9769e-4
+VanGenuchtenN = 2.03252
+VanGenuchtenL = 0.5
+Swr = 0.11077
+Snr = 0.0
+
+[SpatialParams.Sand2]
+VanGenuchtenAlpha = 7.2400e-4
+VanGenuchtenN = 3.01351
+VanGenuchtenL = 0.5
+Swr = 0.12576
+Snr = 0.0
+
+[SpatialParams.Loam]
+VanGenuchtenAlpha = 1.0197e-4
+VanGenuchtenN = 1.49217
+VanGenuchtenL = 0.5
+Swr = 0.13300
+Snr = 0.0
+
+[SpatialParams.SandyLoam]
+VanGenuchtenAlpha = 2.0394e-4
+VanGenuchtenN = 1.40886
+VanGenuchtenL = 0.5
+Swr = 0.13203
+Snr = 0.0
+
+[SpatialParams.Sand3]
+VanGenuchtenAlpha = 3.5690e-4
+VanGenuchtenN = 2.03252
+VanGenuchtenL = 0.5
+Swr = 0.11077
+Snr = 0.0
+
+[SpatialParams]
+Temperature = 298.15
