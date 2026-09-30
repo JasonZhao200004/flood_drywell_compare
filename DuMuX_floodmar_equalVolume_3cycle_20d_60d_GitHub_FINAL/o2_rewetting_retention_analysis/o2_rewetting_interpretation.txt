@@ -1,0 +1,11 @@
+Original Flood-MAR Cycle-2 rewetting O2 diagnostic
+==========================================================
+
+Deep zone used for primary check: depth >= 10 m
+Net excess O2 at 480 h: 47.525660 kg
+Net excess O2 at 504 h: 36.808604 kg (77.450% of 480-h value)
+Net excess O2 at 576 h: -17.311799 kg (-36.426% of 480-h value)
+
+First-pass result: deep O2 is partly retained but substantial redistribution/loss occurs during the first 24 h of rewetting.
+
+Important: a decrease in stored O2 does NOT by itself prove top-boundary venting. It may also reflect respiration, gas-liquid repartition, or downward export. A boundary/reaction O2 budget is required to partition those mechanisms.

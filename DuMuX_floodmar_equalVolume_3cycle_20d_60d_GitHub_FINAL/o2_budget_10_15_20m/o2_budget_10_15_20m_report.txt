@@ -1,0 +1,18 @@
+O2 budget across 10, 15, and 20 m depths
+==========================================================
+Window: 480 to 576 h
+
+Positive plane transport means net downward O2 crossing that depth.
+
+At 576 h relative to 480 h:
+
+Across 10 m: net downward = -52.142909 kg; storage change below = -64.837459 kg; respiration below = 12.694498 kg
+Across 15 m: net downward = 0.717411 kg; storage change below = 0.271994 kg; respiration below = 0.445365 kg
+Across 20 m: net downward = 0.001632 kg; storage change below = -0.000647 kg; respiration below = 0.002227 kg
+
+Bottom O2 export = 0.000053 kg
+
+Layer budgets:
+10-15 m: Δstorage=-65.109453 kg; respiration=12.249133 kg; net transport convergence=-52.860320 kg
+15-20 m: Δstorage=0.272641 kg; respiration=0.443139 kg; net transport convergence=0.715779 kg
+20-30 m: Δstorage=-0.000647 kg; respiration=0.002227 kg; net transport convergence=0.001580 kg
