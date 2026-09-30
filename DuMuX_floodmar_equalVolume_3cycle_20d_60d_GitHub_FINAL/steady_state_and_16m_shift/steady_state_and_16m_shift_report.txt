@@ -1,0 +1,45 @@
+STEADY-STATE + >16 m REWETTING DIAGNOSTIC
+======================================================================
+
+A. Cycle-1 drainage steady-state check (102 -> 480 h)
+
+Total domain O2
+  value at 480 h = 786.015873514
+  terminal 24 h slope = +36.305312593 per day (+4.6189% of current value per day)
+  terminal 48 h slope = +37.805523539 per day (+4.8098% of current value per day)
+  terminal 72 h slope = +39.233167022 per day (+4.9914% of current value per day)
+  exp-fit: asymptote=15179.203488159, current fraction of total change=4.76%, remaining=14393.187614646, R2=0.9953
+
+Positive O2 increment vs 102 h
+  value at 480 h = 726.108714994
+  terminal 24 h slope = +35.607051273 per day (+4.9038% of current value per day)
+  terminal 48 h slope = +37.083173995 per day (+5.1071% of current value per day)
+  terminal 72 h slope = +38.489197767 per day (+5.3007% of current value per day)
+  exp-fit: asymptote=15248.282957632, current fraction of total change=4.76%, remaining=14522.174242638, R2=0.9963
+
+Positive increment below 15 m
+  value at 480 h = 0.017818511
+  terminal 24 h slope = +0.014391925 per day (+80.7695% of current value per day)
+  terminal 48 h slope = +0.004817068 per day (+27.0341% of current value per day)
+  terminal 72 h slope = +0.002368575 per day (+13.2928% of current value per day)
+  exp-fit: unavailable / unreliable
+
+Positive increment below 16 m
+  value at 480 h = 0.000001321
+  terminal 24 h slope = -0.000000320 per day (-24.2512% of current value per day)
+  terminal 48 h slope = -0.000003429 per day (-259.5144% of current value per day)
+  terminal 72 h slope = -0.000018993 per day (-1437.4543% of current value per day)
+  exp-fit: unavailable / unreliable
+
+z90_positive_increment_m: at 480 h = 9.8333 m; last-48h slope = +0.3611 m/day
+z95_positive_increment_m: at 480 h = 11.0833 m; last-48h slope = +0.4167 m/day
+z99_positive_increment_m: at 480 h = 13.1667 m; last-48h slope = +0.5167 m/day
+
+B. Does Cycle-2 rewetting move O2 below 16 m?
+
+ 480.0 h: O2 below 16 m = 0.021245409 kg (change vs 480 h +0.000000000); 16-20 m storage = 0.017850308 kg (change +0.000000000)
+ 486.0 h: O2 below 16 m = 0.023655697 kg (change vs 480 h +0.002410288); 16-20 m storage = 0.020408702 kg (change +0.002558394)
+ 492.0 h: O2 below 16 m = 0.026687271 kg (change vs 480 h +0.005441862); 16-20 m storage = 0.023581651 kg (change +0.005731343)
+ 504.0 h: O2 below 16 m = 0.034914350 kg (change vs 480 h +0.013668942); 16-20 m storage = 0.032057192 kg (change +0.014206883)
+ 528.0 h: O2 below 16 m = 0.068388673 kg (change vs 480 h +0.047143264); 16-20 m storage = 0.065884727 kg (change +0.048034419)
+ 576.0 h: O2 below 16 m = 0.184647841 kg (change vs 480 h +0.163402433); 16-20 m storage = 0.181899779 kg (change +0.164049471)
