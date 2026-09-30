@@ -2297,3 +2297,7 @@
 /flood_MAR_pond5m_head5cm/results/floodmar_pond5m_head5cm_tol1e4_target6_4d6d_720h-00118.vtu filter=lfs diff=lfs merge=lfs -text
 /flood_MAR_pond5m_head5cm/results/floodmar_pond5m_head5cm_tol1e4_target6_4d6d_720h-00119.vtu filter=lfs diff=lfs merge=lfs -text
 /flood_MAR_pond5m_head5cm/results/floodmar_pond5m_head5cm_tol1e4_target6_4d6d_720h-00120.vtu filter=lfs diff=lfs merge=lfs -text
+/DuMuX_floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h/floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h-00004.vtu filter=lfs diff=lfs merge=lfs -text
+/DuMuX_floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h/floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h-00005.vtu filter=lfs diff=lfs merge=lfs -text
+/DuMuX_floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h/floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h-00006.vtu filter=lfs diff=lfs merge=lfs -text
+/DuMuX_floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h/floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h-00007.vtu filter=lfs diff=lfs merge=lfs -text
