@@ -1,0 +1,22 @@
+RIGHT-SURFACE O2 TAG — CORRECTED REWETTING
+
+Restart:
+  864 h state from the completed RIGHT-SURFACE tag run.
+
+O2tag:
+  Preserved exactly from 864 h.
+  New tag source is OFF after 864 h.
+
+Corrected Flood-MAR hydraulic boundary:
+  basin radius = 5.0 m
+  basin depression = 0.10 m
+  basin bottom = y 29.9 m
+
+Rewetting:
+  864-869 h: 0 -> 5 cm smooth rise
+  869-960 h: 5 cm head
+
+Numerics:
+  MaxDt = 900 s
+  Newton.TargetSteps = 8
+  Output = 1 h

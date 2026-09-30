@@ -1,0 +1,41 @@
+TRUE SOURCE-TAGGED O2
+=====================
+
+Single 2-phase / 4-component run:
+  H2O
+  N2
+  O2       = background oxygen
+  O2tag    = source-tagged oxygen
+
+Initial O2tag = 0 everywhere.
+
+Only atmospheric O2 supplied through the recharge boundary while that
+boundary is exposed to atmosphere during 101 <= t < 864 h is assigned
+to O2tag.
+
+Atmospheric O2 entering through the ordinary ground surface remains O2.
+
+At t >= 864 h, no new O2tag is supplied. Existing O2tag continues to
+move and react.
+
+O2tag has the same O2:
+  molar mass
+  Henry coefficient
+  molecular diffusion
+  gas/liquid advection
+  mechanical dispersion
+  phase equilibrium
+  liquid respiration rate = 0.06 h^-1
+  gas respiration rate = 0.002 h^-1
+
+Thus:
+  O2_total = O2 + O2tag
+
+Schedule:
+0-96 h       wetting
+96-101 h     smooth shutdown
+101-864 h    atmospheric drainage; recharge-surface incoming O2 is O2tag
+864-869 h    smooth rewetting; incoming water O2 is untagged O2
+869-960 h    wetting
+
+Output every 1 h.

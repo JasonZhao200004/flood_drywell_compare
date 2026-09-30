@@ -1,0 +1,34 @@
+TRUE RIGHT-SURFACE ATMOSPHERIC O2 TAG
+=====================================
+
+Restart:
+  accepted physical state at 101 h
+  O2tag reset exactly to zero at 101 h
+
+Source definition:
+
+0 <= t < 101 h
+  no tagged oxygen
+
+101 <= t < 864 h
+  ONLY atmospheric O2 supplied through the ORIGINAL y=30 m
+  land-surface atmospheric boundary is stored as O2tag.
+
+  Oxygen supplied through the newly exposed/depressed Flood-MAR
+  basin during drainage remains ordinary/background O2.
+
+t >= 864 h
+  no new O2tag input.
+  Existing tagged oxygen continues transport, partitioning,
+  dispersion, and reaction.
+
+Physical total oxygen:
+  O2_total = O2 + O2tag
+
+Numerical settings:
+  restart = 101 h
+  TEnd = 960 h
+  VTK interval = 3600 s
+  initial dt = 1.08 s
+  MaxTimeStepSize = 900 s
+  Newton.TargetSteps = 8
