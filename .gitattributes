@@ -2545,3 +2545,6 @@
 /DuMuX_floodmar_drain_atmospheric_variant/results/floodmar_equalVolume_60d_drain_atmospheric.log filter=lfs diff=lfs merge=lfs -text
 /DuMuX_floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h/floodmar_TRUE_RIGHTSURFACEtag_REWETFIX870_to960h-00008.vtu filter=lfs diff=lfs merge=lfs -text
 /DuMuX_drywell_head12m_HYDROFIX_full60d/drywell_head12m_HYDROFIX_full60d.log filter=lfs diff=lfs merge=lfs -text
+*.vtu filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.msh filter=lfs diff=lfs merge=lfs -text
