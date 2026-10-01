@@ -1,8 +1,0 @@
-<?xml version="1.0"?> 
-<VTKFile type="Collection" version="0.1" byte_order="LittleEndian"> 
-<Collection> 
-<DataSet timestep="3.1104e+06" group="" part="0" name="" file="floodmar_TRUE_RIGHTSURFACEtag_REWETFIX864_to960h-00000.vtu"/> 
-<DataSet timestep="3.11465e+06" group="" part="0" name="" file="floodmar_TRUE_RIGHTSURFACEtag_REWETFIX864_to960h-00001.vtu"/> 
-<DataSet timestep="3.11825e+06" group="" part="0" name="" file="floodmar_TRUE_RIGHTSURFACEtag_REWETFIX864_to960h-00002.vtu"/> 
-</Collection> 
-</VTKFile> 

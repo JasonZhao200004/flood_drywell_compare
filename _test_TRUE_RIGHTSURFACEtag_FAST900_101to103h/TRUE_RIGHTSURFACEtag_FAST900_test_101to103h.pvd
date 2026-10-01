@@ -1,8 +1,0 @@
-<?xml version="1.0"?> 
-<VTKFile type="Collection" version="0.1" byte_order="LittleEndian"> 
-<Collection> 
-<DataSet timestep="363600" group="" part="0" name="" file="TRUE_RIGHTSURFACEtag_FAST900_test_101to103h-00000.vtu"/> 
-<DataSet timestep="367267" group="" part="0" name="" file="TRUE_RIGHTSURFACEtag_FAST900_test_101to103h-00001.vtu"/> 
-<DataSet timestep="370800" group="" part="0" name="" file="TRUE_RIGHTSURFACEtag_FAST900_test_101to103h-00002.vtu"/> 
-</Collection> 
-</VTKFile> 
