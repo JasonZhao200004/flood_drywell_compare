@@ -85,4 +85,247 @@ Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpda
 Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 12 done, maximum relative shift = 1.0000e-01
 Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 13 done, maximum relative shift = 2.9184e-02
 Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 14 done, maximum relative shift = 7.1983e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 15 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 16 done, maximum relative shift = 7.5711e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 17 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 18 done, maximum relative shift = 5.3242e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 19 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 20 done, maximum relative shift = 8.4574e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 21 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 22 done, maximum relative shift = 6.4751e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 23 done, maximum relative shift = 4.9993e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 24 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 25 done, maximum relative shift = 3.0680e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 26 done, maximum relative shift = 9.7614e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 27 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 28 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 29 done, maximum relative shift = 1.7629e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 30 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 31 done, maximum relative shift = 6.2180e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 32 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 33 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 34 done, maximum relative shift = 6.7830e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 35 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 36 done, maximum relative shift = 5.3059e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 37 done, maximum relative shift = 5.0623e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 38 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 39 done, maximum relative shift = 9.1324e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 40 done, maximum relative shift = 1.0000e-01
+Newton solver did not converge with dt = 37.026099629748806 seconds. Retrying with time step of dt = 18.513049814874403 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.9416e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.8563e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.2358e-07
+Assemble/solve/update time: 0.075(5.34%)/1.3(93.87%)/0.011(0.78%)
+[  0%] Time step 9 done in 20 seconds. Wall clock time: 28.013, time: 83.216, time step size: 18.513
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 8.2923e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.9893e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 9.3099e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 8.0342e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 7.3376e-06
+Assemble/solve/update time: 0.18(7.42%)/2.3(91.75%)/0.02(0.83%)
+[  0%] Time step 10 done in 2.6 seconds. Wall clock time: 30.587, time: 109.44, time step size: 26.227
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.8959e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.7406e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.3117e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 2.1928e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 2.0392e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 1.8049e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 11 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 12 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 13 done, maximum relative shift = 1.1141e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 14 done, maximum relative shift = 1.0099e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 15 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 16 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 17 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 18 done, maximum relative shift = 2.3399e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 19 done, maximum relative shift = 2.3496e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 20 done, maximum relative shift = 2.3496e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 21 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 22 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 23 done, maximum relative shift = 2.4431e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 24 done, maximum relative shift = 2.4431e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 25 done, maximum relative shift = 2.3548e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 26 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 27 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 28 done, maximum relative shift = 1.8927e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 29 done, maximum relative shift = 1.6004e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 30 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 31 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 32 done, maximum relative shift = 2.3453e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 33 done, maximum relative shift = 2.3453e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 34 done, maximum relative shift = 1.4605e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 35 done, maximum relative shift = 2.2175e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 36 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 37 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 38 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 39 done, maximum relative shift = 7.2500e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 40 done, maximum relative shift = 2.3413e-01
+Newton solver did not converge with dt = 29.869434539276526 seconds. Retrying with time step of dt = 14.934717269638263 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 4.5434e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 7.1684e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 3.0690e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.5688e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 7.8968e-05
+Assemble/solve/update time: 0.16(5.70%)/2.6(93.39%)/0.025(0.91%)
+[  0%] Time step 11 done in 23 seconds. Wall clock time: 53.939, time: 124.38, time step size: 14.935
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.3837e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.1752e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.7817e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 6.4782e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.3007e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 4.3921e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 5.6459e-05
+Assemble/solve/update time: 0.23(13.66%)/1.4(84.63%)/0.029(1.71%)
+[  0%] Time step 12 done in 1.9 seconds. Wall clock time: 55.792, time: 139.31, time step size: 14.935
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 7.1005e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.9271e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.2281e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 3.3508e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 3.1233e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.6452e-06
+Assemble/solve/update time: 0.2(6.00%)/3(93.07%)/0.03(0.93%)
+[  0%] Time step 13 done in 3.4 seconds. Wall clock time: 59.232, time: 152.11, time step size: 12.801
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.9099e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.4245e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.3755e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.7071e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.3210e-05
+Assemble/solve/update time: 0.16(5.79%)/2.6(93.32%)/0.025(0.89%)
+[  0%] Time step 14 done in 2.9 seconds. Wall clock time: 62.15, time: 163.09, time step size: 10.972
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 5.2814e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.1216e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.3875e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.4247e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.6775e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 2.2423e-07
+Assemble/solve/update time: 0.19(5.66%)/3.1(93.51%)/0.027(0.83%)
+[  0%] Time step 15 done in 3.4 seconds. Wall clock time: 65.593, time: 174.06, time step size: 10.972
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.6187e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 7.6457e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 4.2849e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.9945e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 3.8993e-07
+Assemble/solve/update time: 0.2(6.85%)/2.7(92.15%)/0.029(1.00%)
+[  0%] Time step 16 done in 3 seconds. Wall clock time: 68.637, time: 183.46, time step size: 9.405
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.1276e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.9639e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.2352e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.8992e-07
+Assemble/solve/update time: 0.17(6.96%)/2.2(91.90%)/0.028(1.14%)
+[  0%] Time step 17 done in 2.6 seconds. Wall clock time: 71.21, time: 192.87, time step size: 9.405
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 6.0812e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.6972e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.6732e-06
+Assemble/solve/update time: 0.13(6.57%)/1.8(92.46%)/0.019(0.97%)
+[  0%] Time step 18 done in 2 seconds. Wall clock time: 73.249, time: 203.58, time step size: 10.711
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.3483e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.1864e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 3.6388e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.0176e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.1352e-07
+Assemble/solve/update time: 0.18(6.13%)/2.7(92.85%)/0.03(1.02%)
+[  0%] Time step 19 done in 3.1 seconds. Wall clock time: 76.341, time: 217.27, time step size: 13.687
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.2359e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.3550e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 4.8798e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 2.2536e-06
+Assemble/solve/update time: 0.16(6.64%)/2.2(92.56%)/0.019(0.79%)
+[  0%] Time step 20 done in 2.5 seconds. Wall clock time: 78.86, time: 230.95, time step size: 13.687
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.3449e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.9559e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 6.8818e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 3.2223e-05
+Assemble/solve/update time: 0.16(6.65%)/2.3(92.58%)/0.019(0.77%)
+[  0%] Time step 21 done in 2.6 seconds. Wall clock time: 81.445, time: 246.54, time step size: 15.587
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.2998e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 9.6151e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 8.5857e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 6.8973e-06
+Assemble/solve/update time: 0.13(5.43%)/2.2(93.74%)/0.019(0.83%)
+[  0%] Time step 22 done in 2.5 seconds. Wall clock time: 83.909, time: 264.29, time step size: 17.752
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.7198e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 6.0085e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.5657e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.9946e-05
+Assemble/solve/update time: 0.13(17.85%)/0.59(79.57%)/0.019(2.57%)
+[  0%] Time step 23 done in 0.86 seconds. Wall clock time: 84.771, time: 284.51, time step size: 20.218
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.2552e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.1144e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.2228e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 2.2933e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 3.9558e-07
+Assemble/solve/update time: 0.17(5.83%)/2.7(93.31%)/0.024(0.85%)
+[  0%] Time step 24 done in 3 seconds. Wall clock time: 87.781, time: 307.54, time step size: 23.026
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.4489e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.9178e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 3.2315e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.1827e-06
+Assemble/solve/update time: 0.13(5.65%)/2.2(93.55%)/0.019(0.80%)
+[  0%] Time step 25 done in 2.5 seconds. Wall clock time: 90.234, time: 330.56, time step size: 23.026
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.8009e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.8257e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.2557e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.0923e-05
+Assemble/solve/update time: 0.12(5.33%)/2.2(93.79%)/0.02(0.88%)
+[  0%] Time step 26 done in 2.4 seconds. Wall clock time: 92.668, time: 356.79, time step size: 26.224
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.9652e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.3014e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.2167e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.0117e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.0265e-06
+Assemble/solve/update time: 0.15(5.34%)/2.6(93.75%)/0.026(0.92%)
+[  0%] Time step 27 done in 2.9 seconds. Wall clock time: 95.613, time: 386.65, time step size: 29.866
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.0655e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.6129e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.6453e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.4979e-06
+Assemble/solve/update time: 0.13(5.62%)/2.2(93.56%)/0.02(0.82%)
+[  0%] Time step 28 done in 2.5 seconds. Wall clock time: 98.115, time: 416.52, time step size: 29.866
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.5815e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.8198e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.3885e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.2846e-05
+Assemble/solve/update time: 0.15(6.30%)/2.2(92.87%)/0.02(0.83%)
+[  0%] Time step 29 done in 2.5 seconds. Wall clock time: 100.65, time: 450.53, time step size: 34.014
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.7422e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.8497e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.3875e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.4690e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.0535e-07
+Assemble/solve/update time: 0.16(5.48%)/2.7(93.64%)/0.025(0.88%)
+[  0%] Time step 30 done in 3 seconds. Wall clock time: 103.64, time: 489.27, time step size: 38.739
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.5200e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.3981e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 4.4909e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 3.0101e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 9.2260e-07
+Assemble/solve/update time: 0.17(5.81%)/2.7(93.33%)/0.025(0.85%)
+[  0%] Time step 31 done in 3.1 seconds. Wall clock time: 106.71, time: 528.01, time step size: 38.739
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.0000e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.0394e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.7716e-03
 Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
