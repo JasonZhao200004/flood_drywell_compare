@@ -1,0 +1,17 @@
+Corrected Flood-MAR merge QC
+===========================
+
+Segment1 frames = 81 (0.000000->480.000000 h)
+Segment2 frames = 161 (480.000000->1440.000000 h)
+Merged frames   = 241 (0.000000->1440.000000 h)
+480-h policy     = segment1 for t<480; segment2 for t>=480
+
+max_coordinate_diff = 0.0
+S_liq_max_abs_diff = 0.0008463784518539796
+S_liq_mean_abs_diff = 1.3541420118003975e-05
+p_liq_max_abs_diff = 139.9074520928989
+p_liq_mean_abs_diff = 8.07337967067401
+xO2_liq_max_abs_diff = 2.8854434877992106e-06
+xO2_liq_mean_abs_diff = 1.5351686479924506e-07
+rhoMolar_liq_max_abs_diff = 0.003496945006190799
+rhoMolar_liq_mean_abs_diff = 0.00020178058989137791
