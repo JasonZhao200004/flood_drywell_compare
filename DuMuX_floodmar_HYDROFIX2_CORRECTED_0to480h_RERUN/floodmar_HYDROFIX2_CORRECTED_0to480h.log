@@ -1,0 +1,71 @@
+
+Everything starts somewhere, though many physicists disagree.
+ - Terry Pratchett 
+
+Reading parameters from file /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/floodmar_HYDROFIX2_CORRECTED_full60d/params.input.
+UGGrid loaded successfully: 27548 elements and 14014 vertices.
+Computed bounding box tree with 55095 nodes for 27548 grid entities in 0.00684401 seconds.
+The H2O-N2-O2 fluid system was configured with the following policy:
+ - use H2O density as liquid mixture density: false
+ - use ideal gas density: false
+ - use N2 viscosity as gas mixture viscosity: false
+ - use N2 heat conductivity as gas mixture heat conductivity: false
+ - use ideal gas heat capacities: false
+-------------------------------------------------------------------------
+Initializing tables for the H2O fluid properties (20000 entries).
+Temperature -> min: 2.731e+02, max: 6.231e+02, n: 100
+Pressure    -> min: 0.000e+00, max: 2.000e+07, n: 200
+-------------------------------------------------------------------------
+Loaded 2-D O2 IC cells = 12908
+Flood-MAR axisymmetric water-N2-O2 model
+Open atmospheric gas-pressure boundary
+O2 surface diffusion coefficient = 1.000e-06 m/s
+Gas-pressure transmissibility factor = 1.000e+00
+Drywell startup ramp time = 1.800e+03 s
+Drywell injection head = 5.000e+00 cm
+Drywell boundary mode = legacy whole-face midpoint
+Initial O2 profile = /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/floodmar_HYDROFIX2_CORRECTED_full60d/oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+Formal drywell simulation: 3 cycles, 720 h
+Writing output for problem "floodmar_HYDROFIX2_CORRECTED_0to480h". Took 0.75 seconds.
+Colored 27548 elements with 5 colors in 0.011314164 seconds.
+
+Newton solver configured with the following options and parameters:
+ -- Newton.EnableChop = true
+ -- Newton.EnableShiftCriterion = true (relative shift convergence criterion)
+ -- Newton.MaxRelativeShift = 1.000e-04
+ -- Newton.MinSteps = 2
+ -- Newton.MaxSteps = 40
+ -- Newton.TargetSteps = 6
+ -- Newton.RetryTimeStepReductionFactor = 5.000e-01
+ -- Newton.MaxTimeStepDivisions = 15
+
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.9158e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.1508e-06
+Assemble/solve/update time: 0.11(9.58%)/1(89.58%)/0.0093(0.84%)
+[  0%] Time step 1 done in 1.2 seconds. Wall clock time: 1.1713, time: 1.08, time step size: 1.08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.6498e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.5844e-06
+Assemble/solve/update time: 0.091(9.23%)/0.87(88.39%)/0.023(2.37%)
+[  0%] Time step 2 done in 1 seconds. Wall clock time: 2.215, time: 2.76, time step size: 1.68
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 2.5544e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.6332e-06
+Assemble/solve/update time: 0.085(8.86%)/0.86(90.19%)/0.0091(0.95%)
+[  0%] Time step 3 done in 1 seconds. Wall clock time: 3.2205, time: 5.3733, time step size: 2.6133
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 3.9450e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.8612e-07
+Assemble/solve/update time: 0.051(5.61%)/0.86(93.58%)/0.0074(0.81%)
+[  0%] Time step 4 done in 0.96 seconds. Wall clock time: 4.1845, time: 9.4385, time step size: 4.0652
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 6.0687e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.1845e-07
+Assemble/solve/update time: 0.053(5.58%)/0.89(93.68%)/0.0071(0.74%)
+[  0%] Time step 5 done in 1 seconds. Wall clock time: 5.1864, time: 15.762, time step size: 6.3236
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 9.2802e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.9385e-07
+Assemble/solve/update time: 0.056(6.12%)/0.86(93.03%)/0.0078(0.85%)
+[  0%] Time step 6 done in 0.97 seconds. Wall clock time: 6.1564, time: 25.599, time step size: 9.8367
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 2.5605e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.0451e-06
+Assemble/solve/update time: 0.062(6.29%)/0.91(92.96%)/0.0074(0.75%)
+[  0%] Time step 7 done in 1 seconds. Wall clock time: 7.189, time: 40.9, time step size: 15.302
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.2719e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
