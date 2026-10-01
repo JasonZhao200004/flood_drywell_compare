@@ -1,0 +1,11 @@
+model,panel,phase,requested_relative_day,actual_relative_day,absolute_time_h,vtu
+Drywell MAR HYDROFIX,1,wetting,0.71259413,0.75405093,978.09722222,/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_full60d/drywell_head12m_HYDROFIX_full60d-00163.vtu
+Drywell MAR HYDROFIX,2,wetting,3.56297066,3.50405093,1044.09722222,/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_full60d/drywell_head12m_HYDROFIX_full60d-00174.vtu
+Drywell MAR HYDROFIX,3,wetting,11.40150611,11.25405093,1230.09722222,/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_full60d/drywell_head12m_HYDROFIX_full60d-00205.vtu
+Drywell MAR HYDROFIX,4,draining,12.90150611,13.00092593,1272.02222222,/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_full60d/drywell_head12m_HYDROFIX_full60d-00212.vtu
+Drywell MAR HYDROFIX,5,draining,17.40150611,17.50381944,1380.09166667,/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_full60d/drywell_head12m_HYDROFIX_full60d-00230.vtu
+Flood-MAR HYDROFIX2 corrected,1,wetting,0.27592182,0.25150463,966.03611111,/mnt/d/flood_drywell_compare/DuMuX_floodmar_HYDROFIX2_CORRECTED_full60d/floodmar_HYDROFIX2_CORRECTED_480to1440h-00081.vtu
+Flood-MAR HYDROFIX2 corrected,2,wetting,1.37960909,1.50185185,996.04444444,/mnt/d/flood_drywell_compare/DuMuX_floodmar_HYDROFIX2_CORRECTED_full60d/floodmar_HYDROFIX2_CORRECTED_480to1440h-00086.vtu
+Flood-MAR HYDROFIX2 corrected,3,wetting,4.41474910,4.25150463,1062.03611111,/mnt/d/flood_drywell_compare/DuMuX_floodmar_HYDROFIX2_CORRECTED_full60d/floodmar_HYDROFIX2_CORRECTED_480to1440h-00097.vtu
+Flood-MAR HYDROFIX2 corrected,4,draining,5.91474910,6.00219907,1104.05277778,/mnt/d/flood_drywell_compare/DuMuX_floodmar_HYDROFIX2_CORRECTED_full60d/floodmar_HYDROFIX2_CORRECTED_480to1440h-00104.vtu
+Flood-MAR HYDROFIX2 corrected,5,draining,10.41474910,10.50219907,1212.05277778,/mnt/d/flood_drywell_compare/DuMuX_floodmar_HYDROFIX2_CORRECTED_full60d/floodmar_HYDROFIX2_CORRECTED_480to1440h-00122.vtu
