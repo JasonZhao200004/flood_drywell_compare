@@ -1,0 +1,25 @@
+HYDROFIX2 40m TRUE BASIN-TAG — CORRECTED TIMEFIX
+
+Source change:
+  isAtmosphere_() uses boundaryTime_()
+  tag source selector uses boundaryTime_()
+
+Schedule:
+  0-96 h       wetting
+  96-101 h     smooth shutdown
+  101<t<=864 h exposed basin atmospheric
+  864-869 h    smooth rewetting
+  869-960 h    wetting
+
+Runtime settings:
+  EXACT original validated COMMON_ARGS restored.
+  GasPhaseHoldIterations = 48
+  Vtk.Precision = Float64
+  MaxDt = 300 s
+  Output = 1 h
+
+Pre-launch QC:
+  raw mesh byte-identical to validated run
+  raw IC byte-identical to validated run
+  t=0 geometry/state identical to validated 40m run
+  O2tag = 0
