@@ -1,0 +1,17 @@
+Flood-MAR HYDROFIX2 Cycle 4 same-volume continuation
+=====================================================
+Baseline end / C4 start      : 1440.000000000000 h
+C4 smooth filling end        : 1445.000000000000 h
+C4 shutdown ramp start       : 1540.657385016391 h
+C4 wetting / ramp end        : 1545.657385016391 h
+Production simulation end    : 1546.157385016391 h
+Target gross injection       : 3956.009528000 m3
+Calibrated gross injection   : 3955.927322549 m3
+Error                        : -0.082205451 m3
+Error                        : -0.002077989 %
+Gas-phase O2 advection       : true
+Longitudinal dispersivity    : 0.50 m
+Transverse dispersivity      : 0.05 m
+Gas mechanical dispersion    : false
+Max numerical dt             : 300 s
+Final VTK output             : 3600 s
