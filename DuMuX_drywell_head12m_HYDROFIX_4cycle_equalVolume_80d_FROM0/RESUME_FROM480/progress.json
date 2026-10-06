@@ -1,0 +1,11 @@
+{
+  "completed_h": 1920,
+  "restart": "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/RESUME_FROM480/C4_formal/restart.dat",
+  "reservoir_head_cm": 778.2697985773823,
+  "cutoffs_h": [
+    190.924177951269,
+    805.6391306396744,
+    1321.0127138621806,
+    1802.4605971281753
+  ]
+}

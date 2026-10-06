@@ -1,0 +1,45 @@
+
+Let's get the cow off the ice.
+
+Reading parameters from file /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/params.input.
+UGGrid loaded successfully: 12908 elements and 6705 vertices.
+Computed bounding box tree with 25815 nodes for 12908 grid entities in 0.00278143 seconds.
+The H2O-N2-O2 fluid system was configured with the following policy:
+ - use H2O density as liquid mixture density: false
+ - use ideal gas density: false
+ - use N2 viscosity as gas mixture viscosity: false
+ - use N2 heat conductivity as gas mixture heat conductivity: false
+ - use ideal gas heat capacities: false
+-------------------------------------------------------------------------
+Initializing tables for the H2O fluid properties (20000 entries).
+Temperature -> min: 2.731e+02, max: 6.231e+02, n: 100
+Pressure    -> min: 0.000e+00, max: 2.000e+07, n: 200
+-------------------------------------------------------------------------
+Loaded 2-D O2 IC cells = 12908
+Flood-MAR axisymmetric water-N2-O2 model
+Open atmospheric gas-pressure boundary
+O2 surface diffusion coefficient = 1.000e-06 m/s
+Gas-pressure transmissibility factor = 1.000e+00
+Drywell startup ramp time = 1.800e+03 s
+Drywell injection head = 1.200e+03 cm
+Drywell boundary mode = legacy whole-face midpoint
+Initial O2 profile = /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/oxygenIC_trueStagnantO2_2880h_2d_xO2.dat
+Formal drywell simulation: 3 cycles, 720 h
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  VTU cell center does not match mesh; recovery stopped
+[DESKTOP-1P3EKVS:01199] *** Process received signal ***
+[DESKTOP-1P3EKVS:01199] Signal: Aborted (6)
+[DESKTOP-1P3EKVS:01199] Signal code:  (-6)
+[DESKTOP-1P3EKVS:01199] [ 0] /lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x7f6d23a45330]
+[DESKTOP-1P3EKVS:01199] [ 1] /lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c)[0x7f6d23a9ec0c]
+[DESKTOP-1P3EKVS:01199] [ 2] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e)[0x7f6d23a4527e]
+[DESKTOP-1P3EKVS:01199] [ 3] /lib/x86_64-linux-gnu/libc.so.6(abort+0xdf)[0x7f6d23a288ff]
+[DESKTOP-1P3EKVS:01199] [ 4] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xa5ff5)[0x7f6d23ea5ff5]
+[DESKTOP-1P3EKVS:01199] [ 5] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xbb0da)[0x7f6d23ebb0da]
+[DESKTOP-1P3EKVS:01199] [ 6] /lib/x86_64-linux-gnu/libstdc++.so.6(_ZSt10unexpectedv+0x0)[0x7f6d23ea5a55]
+[DESKTOP-1P3EKVS:01199] [ 7] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xbb391)[0x7f6d23ebb391]
+[DESKTOP-1P3EKVS:01199] [ 8] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/RESUME_FROM480/drywell_resume480(+0x13a12)[0x59ebd2a34a12]
+[DESKTOP-1P3EKVS:01199] [ 9] /lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7f6d23a2a1ca]
+[DESKTOP-1P3EKVS:01199] [10] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7f6d23a2a28b]
+[DESKTOP-1P3EKVS:01199] [11] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/RESUME_FROM480/drywell_resume480(+0x1aa45)[0x59ebd2a3ba45]
+[DESKTOP-1P3EKVS:01199] *** End of error message ***

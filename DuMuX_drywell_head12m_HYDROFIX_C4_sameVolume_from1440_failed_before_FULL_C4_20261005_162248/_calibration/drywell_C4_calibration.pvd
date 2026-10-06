@@ -1,0 +1,6 @@
+<?xml version="1.0"?> 
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian"> 
+<Collection> 
+<DataSet timestep="5.184e+06" group="" part="0" name="" file="/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_calibration/drywell_C4_calibration-00000.vtu"/> 
+</Collection> 
+</VTKFile> 

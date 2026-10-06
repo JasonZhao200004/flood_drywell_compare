@@ -1,0 +1,5082 @@
+
+===== FILE: /home/zhe_zhao/run_drywell_HYDROFIX_4cycle_equalVolume_FROM0.sh =====
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+# =============================================================================
+# DRYWELL HYDROFIX — NEW FROM-SCRATCH 4-CYCLE EQUAL-VOLUME PIPELINE
+#
+# C1 =    0 ->  480 h
+# C2 =  480 ->  960 h
+# C3 =  960 -> 1440 h
+# C4 = 1440 -> 1920 h
+#
+# Every cycle target:
+# 3956.009528 m3 gross well -> soil
+#
+# Final acceptance tolerance:
+# +/- 0.02 m3 per cycle
+# =============================================================================
+
+ROOT="$HOME/dumux-work/dumux/dumux-floodmar"
+
+SRC="$ROOT/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production"
+
+BUILD="$ROOT/build-cmake"
+
+PROBLEM="$SRC/problem_reservoir_equalVolume_3cycle_60d_HYDROFIX.hh"
+
+PARAMS="$SRC/params.input"
+
+MESH="$SRC/floodmar_nonames.msh"
+
+IC="$SRC/oxygenIC_trueStagnantO2_2880h_2d_xO2.dat"
+
+TARGET_NAME="drywell_head12m_HYDROFIX_cycle1_0to480h"
+
+TARGET_M3="3956.009528"
+
+TOL_M3="0.02"
+
+OUT="/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0"
+
+echo
+echo "===================================================================================================="
+echo "NEW DRYWELL HYDROFIX 4-CYCLE EQUAL-VOLUME MODEL"
+echo "===================================================================================================="
+echo "C1 :    0 ->  480 h"
+echo "C2 :  480 ->  960 h"
+echo "C3 :  960 -> 1440 h"
+echo "C4 : 1440 -> 1920 h"
+echo
+echo "Target per cycle = $TARGET_M3 m3 gross well -> soil"
+echo "Final tolerance  = +/- $TOL_M3 m3"
+echo "Head             = 1200 cm"
+echo "Startup ramp     = 1800 s"
+echo
+
+# -----------------------------------------------------------------------------
+# SAFETY CHECKS
+# -----------------------------------------------------------------------------
+
+for f in "$PROBLEM" "$PARAMS" "$MESH" "$IC"; do
+    if [ ! -e "$f" ]; then
+        echo "ERROR: missing required file:"
+        echo "  $f"
+        exit 1
+    fi
+done
+
+# Archive an old attempt instead of deleting it.
+if [ -e "$OUT" ]; then
+    OLD="${OUT}_backup_$(date +%Y%m%d_%H%M%S)"
+    echo "Existing output found."
+    echo "Moving to:"
+    echo "  $OLD"
+    mv "$OUT" "$OLD"
+fi
+
+mkdir -p \
+    "$OUT/bin" \
+    "$OUT/model_source" \
+    "$OUT/calibration" \
+    "$OUT/restarts" \
+    "$OUT/scripts"
+
+cp "$0" "$OUT/scripts/" 2>/dev/null || true
+
+# -----------------------------------------------------------------------------
+# BUILD A COMPLETELY SEPARATE 4-CYCLE EXECUTABLE
+#
+# Temporarily patch the trusted HYDROFIX header, compile, copy executable,
+# then restore original header immediately.
+# -----------------------------------------------------------------------------
+
+BACKUP="/tmp/problem_HYDROFIX_original_4cycle_$$.hh"
+
+cp -f "$PROBLEM" "$BACKUP"
+
+restore_problem()
+{
+    if [ -f "$BACKUP" ]; then
+        cp -f "$BACKUP" "$PROBLEM"
+        rm -f "$BACKUP"
+        echo
+        echo "Trusted HYDROFIX problem source restored."
+    fi
+}
+
+trap restore_problem EXIT INT TERM
+
+echo
+echo "===================================================================================================="
+echo "1. CREATE 4-CYCLE PARAMETERIZED HYDROFIX SOURCE"
+echo "===================================================================================================="
+
+python3 - "$PROBLEM" "$OUT/model_source/problem_HYDROFIX_4cycle_equalVolume.hh" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+p = Path(sys.argv[1])
+archive = Path(sys.argv[2])
+
+s = p.read_text()
+
+MARK = "HYDROFIX_4CYCLE_EQUAL_VOLUME_FROM0"
+
+if MARK in s:
+    raise SystemExit("ERROR: unexpected existing 4-cycle patch in trusted source")
+
+
+def bounds(text, signature):
+    pos = text.find(signature)
+    if pos < 0:
+        raise RuntimeError(f"Cannot find function: {signature}")
+
+    op = text.find("{", pos)
+    if op < 0:
+        raise RuntimeError(f"Cannot find opening brace: {signature}")
+
+    depth = 0
+
+    for i in range(op, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+
+            if depth == 0:
+                return pos, op, i
+
+    raise RuntimeError(f"Cannot find closing brace: {signature}")
+
+
+def replace_body(text, signature, body):
+    pos, op, cl = bounds(text, signature)
+
+    return (
+        text[:op+1]
+        + "\n"
+        + body.rstrip()
+        + "\n    "
+        + text[cl:]
+    )
+
+
+# ============================================================================
+# Helper: runtime-controlled externally supplied wetting windows
+# ============================================================================
+
+cycle_pos = s.find("    int cycleNumber(Scalar timeSeconds) const")
+
+if cycle_pos < 0:
+    raise RuntimeError("cycleNumber() not found")
+
+helper = r'''
+    // HYDROFIX_4CYCLE_EQUAL_VOLUME_FROM0
+    //
+    // Four 20-day cycles. Wetting cutoff times are runtime parameters
+    // calibrated from model-native gross well->soil injection.
+    bool externallySupplied4Cycle_(Scalar timeSeconds) const
+    {
+        constexpr Scalar eps = 1.0e-8;
+
+        const Scalar c1End =
+            getParam<Scalar>(
+                "Problem.Cycle1WetEndHours",
+                163.125247592924
+            )*3600.0;
+
+        const Scalar c2End =
+            getParam<Scalar>(
+                "Problem.Cycle2WetEndHours",
+                737.084098745400
+            )*3600.0;
+
+        const Scalar c3End =
+            getParam<Scalar>(
+                "Problem.Cycle3WetEndHours",
+                1233.636146520033
+            )*3600.0;
+
+        const Scalar c4End =
+            getParam<Scalar>(
+                "Problem.Cycle4WetEndHours",
+                1750.0
+            )*3600.0;
+
+        if (timeSeconds <= c1End + eps)
+            return true;
+
+        if (
+            timeSeconds > 480.0*3600.0 + eps
+            && timeSeconds <= c2End + eps
+        )
+            return true;
+
+        if (
+            timeSeconds > 960.0*3600.0 + eps
+            && timeSeconds <= c3End + eps
+        )
+            return true;
+
+        if (
+            timeSeconds > 1440.0*3600.0 + eps
+            && timeSeconds <= c4End + eps
+        )
+            return true;
+
+        return false;
+    }
+
+    Scalar cycleStartSeconds4Cycle_(Scalar timeSeconds) const
+    {
+        constexpr Scalar eps = 1.0e-8;
+
+        if (timeSeconds > 1440.0*3600.0 + eps)
+            return 1440.0*3600.0;
+
+        if (timeSeconds > 960.0*3600.0 + eps)
+            return 960.0*3600.0;
+
+        if (timeSeconds > 480.0*3600.0 + eps)
+            return 480.0*3600.0;
+
+        return 0.0;
+    }
+
+'''
+
+s = s[:cycle_pos] + helper + s[cycle_pos:]
+
+
+# ============================================================================
+# cycleNumber(): 1,2,3,4
+# ============================================================================
+
+s = replace_body(
+    s,
+    "int cycleNumber(Scalar timeSeconds) const",
+r'''
+        constexpr Scalar eps = 1.0e-8;
+
+        if (timeSeconds <= 480.0*3600.0 + eps)
+            return 1;
+
+        if (timeSeconds <= 960.0*3600.0 + eps)
+            return 2;
+
+        if (timeSeconds <= 1440.0*3600.0 + eps)
+            return 3;
+
+        return 4;
+'''
+)
+
+
+# ============================================================================
+# appliedDrywellHeadCm(): SAME 1800-s ramp, reset at every cycle
+# ============================================================================
+
+s = replace_body(
+    s,
+    "Scalar appliedDrywellHeadCm(Scalar timeSeconds) const",
+r'''
+        const Scalar cycleStart =
+            cycleStartSeconds4Cycle_(timeSeconds);
+
+        const Scalar localWettingTime =
+            std::max(
+                Scalar(0.0),
+                timeSeconds - cycleStart
+            );
+
+        const Scalar startupFactor =
+            drywellStartupRampTime_ > 0.0
+            ? std::clamp(
+                  localWettingTime/drywellStartupRampTime_,
+                  Scalar(0.0),
+                  Scalar(1.0)
+              )
+            : Scalar(1.0);
+
+        const Scalar scheduledHeadCm =
+            drywellHeadCm_(timeSeconds);
+
+        return scheduledHeadCm > 0.0
+               ? startupFactor*scheduledHeadCm
+               : scheduledHeadCm;
+'''
+)
+
+
+# ============================================================================
+# drywellHeadCm_(): runtime equal-volume schedule
+# ============================================================================
+
+s = replace_body(
+    s,
+    "Scalar drywellHeadCm_(Scalar timeSeconds) const",
+r'''
+        if (externallySupplied4Cycle_(timeSeconds))
+            return drywellInjectionHeadCm_;
+
+        // After external supply stops, the finite drywell reservoir controls
+        // the remaining water head exactly as in the trusted HYDROFIX model.
+        return reservoirHeadCm_;
+'''
+)
+
+
+# ============================================================================
+# nextBoundaryEventTime():
+# synchronize solver with:
+# - 4 cycle starts
+# - end of every 1800-s startup ramp
+# - all four calibrated supply cutoffs
+# ============================================================================
+
+s = replace_body(
+    s,
+    "Scalar nextBoundaryEventTime(Scalar currentTimeSeconds) const",
+r'''
+        constexpr Scalar eps = 1.0e-8;
+
+        const Scalar c1 =
+            getParam<Scalar>(
+                "Problem.Cycle1WetEndHours",
+                163.125247592924
+            )*3600.0;
+
+        const Scalar c2 =
+            getParam<Scalar>(
+                "Problem.Cycle2WetEndHours",
+                737.084098745400
+            )*3600.0;
+
+        const Scalar c3 =
+            getParam<Scalar>(
+                "Problem.Cycle3WetEndHours",
+                1233.636146520033
+            )*3600.0;
+
+        const Scalar c4 =
+            getParam<Scalar>(
+                "Problem.Cycle4WetEndHours",
+                1750.0
+            )*3600.0;
+
+        const Scalar events[] = {
+            drywellStartupRampTime_,
+            c1,
+
+            480.0*3600.0,
+            480.0*3600.0 + drywellStartupRampTime_,
+            c2,
+
+            960.0*3600.0,
+            960.0*3600.0 + drywellStartupRampTime_,
+            c3,
+
+            1440.0*3600.0,
+            1440.0*3600.0 + drywellStartupRampTime_,
+            c4,
+
+            1920.0*3600.0
+        };
+
+        Scalar next = Scalar(1.0e100);
+
+        for (const Scalar eventTime : events)
+        {
+            if (
+                eventTime > currentTimeSeconds + eps
+                && eventTime < next
+            )
+                next = eventTime;
+        }
+
+        return next;
+'''
+)
+
+
+# ============================================================================
+# Robin drywell BC:
+# Replace ONLY the scheduled/ramped-head expression.
+# This regex is deliberately narrow and cannot cross into another function.
+# ============================================================================
+
+if "void updateReservoirAfterAcceptedStep(" not in s:
+    raise RuntimeError(
+        "updateReservoirAfterAcceptedStep() is already missing BEFORE Robin patch"
+    )
+
+pat = re.compile(
+    "const\\s+Scalar\\s+scheduledDrywellHeadCm\\s*=\\s*"
+    "drywellHeadCm_\\(boundaryTime\\)\\s*;\\s*"
+    "const\\s+Scalar\\s+rampedDrywellHeadCm\\s*=\\s*"
+    "scheduledDrywellHeadCm\\s*>\\s*0\\.0\\s*"
+    "\\?\\s*startupFactor\\s*\\*\\s*scheduledDrywellHeadCm\\s*"
+    ":\\s*scheduledDrywellHeadCm\\s*;"
+)
+
+replacement = (
+    "const Scalar rampedDrywellHeadCm =\\n"
+    "                appliedDrywellHeadCm(boundaryTime);"
+)
+
+s2, n = pat.subn(replacement, s, count=1)
+
+if n != 1:
+    raise RuntimeError(
+        f"Expected exactly one Robin scheduled-head block; found {n}"
+    )
+
+if "void updateReservoirAfterAcceptedStep(" not in s2:
+    raise RuntimeError(
+        "SAFETY STOP: Robin replacement removed updateReservoirAfterAcceptedStep()"
+    )
+
+s = s2
+
+print("Robin replacement PASS")
+print("updateReservoirAfterAcceptedStep() preserved")
+
+# ============================================================================
+# updateReservoirAfterAcceptedStep():
+# replace old fixed C1/C2/C3 supply test with the new four-cycle runtime test.
+# Keep the trusted finite-reservoir drainage calculation unchanged.
+# ============================================================================
+
+sig = "void updateReservoirAfterAcceptedStep("
+
+pos, op, cl = bounds(s, sig)
+
+body = s[op+1:cl]
+
+marker = "if (reservoirHeadCm_ <= 0.0)"
+
+m = body.find(marker)
+
+if m < 0:
+    raise RuntimeError(
+        "Could not locate finite-reservoir drainage section"
+    )
+
+drainage_tail = body[m:]
+
+new_prefix = r'''
+
+        // HYDROFIX_4CYCLE_EQUAL_VOLUME_FROM0
+        //
+        // While external supply is active, the drywell is maintained by the
+        // prescribed 12-m source. Once the calibrated gross-volume target has
+        // been reached, finite-reservoir drainage resumes.
+        if (externallySupplied4Cycle_(acceptedEndTimeSeconds))
+        {
+            reservoirHeadCm_ = drywellInjectionHeadCm_;
+            lastReservoirNetFluxM3s_ = 0.0;
+            return;
+        }
+
+'''
+
+new_body = new_prefix + drainage_tail
+
+s = s[:op+1] + new_body + s[cl:]
+
+
+# Final source sanity checks.
+required = [
+    "HYDROFIX_4CYCLE_EQUAL_VOLUME_FROM0",
+    "Problem.Cycle1WetEndHours",
+    "Problem.Cycle2WetEndHours",
+    "Problem.Cycle3WetEndHours",
+    "Problem.Cycle4WetEndHours",
+    "return 4;",
+    "1440.0*3600.0 + drywellStartupRampTime_",
+    "appliedDrywellHeadCm(boundaryTime)",
+]
+
+for x in required:
+    if x not in s:
+        raise RuntimeError(
+            f"Final source verification failed: {x}"
+        )
+
+p.write_text(s)
+archive.write_text(s)
+
+print("SUCCESS: four-cycle HYDROFIX source created.")
+print()
+print("Physics retained:")
+print("  Drywell head       = runtime 1200 cm")
+print("  Startup ramp       = runtime 1800 s")
+print("  Finite reservoir   = retained")
+print("  HYDROFIX pressure  = retained")
+print("  O2 / dispersion    = retained")
+print()
+print("Cycle starts:")
+print("  C1 =    0 h")
+print("  C2 =  480 h")
+print("  C3 =  960 h")
+print("  C4 = 1440 h")
+PY
+
+echo
+echo "===================================================================================================="
+echo "2. COMPILE NEW FOUR-CYCLE EXECUTABLE"
+echo "===================================================================================================="
+
+cmake --build "$BUILD" \
+    --target "$TARGET_NAME" \
+    -j2
+
+EXE_BUILD="$(
+    find "$BUILD" \
+        -type f \
+        -name "$TARGET_NAME" \
+        -perm -u+x \
+        2>/dev/null \
+        | head -1
+)"
+
+if [ -z "$EXE_BUILD" ] || [ ! -x "$EXE_BUILD" ]; then
+    echo "ERROR: compiled executable not found."
+    exit 1
+fi
+
+EXE="$OUT/bin/drywell_HYDROFIX_4cycle_equalVolume"
+
+cp -f "$EXE_BUILD" "$EXE"
+chmod +x "$EXE"
+
+echo
+echo "New executable:"
+echo "  $EXE"
+
+# Restore the trusted source immediately.
+restore_problem
+trap - EXIT INT TERM
+
+
+# =============================================================================
+# COMMON RUNNER
+# =============================================================================
+
+hours_to_seconds()
+{
+    python3 - "$1" <<'PY'
+import sys
+print(f"{float(sys.argv[1])*3600.0:.12f}")
+PY
+}
+
+
+run_case()
+{
+    local stage="$1"
+    local name="$2"
+    local tend_h="$3"
+    local restart_file="$4"
+    local restart_out="$5"
+    local c1="$6"
+    local c2="$7"
+    local c3="$8"
+    local c4="$9"
+
+    mkdir -p "$stage"
+
+    local tend_s
+    tend_s="$(hours_to_seconds "$tend_h")"
+
+    local args=(
+        "$EXE"
+        "$PARAMS"
+
+        -Grid.File "$MESH"
+
+        -Problem.Name "$name"
+        -Problem.InitialOxygenProfileFile "$IC"
+        -Problem.DrywellInjectionHead 1200
+        -Problem.DrywellStartupRampTime 1800
+        -Problem.EnableGasPhaseOxygenAdvection true
+
+        -Problem.Cycle1WetEndHours "$c1"
+        -Problem.Cycle2WetEndHours "$c2"
+        -Problem.Cycle3WetEndHours "$c3"
+        -Problem.Cycle4WetEndHours "$c4"
+
+        -Dispersion.LongitudinalDispersivity 0.50
+        -Dispersion.TransverseDispersivity 0.05
+        -Dispersion.ApplyToGasPhase false
+        -Dispersion.IncludeDrywellBoundaryVelocity false
+
+        -TimeLoop.TEnd "$tend_s"
+        -TimeLoop.DtInitial 1.08
+        -TimeLoop.MaxTimeStepSize 360
+        -TimeLoop.OutputInterval 21600
+
+        -Newton.MaxRelativeShift 1e-4
+        -Newton.MaxSteps 40
+        -Newton.MaxTimeStepDivisions 15
+        -Newton.TargetSteps 6
+        -Newton.UseLineSearch false
+
+        -Newton.EnableChop true
+        -Newton.ChopMaxPressureChange 2e4
+        -Newton.ChopMaxSaturationChange 0.10
+        -Newton.ChopMaxLiquidMoleFractionChange 1e-5
+        -Newton.ChopMaxGasMoleFractionChange 0.05
+        -Newton.ChopSaturationBuffer 0
+
+        -PrimaryVariableSwitch.GasPhaseHoldIterations 48
+        -PrimaryVariableSwitch.GasDisappearanceTolerance 0.01
+        -PrimaryVariableSwitch.GasAppearanceTolerance 0.02
+        -PrimaryVariableSwitch.LiquidAppearanceTolerance 0.02
+        -PrimaryVariableSwitch.AppearanceSaturation 1e-4
+        -PrimaryVariableSwitch.Verbosity 0
+
+        -LinearSolver.ResidualReduction 1e-8
+
+        -Vtk.Precision Float64
+    )
+
+    if [ -n "$restart_file" ]; then
+        args+=(
+            -Restart.Enable true
+            -Restart.File "$restart_file"
+        )
+    else
+        args+=(
+            -Restart.Enable false
+        )
+    fi
+
+    if [ -n "$restart_out" ]; then
+        args+=(
+            -Restart.WriteAtEnd true
+            -Restart.OutputFile "$restart_out"
+        )
+    else
+        args+=(
+            -Restart.WriteAtEnd false
+        )
+    fi
+
+    echo
+    echo "RUN:"
+    echo "  $name"
+    echo "  TEnd = $tend_h h"
+    echo "  C1 cutoff = $c1"
+    echo "  C2 cutoff = $c2"
+    echo "  C3 cutoff = $c3"
+    echo "  C4 cutoff = $c4"
+
+    if ! (
+        cd "$stage"
+        "${args[@]}"
+    ) > "$stage/run.log" 2>&1
+    then
+        echo
+        echo "===================================================================================================="
+        echo "MODEL FAILED: $name"
+        echo "===================================================================================================="
+        tail -100 "$stage/run.log"
+        exit 1
+    fi
+}
+
+
+# Remove calibration VTKs after their information has been extracted.
+# Keep logs + injection_history CSV + restart snapshots.
+cleanup_stage_vtk()
+{
+    local d="$1"
+
+    rm -f \
+        "$d"/*.vtu \
+        "$d"/*.pvd \
+        2>/dev/null || true
+}
+
+
+# =============================================================================
+# PYTHON HELPERS FOR MODEL-NATIVE GROSS WELL->SOIL VOLUME
+# =============================================================================
+
+find_crossing()
+{
+    local csv="$1"
+    local start_h="$2"
+
+    python3 - "$csv" "$start_h" "$TARGET_M3" <<'PY'
+import csv
+import sys
+
+path = sys.argv[1]
+start = float(sys.argv[2])
+target = float(sys.argv[3])
+
+rows = []
+
+with open(path, newline="") as f:
+    r = csv.DictReader(f)
+
+    if "time_h" not in (r.fieldnames or []):
+        raise SystemExit("ERROR: time_h missing")
+
+    if "step_well_to_soil_m3" not in (r.fieldnames or []):
+        raise SystemExit(
+            "ERROR: step_well_to_soil_m3 missing from model-native history"
+        )
+
+    for row in r:
+        t = float(row["time_h"])
+
+        if t <= start + 1e-9:
+            continue
+
+        step = max(
+            0.0,
+            float(row["step_well_to_soil_m3"])
+        )
+
+        rows.append((t, step))
+
+cum = 0.0
+prev_t = start
+prev_v = 0.0
+
+for t, step in rows:
+    new_v = cum + step
+
+    if new_v >= target:
+        dv = new_v - cum
+
+        if dv <= 0.0:
+            tc = t
+        else:
+            f = (target - cum)/dv
+            f = min(1.0, max(0.0, f))
+            tc = prev_t + f*(t - prev_t)
+
+        print(f"{tc:.12f}")
+        raise SystemExit(0)
+
+    prev_t = t
+    prev_v = cum
+    cum = new_v
+
+raise SystemExit(3)
+PY
+}
+
+
+measure_at_cutoff()
+{
+    local csv="$1"
+    local start_h="$2"
+    local cutoff_h="$3"
+
+    python3 - "$csv" "$start_h" "$cutoff_h" <<'PY'
+import csv
+import sys
+
+path = sys.argv[1]
+start = float(sys.argv[2])
+cut = float(sys.argv[3])
+
+rows = []
+
+with open(path, newline="") as f:
+    r = csv.DictReader(f)
+
+    fields = set(r.fieldnames or [])
+
+    if "step_well_to_soil_m3" not in fields:
+        raise SystemExit(
+            "ERROR: missing step_well_to_soil_m3"
+        )
+
+    for row in r:
+        t = float(row["time_h"])
+
+        if not (
+            t > start + 1e-9
+            and t <= cut + 1e-7
+        ):
+            continue
+
+        step = max(
+            0.0,
+            float(row["step_well_to_soil_m3"])
+        )
+
+        dt = float(row.get("dt_s", "0") or 0)
+
+        rows.append((t, step, dt))
+
+vol = sum(x[1] for x in rows)
+
+# Estimate near-cutoff injection rate from the final ~1 h.
+near = [
+    x for x in rows
+    if x[0] >= cut - 1.0
+]
+
+sv = sum(x[1] for x in near)
+sd = sum(x[2] for x in near)
+
+if sd > 0.0:
+    rate_h = sv/sd*3600.0
+else:
+    rate_h = 0.0
+
+print(f"{vol:.12f} {rate_h:.12f}")
+PY
+}
+
+
+abs_le_tol()
+{
+    python3 - "$1" "$2" <<'PY'
+import sys
+print(
+    "yes"
+    if abs(float(sys.argv[1])) <= float(sys.argv[2])
+    else "no"
+)
+PY
+}
+
+
+adjust_cutoff()
+{
+    python3 - "$1" "$2" "$3" "$4" <<'PY'
+import sys
+
+cut = float(sys.argv[1])
+err = float(sys.argv[2])
+rate = float(sys.argv[3])
+cycle_end = float(sys.argv[4])
+
+if rate <= 0.0:
+    raise SystemExit("ERROR: non-positive near-cutoff injection rate")
+
+new = cut + err/rate
+
+new = max(0.0, min(cycle_end - 0.01, new))
+
+print(f"{new:.12f}")
+PY
+}
+
+
+# =============================================================================
+# CALIBRATION STATE
+# =============================================================================
+
+C1="479.999"
+C2="959.999"
+C3="1439.999"
+C4="1919.999"
+
+STARTS=(0 480 960 1440)
+ENDS=(480 960 1440 1920)
+
+CURRENT_RESTART=""
+
+echo
+echo "===================================================================================================="
+echo "3. SEQUENTIAL HYDROFIX CALIBRATION — C1, C2, C3"
+echo "===================================================================================================="
+
+
+for IDX in 0 1 2
+do
+    CYCLE=$((IDX + 1))
+    START="${STARTS[$IDX]}"
+    END="${ENDS[$IDX]}"
+
+    echo
+    echo "----------------------------------------------------------------------------------------------------"
+    echo "CALIBRATING CYCLE $CYCLE"
+    echo "Cycle start = $START h"
+    echo "Target      = $TARGET_M3 m3"
+    echo "----------------------------------------------------------------------------------------------------"
+
+    CAL_END="$(
+        python3 - "$START" <<'PY'
+import sys
+print(float(sys.argv[1]) + 360.0)
+PY
+    )"
+
+    STAGE="$OUT/calibration/C${CYCLE}_continuous"
+
+    NAME="drywell_HYDROFIX_C${CYCLE}_continuous_calibration"
+
+    run_case \
+        "$STAGE" \
+        "$NAME" \
+        "$CAL_END" \
+        "$CURRENT_RESTART" \
+        "" \
+        "$C1" "$C2" "$C3" "$C4"
+
+    CSV="$STAGE/${NAME}_injection_history.csv"
+
+    set +e
+    CUT="$(find_crossing "$CSV" "$START")"
+    RC=$?
+    set -e
+
+    if [ "$RC" -ne 0 ]; then
+        echo "Target not reached in first calibration window."
+        echo "Extending calibration close to end of cycle..."
+
+        CAL_END="$(
+            python3 - "$START" <<'PY'
+import sys
+print(float(sys.argv[1]) + 470.0)
+PY
+        )"
+
+        STAGE="$OUT/calibration/C${CYCLE}_continuous_extended"
+
+        run_case \
+            "$STAGE" \
+            "$NAME" \
+            "$CAL_END" \
+            "$CURRENT_RESTART" \
+            "" \
+            "$C1" "$C2" "$C3" "$C4"
+
+        CSV="$STAGE/${NAME}_injection_history.csv"
+
+        CUT="$(find_crossing "$CSV" "$START")"
+    fi
+
+    cleanup_stage_vtk "$STAGE"
+
+    echo
+    echo "Initial C${CYCLE} cutoff estimate = $CUT h"
+
+    case "$CYCLE" in
+        1) C1="$CUT" ;;
+        2) C2="$CUT" ;;
+        3) C3="$CUT" ;;
+    esac
+
+    # -------------------------------------------------------------------------
+    # Refine cutoff against a formal run using the exact event-synchronized
+    # HYDROFIX model.
+    # -------------------------------------------------------------------------
+
+    for ITER in 1 2 3 4
+    do
+        VALID_END="$(
+            python3 - "$CUT" "$END" <<'PY'
+import sys
+c = float(sys.argv[1])
+e = float(sys.argv[2])
+print(min(e, c + 0.25))
+PY
+        )"
+
+        VSTAGE="$OUT/calibration/C${CYCLE}_validation_${ITER}"
+
+        VNAME="drywell_HYDROFIX_C${CYCLE}_validation_${ITER}"
+
+        run_case \
+            "$VSTAGE" \
+            "$VNAME" \
+            "$VALID_END" \
+            "$CURRENT_RESTART" \
+            "" \
+            "$C1" "$C2" "$C3" "$C4"
+
+        VCSV="$VSTAGE/${VNAME}_injection_history.csv"
+
+        read VOL RATE < <(
+            measure_at_cutoff \
+                "$VCSV" \
+                "$START" \
+                "$CUT"
+        )
+
+        ERR="$(
+            python3 - "$TARGET_M3" "$VOL" <<'PY'
+import sys
+print(
+    f"{float(sys.argv[1])-float(sys.argv[2]):.12f}"
+)
+PY
+        )"
+
+        echo
+        echo "C${CYCLE} validation $ITER"
+        echo "  cutoff = $CUT h"
+        echo "  volume = $VOL m3"
+        echo "  target = $TARGET_M3 m3"
+        echo "  target-volume = $ERR m3"
+        echo "  local rate = $RATE m3/h"
+
+        cleanup_stage_vtk "$VSTAGE"
+
+        if [ "$(abs_le_tol "$ERR" "$TOL_M3")" = "yes" ]; then
+            echo "  PASS"
+            break
+        fi
+
+        CUT="$(
+            adjust_cutoff \
+                "$CUT" \
+                "$ERR" \
+                "$RATE" \
+                "$END"
+        )"
+
+        case "$CYCLE" in
+            1) C1="$CUT" ;;
+            2) C2="$CUT" ;;
+            3) C3="$CUT" ;;
+        esac
+
+        echo "  new cutoff = $CUT h"
+
+        if [ "$ITER" -eq 4 ]; then
+            echo "ERROR: C${CYCLE} cutoff refinement did not converge."
+            exit 1
+        fi
+    done
+
+    # -------------------------------------------------------------------------
+    # Run the calibrated cycle all the way to its 20-day boundary and write an
+    # exact primary-variable restart for calibration of the next cycle.
+    # -------------------------------------------------------------------------
+
+    RESTART_OUT="$OUT/restarts/restart_${END}h.dat"
+
+    FSTAGE="$OUT/calibration/C${CYCLE}_formal_to_${END}h"
+
+    FNAME="drywell_HYDROFIX_C${CYCLE}_formal"
+
+    run_case \
+        "$FSTAGE" \
+        "$FNAME" \
+        "$END" \
+        "$CURRENT_RESTART" \
+        "$RESTART_OUT" \
+        "$C1" "$C2" "$C3" "$C4"
+
+    FCSV="$FSTAGE/${FNAME}_injection_history.csv"
+
+    read FVOL FRATE < <(
+        measure_at_cutoff \
+            "$FCSV" \
+            "$START" \
+            "$CUT"
+    )
+
+    FERR="$(
+        python3 - "$FVOL" "$TARGET_M3" <<'PY'
+import sys
+print(
+    f"{float(sys.argv[1])-float(sys.argv[2]):+.12f}"
+)
+PY
+    )"
+
+    echo
+    echo "FINAL C${CYCLE} FORMAL CHECK"
+    echo "  cutoff = $CUT h"
+    echo "  gross  = $FVOL m3"
+    echo "  error  = $FERR m3"
+
+    if [ ! -s "$RESTART_OUT" ]; then
+        echo "ERROR: restart was not written:"
+        echo "$RESTART_OUT"
+        exit 1
+    fi
+
+    cleanup_stage_vtk "$FSTAGE"
+
+    CURRENT_RESTART="$RESTART_OUT"
+done
+
+
+# =============================================================================
+# C4 CALIBRATION
+#
+# IMPORTANT:
+# Do NOT restart at 1440 h for the actual C4 calibration.
+# Run from t=0 continuously through C1-C2-C3 into C4.
+# This deliberately avoids today's restart/C4 numerical problem.
+# =============================================================================
+
+echo
+echo "===================================================================================================="
+echo "4. C4 CALIBRATION — CONTINUOUS FROM t=0"
+echo "===================================================================================================="
+
+C4="1919.999"
+
+C4_STAGE="$OUT/calibration/C4_continuous_FROM0"
+
+C4_NAME="drywell_HYDROFIX_C4_continuous_FROM0"
+
+run_case \
+    "$C4_STAGE" \
+    "$C4_NAME" \
+    "1800.0" \
+    "" \
+    "" \
+    "$C1" "$C2" "$C3" "$C4"
+
+C4_CSV="$C4_STAGE/${C4_NAME}_injection_history.csv"
+
+set +e
+C4_CUT="$(find_crossing "$C4_CSV" "1440.0")"
+RC=$?
+set -e
+
+if [ "$RC" -ne 0 ]; then
+    echo "C4 target not reached by 1800 h."
+    echo "Extending continuous-from-zero calibration to 1910 h."
+
+    cleanup_stage_vtk "$C4_STAGE"
+
+    C4_STAGE="$OUT/calibration/C4_continuous_FROM0_extended"
+
+    run_case \
+        "$C4_STAGE" \
+        "$C4_NAME" \
+        "1910.0" \
+        "" \
+        "" \
+        "$C1" "$C2" "$C3" "$C4"
+
+    C4_CSV="$C4_STAGE/${C4_NAME}_injection_history.csv"
+
+    C4_CUT="$(find_crossing "$C4_CSV" "1440.0")"
+fi
+
+C4="$C4_CUT"
+
+cleanup_stage_vtk "$C4_STAGE"
+
+echo
+echo "Initial C4 cutoff from continuous 0-h trajectory:"
+echo "  C4 cutoff = $C4 h"
+
+
+# =============================================================================
+# FINAL CONTINUOUS 80-DAY PRODUCTION RUN
+#
+# After every full run, calculate ACTUAL model-native gross well->soil volume
+# in all four wetting periods.
+#
+# If any differs from target by >0.02 m3, adjust the cutoff and repeat.
+# =============================================================================
+
+echo
+echo "===================================================================================================="
+echo "5. FINAL CONTINUOUS 0 -> 1920 h PRODUCTION + FOUR-CYCLE QC"
+echo "===================================================================================================="
+
+ACCEPTED="no"
+FINAL_STAGE=""
+
+for GLOBAL_ITER in 1 2 3 4
+do
+    echo
+    echo "----------------------------------------------------------------------------------------------------"
+    echo "FULL 80-d PRODUCTION ITERATION $GLOBAL_ITER"
+    echo "----------------------------------------------------------------------------------------------------"
+    echo "C1 cutoff = $C1"
+    echo "C2 cutoff = $C2"
+    echo "C3 cutoff = $C3"
+    echo "C4 cutoff = $C4"
+
+    STAGE="$OUT/final_iter_${GLOBAL_ITER}"
+
+    NAME="drywell_HYDROFIX_4cycle_equalVolume_80d_iter${GLOBAL_ITER}"
+
+    run_case \
+        "$STAGE" \
+        "$NAME" \
+        "1920.0" \
+        "" \
+        "$STAGE/restart_1920h.dat" \
+        "$C1" "$C2" "$C3" "$C4"
+
+    CSV="$STAGE/${NAME}_injection_history.csv"
+
+    QC="$(
+        python3 - \
+            "$CSV" \
+            "$TARGET_M3" \
+            "$C1" "$C2" "$C3" "$C4" <<'PY'
+import csv
+import sys
+
+path = sys.argv[1]
+target = float(sys.argv[2])
+
+cuts = [
+    float(sys.argv[3]),
+    float(sys.argv[4]),
+    float(sys.argv[5]),
+    float(sys.argv[6]),
+]
+
+starts = [0.0, 480.0, 960.0, 1440.0]
+
+rows = []
+
+with open(path, newline="") as f:
+    r = csv.DictReader(f)
+
+    fields = set(r.fieldnames or [])
+
+    if "step_well_to_soil_m3" not in fields:
+        raise SystemExit(
+            "ERROR: step_well_to_soil_m3 missing"
+        )
+
+    for row in r:
+        rows.append(row)
+
+vals = []
+rates = []
+
+for start, cut in zip(starts, cuts):
+
+    selected = []
+
+    for row in rows:
+        t = float(row["time_h"])
+
+        if (
+            t > start + 1e-9
+            and t <= cut + 1e-7
+        ):
+            selected.append(row)
+
+    vol = sum(
+        max(
+            0.0,
+            float(r["step_well_to_soil_m3"])
+        )
+        for r in selected
+    )
+
+    near = [
+        r for r in selected
+        if float(r["time_h"]) >= cut - 1.0
+    ]
+
+    sv = sum(
+        max(
+            0.0,
+            float(r["step_well_to_soil_m3"])
+        )
+        for r in near
+    )
+
+    sd = sum(
+        float(r.get("dt_s", "0") or 0)
+        for r in near
+    )
+
+    rate = sv/sd*3600.0 if sd > 0 else 0.0
+
+    vals.append(vol)
+    rates.append(rate)
+
+for v, q in zip(vals, rates):
+    print(f"{v:.12f}:{q:.12f}", end=" ")
+
+PY
+    )"
+
+    read P1 P2 P3 P4 <<< "$QC"
+
+    V1="${P1%%:*}"
+    R1="${P1##*:}"
+
+    V2="${P2%%:*}"
+    R2="${P2##*:}"
+
+    V3="${P3%%:*}"
+    R3="${P3##*:}"
+
+    V4="${P4%%:*}"
+    R4="${P4##*:}"
+
+    E1="$(
+        python3 - "$TARGET_M3" "$V1" <<'PY'
+import sys
+print(float(sys.argv[1])-float(sys.argv[2]))
+PY
+    )"
+
+    E2="$(
+        python3 - "$TARGET_M3" "$V2" <<'PY'
+import sys
+print(float(sys.argv[1])-float(sys.argv[2]))
+PY
+    )"
+
+    E3="$(
+        python3 - "$TARGET_M3" "$V3" <<'PY'
+import sys
+print(float(sys.argv[1])-float(sys.argv[2]))
+PY
+    )"
+
+    E4="$(
+        python3 - "$TARGET_M3" "$V4" <<'PY'
+import sys
+print(float(sys.argv[1])-float(sys.argv[2]))
+PY
+    )"
+
+    echo
+    echo "===================================================================================================="
+    echo "FOUR-CYCLE INJECTION QC — ITERATION $GLOBAL_ITER"
+    echo "===================================================================================================="
+    printf "C1 : %.9f m3   error = %+ .9f m3\n" "$V1" "$E1"
+    printf "C2 : %.9f m3   error = %+ .9f m3\n" "$V2" "$E2"
+    printf "C3 : %.9f m3   error = %+ .9f m3\n" "$V3" "$E3"
+    printf "C4 : %.9f m3   error = %+ .9f m3\n" "$V4" "$E4"
+    echo
+    echo "Target = $TARGET_M3 m3"
+    echo "Tolerance = +/- $TOL_M3 m3"
+
+    PASS="$(
+        python3 - \
+            "$E1" "$E2" "$E3" "$E4" "$TOL_M3" <<'PY'
+import sys
+
+errs = list(map(float, sys.argv[1:5]))
+tol = float(sys.argv[5])
+
+print(
+    "yes"
+    if max(abs(x) for x in errs) <= tol
+    else "no"
+)
+PY
+    )"
+
+    if [ "$PASS" = "yes" ]; then
+        echo
+        echo "===================================================================================================="
+        echo "PASS — ALL FOUR CYCLES HAVE THE SAME INJECTION VOLUME"
+        echo "===================================================================================================="
+
+        ACCEPTED="yes"
+        FINAL_STAGE="$STAGE"
+        break
+    fi
+
+    if [ "$GLOBAL_ITER" -eq 4 ]; then
+        echo
+        echo "ERROR:"
+        echo "Four-cycle volume QC did not converge to +/- $TOL_M3 m3."
+        echo "No result will be labeled FINAL."
+        exit 1
+    fi
+
+    echo
+    echo "Adjusting all four cutoff times from the ACTUAL continuous 80-d result..."
+
+    C1="$(adjust_cutoff "$C1" "$E1" "$R1" "480")"
+    C2="$(adjust_cutoff "$C2" "$E2" "$R2" "960")"
+    C3="$(adjust_cutoff "$C3" "$E3" "$R3" "1440")"
+    C4="$(adjust_cutoff "$C4" "$E4" "$R4" "1920")"
+
+    # Keep the history/log, discard large VTKs from a failed QC iteration.
+    cleanup_stage_vtk "$STAGE"
+done
+
+
+# =============================================================================
+# FINALIZE
+# =============================================================================
+
+if [ "$ACCEPTED" != "yes" ]; then
+    echo "ERROR: no accepted final run."
+    exit 1
+fi
+
+FINAL="$OUT/FINAL_80d_4cycle_equalVolume"
+
+if [ -e "$FINAL" ]; then
+    mv "$FINAL" "${FINAL}_old_$(date +%Y%m%d_%H%M%S)"
+fi
+
+mv "$FINAL_STAGE" "$FINAL"
+
+cat > "$OUT/FINAL_SCHEDULE.csv" <<EOF
+cycle,start_h,end_h,wetting_cutoff_h,target_gross_well_to_soil_m3
+C1,0,480,$C1,$TARGET_M3
+C2,480,960,$C2,$TARGET_M3
+C3,960,1440,$C3,$TARGET_M3
+C4,1440,1920,$C4,$TARGET_M3
+EOF
+
+cat > "$OUT/README_EQUAL_VOLUME.txt" <<EOF
+DRYWELL HYDROFIX — 4-CYCLE EQUAL-VOLUME RUN
+===========================================
+
+Model starts from t = 0.
+No 1440-h restart is used in the FINAL production run.
+
+Cycle boundaries:
+C1 =    0-480 h
+C2 =  480-960 h
+C3 =  960-1440 h
+C4 = 1440-1920 h
+
+Gross well-to-soil target per cycle:
+$TARGET_M3 m3
+
+Acceptance tolerance:
++/- $TOL_M3 m3 per cycle
+
+Hydraulic head:
+1200 cm
+
+Startup ramp:
+1800 s, restarted at each cycle start.
+
+Finite-reservoir drainage:
+retained from trusted HYDROFIX implementation.
+
+Final calibrated cutoff times:
+C1 = $C1 h
+C2 = $C2 h
+C3 = $C3 h
+C4 = $C4 h
+
+Final result directory:
+$FINAL
+EOF
+
+echo
+echo "===================================================================================================="
+echo "DONE"
+echo "===================================================================================================="
+echo
+echo "FINAL model:"
+echo "  $FINAL"
+echo
+echo "Schedule:"
+echo "  C1 cutoff = $C1 h"
+echo "  C2 cutoff = $C2 h"
+echo "  C3 cutoff = $C3 h"
+echo "  C4 cutoff = $C4 h"
+echo
+echo "Target per cycle:"
+echo "  $TARGET_M3 m3"
+echo
+echo "Final schedule file:"
+echo "  $OUT/FINAL_SCHEDULE.csv"
+echo
+echo "This FINAL run is continuous from 0 to 1920 h."
+echo "No C4 restart is used."
+echo
+
+
+===== FILE: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/main_reservoir_equalVolume_3cycle_60d_HYDROFIX.cc =====
+// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+#include <config.h>
+
+#include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include <dune/common/exceptions.hh>
+#include <dune/common/parallel/mpihelper.hh>
+
+#include <dumux/common/dumuxmessage.hh>
+#include <dumux/common/initialize.hh>
+#include <dumux/common/parameters.hh>
+#include <dumux/common/properties.hh>
+#include <dumux/common/timeloop.hh>
+
+#include <dumux/assembly/fvassembler.hh>
+
+// This model uses an unstructured UGGrid loaded from floodmar.msh.
+#include <dumux/io/grid/gridmanager_ug.hh>
+#include <dumux/io/vtkoutputmodule.hh>
+
+#include <dumux/linear/istlsolvers.hh>
+#include <dumux/linear/linearalgebratraits.hh>
+#include <dumux/linear/linearsolvertraits.hh>
+
+#include <dumux/nonlinear/newtonsolver.hh>
+
+#include "properties_reservoir_equalVolume_3cycle_60d_HYDROFIX.hh"
+#include "floodmarchoppednewtonsolver_restart_v4.hh"
+
+int main(int argc, char** argv)
+{
+    using namespace Dumux;
+
+    using TypeTag = Properties::TTag::TYPETAG;
+
+    // Initialize MPI and the selected multithreading backend.
+    Dumux::initialize(argc, argv);
+    const auto& mpiHelper = Dune::MPIHelper::instance();
+
+    if (mpiHelper.rank() == 0)
+        DumuxMessage::print(/*firstCall=*/true);
+
+    // Read the input file and command-line overrides.
+    Parameters::init(argc, argv);
+
+    // Read the unstructured Gmsh mesh with UGGrid.
+    using Grid = GetPropType<TypeTag, Properties::Grid>;
+
+    GridManager<Grid> gridManager;
+    gridManager.init();
+
+    const auto& leafGridView =
+        gridManager.grid().leafGridView();
+
+    if (mpiHelper.rank() == 0)
+    {
+        std::cout
+            << "UGGrid loaded successfully: "
+            << leafGridView.size(0)
+            << " elements and "
+            << leafGridView.size(Grid::dimension)
+            << " vertices."
+            << std::endl;
+    }
+
+    // Construct the axisymmetric finite-volume grid geometry.
+    using GridGeometry =
+        GetPropType<TypeTag, Properties::GridGeometry>;
+
+    auto gridGeometry =
+        std::make_shared<GridGeometry>(
+            leafGridView
+        );
+
+    // Create the problem containing initial and boundary conditions.
+    using Problem =
+        GetPropType<TypeTag, Properties::Problem>;
+
+    auto problem =
+        std::make_shared<Problem>(
+            gridGeometry
+        );
+
+    using Scalar =
+        GetPropType<TypeTag, Properties::Scalar>;
+
+    // Initialize the solution vector, optionally replacing the analytical
+    // initial condition with a cell-centred FloodMAR restart state.
+    using SolutionVector =
+        GetPropType<TypeTag, Properties::SolutionVector>;
+
+    SolutionVector x;
+    problem->applyInitialSolution(x);
+
+    Scalar startTime = 0.0;
+    const bool restartEnabled =
+        getParam<bool>("Restart.Enable", false);
+
+    if (restartEnabled)
+    {
+        const std::string restartFile =
+            getParam<std::string>("Restart.File");
+        std::ifstream input(restartFile);
+        if (!input)
+            throw std::runtime_error(
+                "Could not open FloodMAR restart file: " + restartFile);
+
+        std::string magic;
+        std::size_t numDofs = 0;
+        input >> magic >> numDofs >> startTime;
+
+        if (magic != "FLOODMAR_RESTART_V1")
+            throw std::runtime_error(
+                "Unsupported FloodMAR restart format in: " + restartFile);
+        if (numDofs != x.size())
+            throw std::runtime_error(
+                "Restart DOF count does not match the current grid");
+
+        std::vector<bool> seen(numDofs, false);
+        for (std::size_t row = 0; row < numDofs; ++row)
+        {
+            std::size_t dofIdx = 0;
+            int phaseState = 0;
+            Scalar pressure = 0.0;
+            Scalar switchValue = 0.0;
+            Scalar oxygen = 0.0;
+
+            if (!(input
+                  >> dofIdx
+                  >> phaseState
+                  >> pressure
+                  >> switchValue
+                  >> oxygen))
+                throw std::runtime_error(
+                    "Restart file ended before all DOFs were read");
+
+            if (dofIdx >= numDofs || seen[dofIdx])
+                throw std::runtime_error(
+                    "Restart file contains an invalid or duplicate DOF index");
+
+            x[dofIdx].setState(phaseState);
+            x[dofIdx][0] = pressure;
+            x[dofIdx][1] = switchValue;
+            x[dofIdx][2] = oxygen;
+            seen[dofIdx] = true;
+        }
+
+        std::size_t extraDof = 0;
+        if (input >> extraDof)
+            throw std::runtime_error(
+                "Restart file contains more rows than the current grid");
+
+        problem->setTime(startTime);
+
+        if (mpiHelper.rank() == 0)
+            std::cout
+                << "Loaded FloodMAR restart: " << restartFile
+                << "\nRestart time = " << startTime
+                << " s (" << startTime/3600.0 << " h)"
+                << std::endl;
+    }
+
+    auto xOld = x;
+
+    // Initialize volume and flux variables.
+    using GridVariables =
+        GetPropType<TypeTag, Properties::GridVariables>;
+
+    auto gridVariables =
+        std::make_shared<GridVariables>(
+            problem,
+            gridGeometry
+        );
+
+    gridVariables->init(x);
+
+    // Configure VTK output for ParaView.
+    VtkOutputModule<GridVariables, SolutionVector>
+        vtkWriter(
+            *gridVariables,
+            x,
+            problem->name()
+        );
+
+    using VelocityOutput =
+        GetPropType<TypeTag, Properties::VelocityOutput>;
+
+    vtkWriter.addVelocityOutput(
+        std::make_shared<VelocityOutput>(
+            *gridVariables
+        )
+    );
+
+    GetPropType<
+        TypeTag,
+        Properties::IOFields
+    >::initOutputModule(vtkWriter);
+
+    // Write the loaded or analytical initial state under the new run name.
+    vtkWriter.write(startTime);
+
+    // Read time-loop parameters. DuMuX uses seconds here.
+    const Scalar tEnd =
+        getParam<Scalar>(
+            "TimeLoop.TEnd"
+        );
+
+    const Scalar dtInitial =
+        getParam<Scalar>(
+            "TimeLoop.DtInitial"
+        );
+
+    const Scalar maxDt =
+        getParam<Scalar>(
+            "TimeLoop.MaxTimeStepSize"
+        );
+
+    const Scalar outputInterval =
+        getParam<Scalar>(
+            "TimeLoop.OutputInterval",
+            21600.0
+        );
+
+    auto timeLoop =
+        std::make_shared<TimeLoop<Scalar>>(
+            startTime,
+            dtInitial,
+            tEnd
+        );
+
+    timeLoop->setMaxTimeStepSize(maxDt);
+
+    // Let the problem read the currently attempted implicit time level.
+    // This remains correct when the Newton solver internally reduces dt and
+    // retries the same step.
+    problem->setTimeLoop(timeLoop);
+
+    // Create the finite-volume assembler.
+    using Assembler =
+        FVAssembler<TypeTag, DiffMethod::numeric>;
+
+    auto assembler =
+        std::make_shared<Assembler>(
+            problem,
+            gridGeometry,
+            gridVariables,
+            timeLoop,
+            xOld
+        );
+
+    // Create the sequential UMFPack direct linear solver.
+    using LinearSolver =
+        UMFPackIstlSolver<
+            LinearSolverTraits<GridGeometry>,
+            LinearAlgebraTraitsFromAssembler<Assembler>
+        >;
+
+    auto linearSolver =
+        std::make_shared<LinearSolver>();
+
+    // Create the nonlinear Newton solver.
+    using NonlinearSolver =
+        FloodMarChoppedNewtonSolver<Assembler, LinearSolver>;
+
+    NonlinearSolver nonlinearSolver(
+        assembler,
+        linearSolver
+    );
+
+    Scalar nextOutputTime =
+        startTime + outputInterval;
+
+    timeLoop->start();
+
+    std::ofstream reservoirHistory(
+        problem->name()
+        + "_reservoir_history.csv"
+    );
+
+    reservoirHistory
+        << "time_h,reservoir_head_cm,"
+        << "reservoir_storage_m3,"
+        << "reservoir_net_flux_m3_s\n";
+
+    reservoirHistory
+        << std::setprecision(15);
+
+    std::ofstream injectionHistory(
+        problem->name()
+        + "_injection_history.csv"
+    );
+
+    injectionHistory
+        << "time_h,cycle,phase,dt_s,"
+        << "applied_boundary_head_cm,"
+        << "drywell_net_flux_to_well_m3_s,"
+        << "well_to_soil_flux_m3_s,"
+        << "soil_to_well_flux_m3_s,"
+        << "step_well_to_soil_m3,"
+        << "step_soil_to_well_m3,"
+        << "step_net_to_soil_m3,"
+        << "step_well_storage_change_m3,"
+        << "step_external_supply_m3,"
+        << "cumulative_wetting_well_to_soil_m3,"
+        << "cumulative_wetting_soil_to_well_m3,"
+        << "cumulative_wetting_net_to_soil_m3,"
+        << "cumulative_drainage_well_to_soil_m3,"
+        << "cumulative_drainage_soil_to_well_m3,"
+        << "cumulative_drainage_net_to_soil_m3,"
+        << "cumulative_total_well_to_soil_m3,"
+        << "cumulative_total_soil_to_well_m3,"
+        << "cumulative_total_net_to_soil_m3,"
+        << "cumulative_external_supply_m3,"
+        << "reservoir_state_head_cm,"
+        << "reservoir_state_storage_m3\n";
+
+    injectionHistory
+        << std::setprecision(15);
+
+    Scalar cumulativeWettingWellToSoilM3 = 0.0;
+    Scalar cumulativeWettingSoilToWellM3 = 0.0;
+    Scalar cumulativeWettingNetToSoilM3 = 0.0;
+
+    Scalar cumulativeDrainageWellToSoilM3 = 0.0;
+    Scalar cumulativeDrainageSoilToWellM3 = 0.0;
+    Scalar cumulativeDrainageNetToSoilM3 = 0.0;
+
+    Scalar cumulativeTotalWellToSoilM3 = 0.0;
+    Scalar cumulativeTotalSoilToWellM3 = 0.0;
+    Scalar cumulativeTotalNetToSoilM3 = 0.0;
+
+    Scalar cumulativeExternalSupplyM3 = 0.0;
+
+    // The production startup ramp begins from zero water head.
+    // This variable tracks the physically represented water volume
+    // inside the drywell across wetting/drainage transitions.
+    Scalar physicalWellStorageM3 = 0.0;
+
+
+    do
+    {
+        // Never step across a change point in the time-variable drywell
+        // boundary. This makes the 5-hour linear ramps reproducible.
+        const Scalar nextBoundaryEvent =
+            problem->nextBoundaryEventTime(timeLoop->time());
+        if (nextBoundaryEvent < timeLoop->time() + timeLoop->timeStepSize())
+        {
+            timeLoop->setTimeStepSize(
+                nextBoundaryEvent - timeLoop->time()
+            );
+        }
+
+        // Solve the nonlinear two-phase system.
+        nonlinearSolver.solve(
+            x,
+            *timeLoop
+        );
+
+        // The Newton solver may have reduced dt internally.
+        // Use the actually accepted dt/end time.
+        const Scalar acceptedDt =
+            timeLoop->timeStepSize();
+
+        const Scalar acceptedEndTime =
+            timeLoop->time()
+            + acceptedDt;
+
+        // Read-only boundary-flux reconstruction using exactly the
+        // hydraulic head that was applied during this accepted step.
+        const auto fluxDiag =
+            problem->drywellFluxDiagnostics(
+                *gridVariables,
+                x,
+                acceptedEndTime
+            );
+
+        const bool externalSupplyActive =
+            problem->externalSupplyActive(
+                acceptedEndTime
+            );
+
+        const int cycle =
+            problem->cycleNumber(
+                acceptedEndTime
+            );
+
+        const Scalar stepWellToSoilM3 =
+            fluxDiag.wellToSoilFluxM3s
+            *acceptedDt;
+
+        const Scalar stepSoilToWellM3 =
+            fluxDiag.soilToWellFluxM3s
+            *acceptedDt;
+
+        // Positive means net transfer from the well into soil.
+        const Scalar stepNetToSoilM3 =
+            -fluxDiag.netFluxToWellM3s
+            *acceptedDt;
+
+        Scalar stepWellStorageChangeM3 = 0.0;
+        Scalar stepExternalSupplyM3 = 0.0;
+
+        if (externalSupplyActive)
+        {
+            // During constant-head wetting, external water must provide:
+            //   1. net water transferred from well to soil, plus
+            //   2. any increase in water stored in the well itself.
+            //
+            // This captures the initial 0 -> 12 m filling ramp and the
+            // refill from residual head back to 12 m at cycles 2 and 3.
+            stepWellStorageChangeM3 =
+                fluxDiag.boundaryStorageM3
+                - physicalWellStorageM3;
+
+            stepExternalSupplyM3 =
+                stepNetToSoilM3
+                + stepWellStorageChangeM3;
+
+            cumulativeWettingWellToSoilM3 +=
+                stepWellToSoilM3;
+
+            cumulativeWettingSoilToWellM3 +=
+                stepSoilToWellM3;
+
+            cumulativeWettingNetToSoilM3 +=
+                stepNetToSoilM3;
+
+            cumulativeExternalSupplyM3 +=
+                stepExternalSupplyM3;
+        }
+        else
+        {
+            cumulativeDrainageWellToSoilM3 +=
+                stepWellToSoilM3;
+
+            cumulativeDrainageSoilToWellM3 +=
+                stepSoilToWellM3;
+
+            cumulativeDrainageNetToSoilM3 +=
+                stepNetToSoilM3;
+        }
+
+        cumulativeTotalWellToSoilM3 +=
+            stepWellToSoilM3;
+
+        cumulativeTotalSoilToWellM3 +=
+            stepSoilToWellM3;
+
+        cumulativeTotalNetToSoilM3 +=
+            stepNetToSoilM3;
+
+        problem->updateReservoirAfterAcceptedStep(
+            *gridVariables,
+            x,
+            acceptedEndTime,
+            acceptedDt
+        );
+
+        if (externalSupplyActive)
+            physicalWellStorageM3 =
+                fluxDiag.boundaryStorageM3;
+        else
+            physicalWellStorageM3 =
+                problem->reservoirStorageM3();
+
+        // Accept the new solution.
+        xOld = x;
+        gridVariables->advanceTimeStep();
+
+        // Advance simulation time.
+        timeLoop->advanceTimeStep();
+        timeLoop->reportTimeStep();
+
+        injectionHistory
+            << timeLoop->time()/3600.0 << ","
+            << cycle << ","
+            << (externalSupplyActive
+                ? "wetting"
+                : "drainage") << ","
+            << acceptedDt << ","
+            << fluxDiag.boundaryHeadCm << ","
+            << fluxDiag.netFluxToWellM3s << ","
+            << fluxDiag.wellToSoilFluxM3s << ","
+            << fluxDiag.soilToWellFluxM3s << ","
+            << stepWellToSoilM3 << ","
+            << stepSoilToWellM3 << ","
+            << stepNetToSoilM3 << ","
+            << stepWellStorageChangeM3 << ","
+            << stepExternalSupplyM3 << ","
+            << cumulativeWettingWellToSoilM3 << ","
+            << cumulativeWettingSoilToWellM3 << ","
+            << cumulativeWettingNetToSoilM3 << ","
+            << cumulativeDrainageWellToSoilM3 << ","
+            << cumulativeDrainageSoilToWellM3 << ","
+            << cumulativeDrainageNetToSoilM3 << ","
+            << cumulativeTotalWellToSoilM3 << ","
+            << cumulativeTotalSoilToWellM3 << ","
+            << cumulativeTotalNetToSoilM3 << ","
+            << cumulativeExternalSupplyM3 << ","
+            << problem->reservoirHeadCm() << ","
+            << problem->reservoirStorageM3()
+            << "\n";
+
+        if (timeLoop->time() >= 95.0*3600.0)
+        {
+            reservoirHistory
+                << timeLoop->time()/3600.0 << ","
+                << problem->reservoirHeadCm() << ","
+                << problem->reservoirStorageM3() << ","
+                << problem->lastReservoirNetFluxM3s()
+                << "\n";
+
+            reservoirHistory.flush();
+        }
+
+        // Write output at the specified interval and final time.
+        const Scalar timeTolerance =
+            1.0e-8
+            * std::max(
+                Scalar(1.0),
+                timeLoop->time()
+            );
+
+        if (
+            timeLoop->time()
+                >= nextOutputTime - timeTolerance
+            || timeLoop->finished()
+        )
+        {
+            vtkWriter.write(
+                timeLoop->time()
+            );
+
+            while (
+                nextOutputTime
+                <= timeLoop->time()
+                    + timeTolerance
+            )
+            {
+                nextOutputTime +=
+                    outputInterval;
+            }
+        }
+
+        // Use the Newton solver's suggested next time step,
+        // but do not exceed the configured maximum.
+        const Scalar suggestedDt =
+            nonlinearSolver.suggestTimeStepSize(
+                timeLoop->timeStepSize()
+            );
+
+        timeLoop->setTimeStepSize(
+            std::min(
+                maxDt,
+                suggestedDt
+            )
+        );
+
+    } while (!timeLoop->finished());
+
+    timeLoop->finalize(
+        leafGridView.comm()
+    );
+
+    if (mpiHelper.rank() == 0)
+    {
+        Parameters::print();
+        DumuxMessage::print(/*firstCall=*/false);
+    }
+
+    return 0;
+}
+
+===== FILE: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/problem_reservoir_equalVolume_3cycle_60d_HYDROFIX.hh =====
+#ifndef DUMUX_FLOOD_MAR_PROBLEM_HH
+#define DUMUX_FLOOD_MAR_PROBLEM_HH
+
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <limits>
+#include <memory>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include <dumux/common/properties.hh>
+#include <dumux/common/parameters.hh>
+#include <dumux/common/boundarytypes.hh>
+#include <dumux/common/numeqvector.hh>
+#include <dumux/common/timeloop.hh>
+#include <dumux/porousmediumflow/problem.hh>
+#include <dumux/material/binarycoefficients/h2o_o2.hh>
+
+#include <dune/grid/common/rangegenerators.hh>
+#include <dumux/discretization/localview.hh>
+#include <dumux/discretization/extrusion.hh>
+
+namespace Dumux {
+
+template<class TypeTag>
+class WaterAirProblem
+: public PorousMediumFlowProblem<TypeTag>
+{
+    using ParentType = PorousMediumFlowProblem<TypeTag>;
+
+    using Scalar = GetPropType<TypeTag, Properties::Scalar>;
+    using GridGeometry = GetPropType<TypeTag, Properties::GridGeometry>;
+    using Extrusion = Extrusion_t<GridGeometry>;
+    using GridView = typename GridGeometry::GridView;
+    using FVElementGeometry = typename GridGeometry::LocalView;
+    using SubControlVolume = typename FVElementGeometry::SubControlVolume;
+    using SubControlVolumeFace = typename FVElementGeometry::SubControlVolumeFace;
+    using FluidSystem = GetPropType<TypeTag, Properties::FluidSystem>;
+    using ModelTraits = GetPropType<TypeTag, Properties::ModelTraits>;
+    using Indices = typename ModelTraits::Indices;
+
+    enum
+    {
+        pressureIdx = Indices::pressureIdx,
+        switchIdx = Indices::switchIdx,
+        oxygenIdx = Indices::switchIdx + 1
+    };
+
+    enum
+    {
+        wPhaseOnly = Indices::firstPhaseOnly,
+        bothPhases = Indices::bothPhases
+    };
+
+    using PrimaryVariables = GetPropType<TypeTag, Properties::PrimaryVariables>;
+    using NumEqVector = Dumux::NumEqVector<PrimaryVariables>;
+    using BoundaryTypes = Dumux::BoundaryTypes<ModelTraits::numEq()>;
+    using Element = typename GridView::template Codim<0>::Entity;
+    using GlobalPosition = typename Element::Geometry::GlobalCoordinate;
+    using TimeLoop = Dumux::TimeLoop<Scalar>;
+
+public:
+    WaterAirProblem(std::shared_ptr<const GridGeometry> gridGeometry)
+    : ParentType(gridGeometry)
+    , atmosphericOxygenDiffusionCoefficient_(
+        getParam<Scalar>(
+            "Problem.AtmosphericOxygenDiffusionCoefficient",
+            getParam<Scalar>("Problem.AtmosphericGasTransferCoefficient", 1.0e-6)
+        )
+      )
+    , atmosphericGasPressureFactor_(
+        getParam<Scalar>("Problem.AtmosphericGasPressureFactor", 1.0)
+      )
+    , enableGasPhaseOxygenAdvection_(
+        getParam<bool>("Problem.EnableGasPhaseOxygenAdvection", true)
+      )
+    , drywellStartupRampTime_(
+        getParam<Scalar>("Problem.DrywellStartupRampTime", 3600.0)
+      )
+    , drywellInjectionHeadCm_(
+        getParam<Scalar>("Problem.DrywellInjectionHead", 1200.0)
+      )
+    , initialOxygenProfileFile_(
+        getParam<std::string>(
+            "Problem.InitialOxygenProfileFile",
+            "oxygen_initial_2880.dat"
+        )
+      )
+    {
+        FluidSystem::init();
+        reservoirHeadCm_ = drywellInjectionHeadCm_;
+        name_ = getParam<std::string>("Problem.Name", "floodmar");
+        readInitialOxygenProfile_();
+
+        std::cout << "Flood-MAR axisymmetric water-N2-O2 model\n"
+                  << "Open atmospheric gas-pressure boundary\n"
+                  << "O2 surface diffusion coefficient = "
+                  << atmosphericOxygenDiffusionCoefficient_ << " m/s\n"
+                  << "Gas-pressure transmissibility factor = "
+                  << atmosphericGasPressureFactor_ << "\n"
+                  << "Drywell startup ramp time = "
+                  << drywellStartupRampTime_ << " s\n"
+                  << "Drywell injection head = "
+                  << drywellInjectionHeadCm_ << " cm\n"
+                  << "Drywell boundary mode = legacy whole-face midpoint\n"
+                  << "Initial O2 profile = "
+                  << initialOxygenProfileFile_ << "\n"
+                  << "Formal drywell simulation: 3 cycles, 720 h"
+                  << std::endl;
+    }
+
+    const std::string& name() const
+    { return name_; }
+
+    Scalar temperatureAtPos(const GlobalPosition&) const
+    { return 298.15; }
+
+    void setTime(Scalar time)
+    { time_ = time; }
+
+    // Keep time-dependent boundary conditions synchronized with the time
+    // step currently tried by DuMuX. NewtonSolver::solve(x, timeLoop) may
+    // reduce dt internally after a failed Newton attempt. Reading the shared
+    // time loop here ensures the retry uses t + the reduced dt, not the end
+    // time of the failed larger step.
+    void setTimeLoop(const std::shared_ptr<TimeLoop>& timeLoop)
+    { timeLoop_ = timeLoop; }
+
+    Scalar nextBoundaryEventTime(Scalar currentTimeSeconds) const
+    {
+        static constexpr std::array<Scalar, 5> eventHours = {
+            163.125247592924,
+            480.0,
+            737.084098745400,
+            960.0,
+            1233.636146520033
+        };
+
+        Scalar nextEventTime = std::numeric_limits<Scalar>::infinity();
+
+        // The end of the configurable startup ramp is also a boundary-law
+        // change point and should not be crossed by one time step.
+        if (drywellStartupRampTime_ > currentTimeSeconds + 1.0e-8)
+            nextEventTime = drywellStartupRampTime_;
+
+        for (const Scalar eventHour : eventHours)
+        {
+            const Scalar eventTime = eventHour*3600.0;
+            if (eventTime > currentTimeSeconds + 1.0e-8)
+                nextEventTime = std::min(nextEventTime, eventTime);
+        }
+
+        return nextEventTime;
+    }
+
+
+    // ---------------------------------------------------------------------
+    // Finite drywell reservoir used only after external supply stops at 96 h.
+    //
+    // Sign convention:
+    //   liquidVolumeFlux < 0 : reservoir -> porous medium
+    //   liquidVolumeFlux > 0 : porous medium -> reservoir
+    //
+    // The reservoir state is updated exactly once after an accepted DuMuX
+    // time step. It is never modified during Newton iterations.
+    // ---------------------------------------------------------------------
+
+    Scalar reservoirHeadCm() const
+    {
+        return reservoirHeadCm_;
+    }
+
+    Scalar reservoirStorageM3() const
+    {
+        constexpr Scalar pi =
+            3.1415926535897932384626433832795;
+
+        const Scalar area =
+            pi*drywellRadius_*drywellRadius_;
+
+        return area
+               *std::max(Scalar(0.0), reservoirHeadCm_)
+               /100.0;
+    }
+
+    Scalar lastReservoirNetFluxM3s() const
+    {
+        return lastReservoirNetFluxM3s_;
+    }
+
+    struct DrywellFluxDiagnostics
+    {
+        Scalar netFluxToWellM3s = 0.0;
+        Scalar wellToSoilFluxM3s = 0.0;
+        Scalar soilToWellFluxM3s = 0.0;
+        Scalar boundaryHeadCm = 0.0;
+        Scalar boundaryStorageM3 = 0.0;
+    };
+
+    bool externalSupplyActive(Scalar timeSeconds) const
+    {
+        const Scalar epsTime = 1.0e-8;
+
+        return
+            timeSeconds <= 163.125247592924*3600.0 + epsTime
+            ||
+            (
+                timeSeconds > 480.0*3600.0 + epsTime
+                &&
+                timeSeconds <= 737.084098745400*3600.0 + epsTime
+            )
+            ||
+            (
+                timeSeconds > 960.0*3600.0 + epsTime
+                &&
+                timeSeconds <= 1233.636146520033*3600.0 + epsTime
+            );
+    }
+
+    int cycleNumber(Scalar timeSeconds) const
+    {
+        if (timeSeconds <= 480.0*3600.0 + 1.0e-8)
+            return 1;
+
+        if (timeSeconds <= 960.0*3600.0 + 1.0e-8)
+            return 2;
+
+        return 3;
+    }
+
+    Scalar appliedDrywellHeadCm(Scalar timeSeconds) const
+    {
+        const Scalar startupFactor =
+            drywellStartupRampTime_ > 0.0
+            ? std::clamp(
+                  timeSeconds/drywellStartupRampTime_,
+                  Scalar(0.0),
+                  Scalar(1.0)
+              )
+            : Scalar(1.0);
+
+        const Scalar scheduledHeadCm =
+            drywellHeadCm_(timeSeconds);
+
+        return scheduledHeadCm > 0.0
+               ? startupFactor*scheduledHeadCm
+               : scheduledHeadCm;
+    }
+
+    template<class GridVariables, class SolutionVector>
+    DrywellFluxDiagnostics drywellFluxDiagnostics(
+        const GridVariables& gridVariables,
+        const SolutionVector& sol,
+        Scalar acceptedEndTimeSeconds) const
+    {
+        DrywellFluxDiagnostics result;
+
+        result.boundaryHeadCm =
+            appliedDrywellHeadCm(
+                acceptedEndTimeSeconds
+            );
+
+        constexpr Scalar pi =
+            3.1415926535897932384626433832795;
+
+        const Scalar reservoirArea =
+            pi*drywellRadius_*drywellRadius_;
+
+        result.boundaryStorageM3 =
+            reservoirArea
+            *std::max(
+                Scalar(0.0),
+                result.boundaryHeadCm
+            )
+            /100.0;
+
+        const auto& gridGeometry =
+            this->gridGeometry();
+
+        auto fvGeometry =
+            localView(gridGeometry);
+
+        auto elemVolVars =
+            localView(
+                gridVariables.curGridVolVars()
+            );
+
+        constexpr Scalar waterDensity = 1000.0;
+        constexpr Scalar gravity = 9.81;
+        constexpr Scalar atmosphericPressure = 1.0e5;
+
+        for (const auto& element :
+             elements(gridGeometry.gridView()))
+        {
+            fvGeometry.bindElement(element);
+
+            elemVolVars.bindElement(
+                element,
+                fvGeometry,
+                sol
+            );
+
+            for (const auto& scvf :
+                 scvfs(fvGeometry))
+            {
+                if (!scvf.boundary())
+                    continue;
+
+                const auto& globalPos =
+                    scvf.ipGlobal();
+
+                if (!isVariHeadBoundary_(globalPos))
+                    continue;
+
+                const Scalar localDrywellHeadCm =
+                    result.boundaryHeadCm
+                    - (globalPos[1]
+                       - drywellBottomElevation_)*100.0;
+
+                if (localDrywellHeadCm <= 0.0)
+                    continue;
+
+                const auto& volVars =
+                    elemVolVars[
+                        scvf.insideScvIdx()
+                    ];
+
+                const int liquidPhaseIdx =
+                    FluidSystem::liquidPhaseIdx;
+
+                const Scalar density =
+                    volVars.density(
+                        liquidPhaseIdx
+                    );
+
+                const Scalar mobility =
+                    volVars.mobility(
+                        liquidPhaseIdx
+                    );
+
+                const auto permeability =
+                    volVars.permeability();
+
+                const Scalar drywellFreeSurfaceElevation =
+                globalPos[1]
+                + localDrywellHeadCm/100.0;
+
+            const Scalar boundaryAtmosphericPressure =
+                atmosphericPressureAtElevation_(
+                    drywellFreeSurfaceElevation
+                );
+
+            const Scalar boundaryLiquidPressure =
+                boundaryAtmosphericPressure
+                + waterDensity*gravity
+                    *(localDrywellHeadCm/100.0);
+
+                const auto& insideScv =
+                    fvGeometry.scv(
+                        scvf.insideScvIdx()
+                    );
+
+                const Scalar distance =
+                    (insideScv.center()
+                     - globalPos).two_norm();
+
+                const auto normal =
+                    scvf.unitOuterNormal();
+
+                const Scalar liquidVolumeFlux =
+                    permeability*mobility
+                    *((volVars.pressure(
+                           liquidPhaseIdx
+                       )
+                       - boundaryLiquidPressure)
+                       /distance
+                      - density*gravity*normal[1]);
+
+                const Scalar physicalArea =
+                    Extrusion::area(
+                        fvGeometry,
+                        scvf
+                    );
+
+                const Scalar faceFluxM3s =
+                    liquidVolumeFlux
+                    *physicalArea;
+
+                result.netFluxToWellM3s +=
+                    faceFluxM3s;
+
+                if (faceFluxM3s < 0.0)
+                    result.wellToSoilFluxM3s +=
+                        -faceFluxM3s;
+                else
+                    result.soilToWellFluxM3s +=
+                        faceFluxM3s;
+            }
+        }
+
+        return result;
+    }
+
+    template<class GridVariables, class SolutionVector>
+    void updateReservoirAfterAcceptedStep(
+        const GridVariables& gridVariables,
+        const SolutionVector& sol,
+        Scalar acceptedEndTimeSeconds,
+        Scalar dtSeconds)
+    {
+        // Three externally supplied equal-volume diagnostic wetting periods:
+        //   cycle 1:   0-96 h
+        //   cycle 2: 240-336 h
+        //   cycle 3: 480-576 h
+        //
+        // At exactly 240 h and 480 h the preceding drainage interval is
+        // completed first. The next accepted step is then externally supplied
+        // and returns the drywell boundary to the 12 m production head.
+        const Scalar epsTime = 1.0e-8;
+
+        const bool externallySupplied =
+            acceptedEndTimeSeconds <= 163.125247592924*3600.0 + epsTime
+            ||
+            (
+                acceptedEndTimeSeconds > 480.0*3600.0 + epsTime
+                &&
+                acceptedEndTimeSeconds <= 737.084098745400*3600.0 + epsTime
+            )
+            ||
+            (
+                acceptedEndTimeSeconds > 960.0*3600.0 + epsTime
+                &&
+                acceptedEndTimeSeconds <= 1233.636146520033*3600.0 + epsTime
+            );
+
+        if (externallySupplied)
+        {
+            reservoirHeadCm_ = drywellInjectionHeadCm_;
+            lastReservoirNetFluxM3s_ = 0.0;
+            return;
+        }
+
+        // Once empty, this first hydraulic trial imposes no further liquid
+        // supply from the exposed drywell wall.
+        if (reservoirHeadCm_ <= 0.0)
+        {
+            reservoirHeadCm_ = 0.0;
+            lastReservoirNetFluxM3s_ = 0.0;
+            return;
+        }
+
+        const auto& gridGeometry = this->gridGeometry();
+
+        auto fvGeometry =
+            localView(gridGeometry);
+
+        auto elemVolVars =
+            localView(gridVariables.curGridVolVars());
+
+        Scalar reservoirNetFluxM3s = 0.0;
+
+        constexpr Scalar waterDensity = 1000.0;
+        constexpr Scalar gravity = 9.81;
+        constexpr Scalar atmosphericPressure = 1.0e5;
+
+        for (const auto& element :
+             elements(gridGeometry.gridView()))
+        {
+            fvGeometry.bindElement(element);
+            elemVolVars.bindElement(
+                element,
+                fvGeometry,
+                sol
+            );
+
+            for (const auto& scvf :
+                 scvfs(fvGeometry))
+            {
+                if (!scvf.boundary())
+                    continue;
+
+                const auto& globalPos =
+                    scvf.ipGlobal();
+
+                if (!isVariHeadBoundary_(globalPos))
+                    continue;
+
+                const Scalar localDrywellHeadCm =
+                    reservoirHeadCm_
+                    - (globalPos[1]
+                       - drywellBottomElevation_)*100.0;
+
+                // Boundary face is above the instantaneous reservoir surface.
+                if (localDrywellHeadCm <= 0.0)
+                    continue;
+
+                const auto& volVars =
+                    elemVolVars[scvf.insideScvIdx()];
+
+                const int liquidPhaseIdx =
+                    FluidSystem::liquidPhaseIdx;
+
+                const Scalar density =
+                    volVars.density(liquidPhaseIdx);
+
+                const Scalar mobility =
+                    volVars.mobility(liquidPhaseIdx);
+
+                const auto permeability =
+                    volVars.permeability();
+
+                const Scalar drywellFreeSurfaceElevation =
+                globalPos[1]
+                + localDrywellHeadCm/100.0;
+
+            const Scalar boundaryAtmosphericPressure =
+                atmosphericPressureAtElevation_(
+                    drywellFreeSurfaceElevation
+                );
+
+            const Scalar boundaryLiquidPressure =
+                boundaryAtmosphericPressure
+                + waterDensity*gravity
+                    *(localDrywellHeadCm/100.0);
+
+                const auto& insideScv =
+                    fvGeometry.scv(
+                        scvf.insideScvIdx()
+                    );
+
+                const Scalar distance =
+                    (insideScv.center()
+                     - globalPos).two_norm();
+
+                const auto normal =
+                    scvf.unitOuterNormal();
+
+                // EXACT same liquid Robin expression as production BC.
+                const Scalar liquidVolumeFlux =
+                    permeability*mobility
+                    *((volVars.pressure(liquidPhaseIdx)
+                       - boundaryLiquidPressure)/distance
+                      - density*gravity*normal[1]);
+
+                // RotationalExtrusion<0> physical axisymmetric area.
+                const Scalar physicalArea =
+                    Extrusion::area(
+                        fvGeometry,
+                        scvf
+                    );
+
+                reservoirNetFluxM3s +=
+                    liquidVolumeFlux*physicalArea;
+            }
+        }
+
+        constexpr Scalar pi =
+            3.1415926535897932384626433832795;
+
+        const Scalar reservoirArea =
+            pi*drywellRadius_*drywellRadius_;
+
+        const Scalar oldStorage =
+            reservoirArea
+            *reservoirHeadCm_/100.0;
+
+        // q > 0 adds water to well;
+        // q < 0 removes water from well.
+        const Scalar trialStorage =
+            oldStorage
+            + reservoirNetFluxM3s*dtSeconds;
+
+        const Scalar newStorage =
+            std::max(
+                Scalar(0.0),
+                trialStorage
+            );
+
+        reservoirHeadCm_ =
+            100.0*newStorage/reservoirArea;
+
+        lastReservoirNetFluxM3s_ =
+            reservoirNetFluxM3s;
+    }
+
+    BoundaryTypes boundaryTypesAtPos(const GlobalPosition& globalPos) const
+    {
+        BoundaryTypes bcTypes;
+        bcTypes.setAllNeumann();
+
+        return bcTypes;
+    }
+
+    PrimaryVariables dirichletAtPos(const GlobalPosition& globalPos) const
+    {
+        if (isVariHeadBoundary_(globalPos))
+            return drywellState_(globalPos);
+
+        return initial_(globalPos);
+    }
+
+    template<class ElementVolumeVariables, class ElementFluxVariablesCache>
+    NumEqVector neumann(const Element&,
+                        const FVElementGeometry& fvGeometry,
+                        const ElementVolumeVariables& elemVolVars,
+                        const ElementFluxVariablesCache&,
+                        const SubControlVolumeFace& scvf) const
+    {
+        NumEqVector values(0.0);
+        const auto& globalPos = scvf.ipGlobal();
+        const auto& volVars = elemVolVars[scvf.insideScvIdx()];
+
+        if (isAtmosphere_(globalPos))
+        {
+            const int gasPhaseIdx = FluidSystem::gasPhaseIdx;
+            constexpr Scalar atmosphericPressure = 1.0e5;
+            constexpr Scalar temperature = 298.15;
+            constexpr Scalar gasConstant = 8.31446261815324;
+            constexpr Scalar atmosphericWaterVaporPressure = 3169.0;
+
+            const Scalar cO2Atmosphere =
+                atmosphericOxygenMassConcentration_
+                /FluidSystem::molarMass(FluidSystem::O2Idx);
+
+            const Scalar cH2OAtmosphere =
+                atmosphericWaterVaporPressure
+                /(gasConstant*temperature);
+
+            const Scalar cDryAtmosphere =
+                (atmosphericPressure - atmosphericWaterVaporPressure)
+                /(gasConstant*temperature);
+
+            const Scalar cN2Atmosphere =
+                std::max(Scalar(0.0), cDryAtmosphere - cO2Atmosphere);
+
+            const Scalar gasMolarDensity = volVars.molarDensity(gasPhaseIdx);
+            const Scalar xH2OSoil =
+                volVars.moleFraction(gasPhaseIdx, FluidSystem::H2OIdx);
+            const Scalar xO2Soil =
+                volVars.moleFraction(gasPhaseIdx, FluidSystem::O2Idx);
+            const Scalar xN2Soil =
+                volVars.moleFraction(gasPhaseIdx, FluidSystem::N2Idx);
+            const Scalar cO2Soil = gasMolarDensity*xO2Soil;
+
+            // Outward Darcy gas volume flux [m/s]. Positive values vent
+            // soil gas; negative values draw atmospheric gas into the soil.
+            const auto& insideScv = fvGeometry.scv(scvf.insideScvIdx());
+            const Scalar distance =
+                (insideScv.center() - globalPos).two_norm();
+
+            // HYDROFIX: hydrostatic-consistent atmospheric gas Darcy BC.
+            constexpr Scalar gasGravity = 9.81;
+
+            const Scalar atmosphericPressureAtFace =
+                atmosphericPressureAtElevation_(globalPos[1]);
+
+            const auto gasBoundaryNormal =
+                scvf.unitOuterNormal();
+
+            const Scalar gasDensity =
+                volVars.density(gasPhaseIdx);
+
+            const Scalar gasVolumeFlux =
+                atmosphericGasPressureFactor_
+                *volVars.permeability()
+                *volVars.mobility(gasPhaseIdx)
+                *((volVars.pressure(gasPhaseIdx)
+                   - atmosphericPressureAtFace)/distance
+                  - gasDensity*gasGravity
+                    *gasBoundaryNormal[1]);
+
+            Scalar advectiveH2OFlux = 0.0;
+            Scalar advectiveN2Flux = 0.0;
+            Scalar advectiveO2Flux = 0.0;
+
+            if (gasVolumeFlux >= 0.0)
+            {
+                // Gas leaving the domain carries the local soil composition.
+                advectiveH2OFlux =
+                    gasVolumeFlux*gasMolarDensity*xH2OSoil;
+                advectiveN2Flux =
+                    gasVolumeFlux*gasMolarDensity*xN2Soil;
+                advectiveO2Flux =
+                    gasVolumeFlux*gasMolarDensity*xO2Soil;
+            }
+            else
+            {
+                // Gas entering the domain carries the complete atmospheric
+                // H2O-N2-O2 composition at 25 degrees Celsius.
+                advectiveH2OFlux = gasVolumeFlux*cH2OAtmosphere;
+                advectiveN2Flux = gasVolumeFlux*cN2Atmosphere;
+                advectiveO2Flux = gasVolumeFlux*cO2Atmosphere;
+            }
+
+            // Stagnant-O2 diagnostic: preserve the total advective gas
+            // molar flux by treating the suppressed advective O2 as inert N2.
+            // Gas pressure can therefore vent normally while O2 itself is
+            // transported in the gas phase only by diffusion.
+            if (!enableGasPhaseOxygenAdvection_)
+            {
+                advectiveN2Flux += advectiveO2Flux;
+                advectiveO2Flux = 0.0;
+            }
+
+            // Molecular O2 exchange with the atmospheric reservoir.
+            // Positive is outward according to the DuMuX Neumann convention.
+            const Scalar diffusiveO2Flux =
+                atmosphericOxygenDiffusionCoefficient_
+                *(cO2Soil - cO2Atmosphere);
+
+            values[Indices::conti0EqIdx + FluidSystem::H2OIdx] =
+                advectiveH2OFlux;
+            values[Indices::conti0EqIdx + FluidSystem::N2Idx] =
+                advectiveN2Flux;
+            values[Indices::conti0EqIdx + FluidSystem::O2Idx] =
+                advectiveO2Flux + diffusiveO2Flux;
+
+            // There is no imposed liquid rainfall or evaporation flux. The
+            // H2O flux above is only the water vapor transported with the
+            // pressure-driven gas mixture.
+        }
+        else if (isVariHeadBoundary_(globalPos))
+        {
+            // CCTpfa requires a pure boundary type on each boundary face.
+            // Therefore, impose the variable hydraulic head as a Robin flux
+            // for all component balances. This is the flux equivalent of the
+            // former pressure/state Dirichlet condition, while retaining the
+            // HYDRUS third-type oxygen condition.
+            const int liquidPhaseIdx = FluidSystem::liquidPhaseIdx;
+            const Scalar density = volVars.density(liquidPhaseIdx);
+            const Scalar molarDensity = volVars.molarDensity(liquidPhaseIdx);
+            const Scalar mobility = volVars.mobility(liquidPhaseIdx);
+            const auto permeability = volVars.permeability();
+
+            constexpr Scalar waterDensity = 1000.0;
+            constexpr Scalar gravity = 9.81;
+            constexpr Scalar atmosphericPressure = 1.0e5;
+
+            const Scalar boundaryTime = boundaryTime_();
+
+            // During startup, ramp the water level/head itself instead of
+            // activating the complete drywell wall immediately and merely
+            // scaling its flux. This makes the wetted boundary grow upward
+            // from the drywell bottom and avoids a simultaneous phase switch
+            // along the full 12 m injection interval.
+            const Scalar startupFactor =
+                drywellStartupRampTime_ > 0.0
+                ? std::clamp(boundaryTime/drywellStartupRampTime_, Scalar(0.0), Scalar(1.0))
+                : Scalar(1.0);
+
+            const Scalar scheduledDrywellHeadCm = drywellHeadCm_(boundaryTime);
+            const Scalar rampedDrywellHeadCm =
+                scheduledDrywellHeadCm > 0.0
+                ? startupFactor*scheduledDrywellHeadCm
+                : scheduledDrywellHeadCm;
+
+            // Legacy boundary used by the earlier HYDRUS-comparison model:
+            // evaluate the hydrostatic head at the integration point of the
+            // boundary face. A complete face is wet when this midpoint head
+            // is positive and dry otherwise. There is deliberately no
+            // partial-face wetted-fraction weighting in this variant.
+            const Scalar localDrywellHeadCm =
+                rampedDrywellHeadCm
+                - (globalPos[1] - drywellBottomElevation_)*100.0;
+
+            const Scalar drywellFreeSurfaceElevation =
+                globalPos[1]
+                + localDrywellHeadCm/100.0;
+
+            const Scalar boundaryAtmosphericPressure =
+                atmosphericPressureAtElevation_(
+                    drywellFreeSurfaceElevation
+                );
+
+            const Scalar boundaryLiquidPressure =
+                boundaryAtmosphericPressure
+                + waterDensity*gravity
+                    *(localDrywellHeadCm/100.0);
+
+            const auto& insideScv = fvGeometry.scv(scvf.insideScvIdx());
+            const Scalar distance =
+                (insideScv.center() - globalPos).two_norm();
+            const auto normal = scvf.unitOuterNormal();
+
+            // HYDRUS option: "Atmospheric BC when the specified nodal
+            // pressure head is negative". Rainfall and evaporation are zero,
+            // so a face whose midpoint is above the water level receives no
+            // imposed liquid-water flux.
+            const Scalar liquidVolumeFlux =
+                localDrywellHeadCm > 0.0
+                ? permeability*mobility
+                    *((volVars.pressure(liquidPhaseIdx)
+                       - boundaryLiquidPressure)/distance
+                      - density*gravity*normal[1])
+                : Scalar(0.0);
+
+            std::array<Scalar, FluidSystem::numComponents>
+                componentMolarConcentration{};
+
+            if (liquidVolumeFlux >= 0.0)
+            {
+                // Water leaving the domain carries the complete local liquid
+                // composition, including dissolved N2 and O2.
+                for (int compIdx = 0;
+                     compIdx < FluidSystem::numComponents;
+                     ++compIdx)
+                {
+                    componentMolarConcentration[compIdx] =
+                        molarDensity
+                        *volVars.moleFraction(liquidPhaseIdx, compIdx);
+                }
+            }
+            else
+            {
+                // Inflow carries HYDRUS cValue2 = 8e-6 g/cm3
+                // = 0.008 kg/m3. Incoming water contains no imposed N2;
+                // the remaining liquid molar concentration is H2O.
+                const Scalar oxygenMolarConcentration =
+                    drywellInfluentOxygenMassConcentration_
+                    /FluidSystem::molarMass(FluidSystem::O2Idx);
+
+                componentMolarConcentration[FluidSystem::O2Idx] =
+                    oxygenMolarConcentration;
+                componentMolarConcentration[FluidSystem::N2Idx] = 0.0;
+                componentMolarConcentration[FluidSystem::H2OIdx] =
+                    std::max(
+                        Scalar(0.0),
+                        molarDensity - oxygenMolarConcentration
+                    );
+            }
+
+            for (int compIdx = 0;
+                 compIdx < FluidSystem::numComponents;
+                 ++compIdx)
+            {
+                values[Indices::conti0EqIdx + compIdx] =
+                    liquidVolumeFlux
+                    *componentMolarConcentration[compIdx];
+            }
+        }
+        else if (isBottom_(globalPos))
+        {
+            constexpr Scalar gravity = 9.81;
+            const int liquidPhaseIdx = FluidSystem::liquidPhaseIdx;
+
+            const Scalar density = volVars.density(liquidPhaseIdx);
+            const Scalar molarDensity = volVars.molarDensity(liquidPhaseIdx);
+            const Scalar mobility = volVars.mobility(liquidPhaseIdx);
+            const auto permeability = volVars.permeability();
+
+            // Free drainage: unit hydraulic gradient.
+            const Scalar liquidVolumeFlux =
+                permeability*mobility*density*gravity;
+
+            for (int compIdx = 0;
+                 compIdx < FluidSystem::numComponents;
+                 ++compIdx)
+            {
+                values[Indices::conti0EqIdx + compIdx] =
+                    liquidVolumeFlux
+                    *molarDensity
+                    *volVars.moleFraction(liquidPhaseIdx, compIdx);
+            }
+        }
+
+        return values;
+    }
+
+    // Allow the prescribed drywell liquid flux to participate in
+    // near-boundary mechanical-dispersion velocity reconstruction.
+    // This does not add a separate boundary dispersive component flux.
+    bool isDrywellLiquidBoundaryForDispersion(
+        const GlobalPosition& globalPos) const
+    { return isVariHeadBoundary_(globalPos); }
+
+    PrimaryVariables initialAtPos(const GlobalPosition& globalPos) const
+    { return initial_(globalPos); }
+
+    template<class ElementVolumeVariables>
+    NumEqVector source(const Element&,
+                       const FVElementGeometry&,
+                       const ElementVolumeVariables& elemVolVars,
+                       const SubControlVolume& scv) const
+    {
+        NumEqVector values(0.0);
+        const auto& volVars = elemVolVars[scv];
+        const int liquidPhaseIdx = FluidSystem::liquidPhaseIdx;
+        const int gasPhaseIdx = FluidSystem::gasPhaseIdx;
+
+        const Scalar porosity = volVars.porosity();
+        const Scalar liquidSaturation = volVars.saturation(liquidPhaseIdx);
+        const Scalar gasSaturation = volVars.saturation(gasPhaseIdx);
+        const Scalar waterContent = porosity*liquidSaturation;
+        const Scalar moistureFactor = moistureDecayFactor_(waterContent);
+
+        constexpr Scalar oxygenRegularization = 1.0e-12;
+        const auto regularizedOxygenMoleFraction =
+            [=](Scalar x)
+            {
+                const Scalar ratio = x/oxygenRegularization;
+                return x*(Scalar(1.0) - std::exp(-ratio*ratio));
+            };
+
+        const Scalar xO2Liquid = regularizedOxygenMoleFraction(
+            volVars.moleFraction(liquidPhaseIdx, FluidSystem::O2Idx));
+        const Scalar xO2Gas = regularizedOxygenMoleFraction(
+            volVars.moleFraction(gasPhaseIdx, FluidSystem::O2Idx));
+
+        const Scalar liquidOxygenInventory =
+            porosity*liquidSaturation
+            *volVars.molarDensity(liquidPhaseIdx)*xO2Liquid;
+        const Scalar gasOxygenInventory =
+            porosity*gasSaturation
+            *volVars.molarDensity(gasPhaseIdx)*xO2Gas;
+
+        // HYDRUS first-order constants, converted from 1/h to 1/s.
+        constexpr Scalar liquidDecayRate = 0.06/3600.0;
+        constexpr Scalar gasDecayRate = 0.002/3600.0;
+
+        values[Indices::conti0EqIdx + FluidSystem::O2Idx] =
+            -moistureFactor
+            *(liquidDecayRate*liquidOxygenInventory
+              + gasDecayRate*gasOxygenInventory);
+
+        return values;
+    }
+
+private:
+    Scalar boundaryTime_() const
+    {
+        if (timeLoop_)
+            return timeLoop_->time() + timeLoop_->timeStepSize();
+
+        return time_;
+    }
+
+    static Scalar liquidMoleFractionFromLiquidMassConcentration_(Scalar c)
+    {
+        constexpr Scalar waterDensity = 1000.0;
+        const Scalar oxygenMolarConcentration =
+            c/FluidSystem::molarMass(FluidSystem::O2Idx);
+        const Scalar waterMolarConcentration =
+            waterDensity/FluidSystem::molarMass(FluidSystem::H2OIdx);
+        return oxygenMolarConcentration
+               /(waterMolarConcentration + oxygenMolarConcentration);
+    }
+
+    static Scalar moistureDecayFactor_(Scalar theta)
+    {
+        constexpr Scalar minimumDryRate = 0.1;
+        constexpr Scalar theta0 = 0.06;
+        constexpr Scalar theta1 = 0.15;
+        constexpr Scalar theta2 = 0.25;
+        constexpr Scalar theta3 = 0.37;
+        constexpr Scalar minimumWetRate = 0.3;
+
+        if (theta <= theta0) return minimumDryRate;
+        if (theta < theta1)
+        {
+            const Scalar f = (theta - theta0)/(theta1 - theta0);
+            return minimumDryRate + f*(1.0 - minimumDryRate);
+        }
+        if (theta <= theta2) return 1.0;
+        if (theta < theta3)
+        {
+            const Scalar f = (theta - theta2)/(theta3 - theta2);
+            return 1.0 + f*(minimumWetRate - 1.0);
+        }
+        return minimumWetRate;
+    }
+
+    PrimaryVariables initial_(const GlobalPosition& globalPos) const
+    {
+        const Scalar depthCm = (30.0 - globalPos[1])*100.0;
+        Scalar headCm = -55.0;
+
+        if (depthCm <= 1750.0)
+            headCm = -55.0 + depthCm/1750.0*30.0;
+        else if (depthCm <= 2090.0)
+            headCm = -25.0
+                     + (depthCm - 1750.0)/(2090.0 - 1750.0)*(-125.0);
+        else
+            headCm = -150.0
+                     + (depthCm - 2090.0)/(3000.0 - 2090.0)*50.0;
+
+        return stateFromHead_(
+            globalPos,
+            headCm,
+            initialOxygenMoleFractionAtPosition_(globalPos)
+        );
+    }
+
+    void readInitialOxygenProfile_()
+    {
+        std::ifstream input(initialOxygenProfileFile_);
+        if (!input)
+            throw std::runtime_error(
+                "Cannot open 2-D initial oxygen field: "
+                + initialOxygenProfileFile_
+            );
+
+        Scalar radius = 0.0;
+        Scalar elevation = 0.0;
+        Scalar liquidOxygenMoleFraction = 0.0;
+        std::string line;
+
+        while (std::getline(input, line))
+        {
+            if (line.empty() || line[0] == '#')
+                continue;
+
+            std::istringstream stream(line);
+            if (!(stream >> radius >> elevation >> liquidOxygenMoleFraction))
+                continue;
+
+            oxygenProfileRadius_.push_back(radius);
+            oxygenProfileElevation_.push_back(elevation);
+            oxygenProfileLiquidMoleFraction_.push_back(liquidOxygenMoleFraction);
+        }
+
+        if (oxygenProfileRadius_.empty())
+            throw std::runtime_error("2-D initial oxygen field contains no usable rows");
+
+        std::cout << "Loaded 2-D O2 IC cells = "
+                  << oxygenProfileRadius_.size() << std::endl;
+    }
+
+    Scalar initialOxygenMoleFractionAtPosition_(const GlobalPosition& globalPos) const
+    {
+        const Scalar radius = globalPos[0];
+        const Scalar elevation = globalPos[1];
+        Scalar bestDistanceSquared = std::numeric_limits<Scalar>::max();
+        Scalar bestValue = oxygenProfileLiquidMoleFraction_.front();
+
+        for (std::size_t i = 0; i < oxygenProfileRadius_.size(); ++i)
+        {
+            const Scalar dr = radius - oxygenProfileRadius_[i];
+            const Scalar dz = elevation - oxygenProfileElevation_[i];
+            const Scalar d2 = dr*dr + dz*dz;
+            if (d2 < bestDistanceSquared)
+            {
+                bestDistanceSquared = d2;
+                bestValue = oxygenProfileLiquidMoleFraction_[i];
+                if (d2 < 1.0e-24) break;
+            }
+        }
+        return bestValue;
+    }
+
+    
+    // ==================================================================
+    // HYDROFIX: hydrostatic atmospheric pressure reference.
+    //
+    // z = 30 m is the reference ground elevation:
+    //     p_atm(30 m) = 100000 Pa
+    //
+    // Pressure increases downward according to the reference atmospheric
+    // mixture density used by the atmospheric gas reservoir.
+    // ==================================================================
+    Scalar atmosphericPressureAtElevation_(Scalar elevation) const
+    {
+        constexpr Scalar pRef = 1.0e5;
+        constexpr Scalar zRef = 30.0;
+        constexpr Scalar temperature = 298.15;
+        constexpr Scalar gasConstant = 8.31446261815324;
+        constexpr Scalar waterVaporPressure = 3169.0;
+        constexpr Scalar gravity = 9.81;
+
+        const Scalar cO2 =
+            atmosphericOxygenMassConcentration_
+            /FluidSystem::molarMass(FluidSystem::O2Idx);
+
+        const Scalar cH2O =
+            waterVaporPressure/(gasConstant*temperature);
+
+        const Scalar cDry =
+            (pRef - waterVaporPressure)
+            /(gasConstant*temperature);
+
+        const Scalar cN2 =
+            std::max(
+                Scalar(0.0),
+                cDry - cO2
+            );
+
+        const Scalar rhoAtmosphere =
+            cH2O*FluidSystem::molarMass(FluidSystem::H2OIdx)
+            + cN2*FluidSystem::molarMass(FluidSystem::N2Idx)
+            + cO2*FluidSystem::molarMass(FluidSystem::O2Idx);
+
+        return
+            pRef
+            + rhoAtmosphere*gravity*(zRef - elevation);
+    }
+
+PrimaryVariables stateFromHead_(const GlobalPosition& globalPos,
+                                    Scalar headCm,
+                                    Scalar liquidOxygenMoleFraction) const
+    {
+        PrimaryVariables priVars(0.0);
+        const Scalar localAtmosphericPressure =
+            atmosphericPressureAtElevation_(globalPos[1]);
+        constexpr Scalar waterDensity = 1000.0;
+        constexpr Scalar gravity = 9.81;
+
+        const Scalar liquidPressure =
+            localAtmosphericPressure
+            + waterDensity*gravity*(headCm/100.0);
+
+        if (headCm >= 0.0)
+        {
+            priVars.setState(wPhaseOnly);
+            priVars[pressureIdx] = liquidPressure;
+            priVars[switchIdx] = 0.0;
+            priVars[oxygenIdx] = liquidOxygenMoleFraction;
+        }
+        else
+        {
+            const Scalar capillaryPressure =
+                localAtmosphericPressure - liquidPressure;
+            const auto interaction =
+                this->spatialParams().fluidMatrixInteractionAtPos(globalPos);
+            Scalar liquidSaturation = interaction.sw(capillaryPressure);
+            liquidSaturation = std::clamp(
+                liquidSaturation, Scalar(0.0), Scalar(1.0));
+
+            priVars.setState(bothPhases);
+            priVars[pressureIdx] = liquidPressure;
+            priVars[switchIdx] = 1.0 - liquidSaturation;
+            priVars[oxygenIdx] = liquidOxygenMoleFraction;
+        }
+
+        return priVars;
+    }
+
+    PrimaryVariables drywellState_(const GlobalPosition& globalPos) const
+    {
+        return stateFromHead_(
+            globalPos,
+            drywellHeadCm_(boundaryTime_()),
+            initialOxygenMoleFractionAtPosition_(globalPos)
+        );
+    }
+
+    Scalar drywellHeadCm_(Scalar timeSeconds) const
+    {
+        const Scalar epsTime = 1.0e-8;
+
+        // Externally supplied constant-head wetting periods.
+        //
+        // Exact switching times 240 h and 480 h still belong to the
+        // preceding drainage step. For the following step, timeSeconds is
+        // greater than the switching time and the 12 m supplied boundary
+        // becomes active.
+        const bool externallySupplied =
+            timeSeconds <= 163.125247592924*3600.0 + epsTime
+            ||
+            (
+                timeSeconds > 480.0*3600.0 + epsTime
+                &&
+                timeSeconds <= 737.084098745400*3600.0 + epsTime
+            )
+            ||
+            (
+                timeSeconds > 960.0*3600.0 + epsTime
+                &&
+                timeSeconds <= 1233.636146520033*3600.0 + epsTime
+            );
+
+        if (externallySupplied)
+            return drywellInjectionHeadCm_;
+
+        // During each 6-day drainage period the external supply is OFF.
+        // The hydraulic boundary is the finite reservoir state.
+        return reservoirHeadCm_;
+    }
+
+    bool isAtmosphere_(const GlobalPosition& globalPos) const
+    { return globalPos[1] > 30.0 - eps_; }
+
+    bool isBottom_(const GlobalPosition& globalPos) const
+    { return globalPos[1] < eps_; }
+
+    bool isVariHeadBoundary_(const GlobalPosition& globalPos) const
+    {
+        const Scalar x = globalPos[0];
+        const Scalar y = globalPos[1];
+
+        const bool mainWall =
+            std::abs(x - 0.61) < eps_
+            && y >= 14.0 - eps_ && y <= 27.0 + eps_;
+        const bool wellBottom =
+            std::abs(y - 14.0) < eps_ && x <= 0.61 + eps_;
+
+        // Match the blue HYDRUS VariHead boundary: the complete lower
+        // 1.22 m-diameter section, i.e. both its vertical wall and bottom.
+        // The upper black 1.23 m-diameter casing wall (ground to 3 m depth)
+        // and its 5 mm radial shoulder are intentionally no-flow.
+        return mainWall || wellBottom;
+    }
+
+    static constexpr Scalar eps_ = 1.0e-6;
+    static constexpr Scalar drywellRadius_ = 0.61;
+    static constexpr Scalar drywellBottomElevation_ = 14.0;
+    Scalar time_ = 0.0;
+    std::shared_ptr<const TimeLoop> timeLoop_;
+    std::string name_;
+    Scalar atmosphericOxygenDiffusionCoefficient_;
+    Scalar atmosphericGasPressureFactor_;
+    bool enableGasPhaseOxygenAdvection_;
+    Scalar drywellStartupRampTime_;
+    Scalar drywellInjectionHeadCm_;
+
+    Scalar reservoirHeadCm_ = 0.0;
+    Scalar lastReservoirNetFluxM3s_ = 0.0;
+
+    static constexpr Scalar reservoirShutoffTimeSeconds_ =
+        163.125247592924*3600.0;
+
+    std::string initialOxygenProfileFile_;
+    std::vector<Scalar> oxygenProfileRadius_;
+    std::vector<Scalar> oxygenProfileElevation_;
+    std::vector<Scalar> oxygenProfileLiquidMoleFraction_;
+
+    // HYDRUS cValue2: 8e-6 g/cm3 = 0.008 kg/m3 inflowing water.
+    static constexpr Scalar drywellInfluentOxygenMassConcentration_ = 0.008;
+    // 0.000261 g/cm3 = 0.261 kg/m3 gas.
+    static constexpr Scalar atmosphericOxygenMassConcentration_ = 0.261;
+};
+
+} // namespace Dumux
+
+#endif
+
+===== FILE: /home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/params.input =====
+[TimeLoop]
+# HYDRUS formal simulation: 720 h.
+TEnd = 2592000
+# HYDRUS initial step: 0.0003 h = 1.08 s.
+DtInitial = 1.08
+# HYDRUS maximum step: 0.1 h = 360 s.
+MaxTimeStepSize = 360
+# 120 equally spaced print intervals over 720 h = every 6 h.
+OutputInterval = 21600
+
+[Grid]
+File = floodmar.msh
+Verbose = true
+
+[Problem]
+Name = drywell_radius20m_head12m_dispersion_720h
+InitialOxygenProfileFile = oxygen_initial_2880.dat
+AtmosphericOxygenDiffusionCoefficient = 1e-6
+AtmosphericGasPressureFactor = 1.0
+EnableGravity = true
+DrywellStartupRampTime = 43200
+DrywellInjectionHead = 1200
+
+[Dispersion]
+LongitudinalDispersivity = 0.50
+TransverseDispersivity = 0.05
+ApplyToGasPhase = false
+
+[Vtk]
+AddVelocity = true
+
+[Output]
+PlotFluidMatrixInteractions = false
+
+[LinearSolver]
+ResidualReduction = 1e-8
+
+[Newton]
+MaxRelativeShift = 1e-8
+MaxSteps = 18
+
+[Component]
+SolidDensity = 2700
+SolidThermalConductivity = 2.8
+SolidHeatCapacity = 790
+
+# alpha values converted from 1/cm to 1/Pa:
+# alpha_Pa = alpha_cm / 98.0665
+
+[SpatialParams.Sand1]
+VanGenuchtenAlpha = 3.2631e-4
+VanGenuchtenN = 3.47614
+VanGenuchtenL = 0.5
+Swr = 0.12737
+Snr = 0.0
+
+[SpatialParams.LoamySand]
+VanGenuchtenAlpha = 3.9769e-4
+VanGenuchtenN = 2.03252
+VanGenuchtenL = 0.5
+Swr = 0.11077
+Snr = 0.0
+
+[SpatialParams.Sand2]
+VanGenuchtenAlpha = 7.2400e-4
+VanGenuchtenN = 3.01351
+VanGenuchtenL = 0.5
+Swr = 0.12576
+Snr = 0.0
+
+[SpatialParams.Loam]
+VanGenuchtenAlpha = 1.0197e-4
+VanGenuchtenN = 1.49217
+VanGenuchtenL = 0.5
+Swr = 0.13300
+Snr = 0.0
+
+[SpatialParams.SandyLoam]
+VanGenuchtenAlpha = 2.0394e-4
+VanGenuchtenN = 1.40886
+VanGenuchtenL = 0.5
+Swr = 0.13203
+Snr = 0.0
+
+[SpatialParams.Sand3]
+VanGenuchtenAlpha = 3.5690e-4
+VanGenuchtenN = 2.03252
+VanGenuchtenL = 0.5
+Swr = 0.11077
+Snr = 0.0
+
+[SpatialParams]
+Temperature = 298.15
+
+===== FILE: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/model_source/problem_HYDROFIX_4cycle_equalVolume.hh =====
+#ifndef DUMUX_FLOOD_MAR_PROBLEM_HH
+#define DUMUX_FLOOD_MAR_PROBLEM_HH
+
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <limits>
+#include <memory>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include <dumux/common/properties.hh>
+#include <dumux/common/parameters.hh>
+#include <dumux/common/boundarytypes.hh>
+#include <dumux/common/numeqvector.hh>
+#include <dumux/common/timeloop.hh>
+#include <dumux/porousmediumflow/problem.hh>
+#include <dumux/material/binarycoefficients/h2o_o2.hh>
+
+#include <dune/grid/common/rangegenerators.hh>
+#include <dumux/discretization/localview.hh>
+#include <dumux/discretization/extrusion.hh>
+
+namespace Dumux {
+
+template<class TypeTag>
+class WaterAirProblem
+: public PorousMediumFlowProblem<TypeTag>
+{
+    using ParentType = PorousMediumFlowProblem<TypeTag>;
+
+    using Scalar = GetPropType<TypeTag, Properties::Scalar>;
+    using GridGeometry = GetPropType<TypeTag, Properties::GridGeometry>;
+    using Extrusion = Extrusion_t<GridGeometry>;
+    using GridView = typename GridGeometry::GridView;
+    using FVElementGeometry = typename GridGeometry::LocalView;
+    using SubControlVolume = typename FVElementGeometry::SubControlVolume;
+    using SubControlVolumeFace = typename FVElementGeometry::SubControlVolumeFace;
+    using FluidSystem = GetPropType<TypeTag, Properties::FluidSystem>;
+    using ModelTraits = GetPropType<TypeTag, Properties::ModelTraits>;
+    using Indices = typename ModelTraits::Indices;
+
+    enum
+    {
+        pressureIdx = Indices::pressureIdx,
+        switchIdx = Indices::switchIdx,
+        oxygenIdx = Indices::switchIdx + 1
+    };
+
+    enum
+    {
+        wPhaseOnly = Indices::firstPhaseOnly,
+        bothPhases = Indices::bothPhases
+    };
+
+    using PrimaryVariables = GetPropType<TypeTag, Properties::PrimaryVariables>;
+    using NumEqVector = Dumux::NumEqVector<PrimaryVariables>;
+    using BoundaryTypes = Dumux::BoundaryTypes<ModelTraits::numEq()>;
+    using Element = typename GridView::template Codim<0>::Entity;
+    using GlobalPosition = typename Element::Geometry::GlobalCoordinate;
+    using TimeLoop = Dumux::TimeLoop<Scalar>;
+
+public:
+    WaterAirProblem(std::shared_ptr<const GridGeometry> gridGeometry)
+    : ParentType(gridGeometry)
+    , atmosphericOxygenDiffusionCoefficient_(
+        getParam<Scalar>(
+            "Problem.AtmosphericOxygenDiffusionCoefficient",
+            getParam<Scalar>("Problem.AtmosphericGasTransferCoefficient", 1.0e-6)
+        )
+      )
+    , atmosphericGasPressureFactor_(
+        getParam<Scalar>("Problem.AtmosphericGasPressureFactor", 1.0)
+      )
+    , enableGasPhaseOxygenAdvection_(
+        getParam<bool>("Problem.EnableGasPhaseOxygenAdvection", true)
+      )
+    , drywellStartupRampTime_(
+        getParam<Scalar>("Problem.DrywellStartupRampTime", 3600.0)
+      )
+    , drywellInjectionHeadCm_(
+        getParam<Scalar>("Problem.DrywellInjectionHead", 1200.0)
+      )
+    , initialOxygenProfileFile_(
+        getParam<std::string>(
+            "Problem.InitialOxygenProfileFile",
+            "oxygen_initial_2880.dat"
+        )
+      )
+    {
+        FluidSystem::init();
+        reservoirHeadCm_ = drywellInjectionHeadCm_;
+        name_ = getParam<std::string>("Problem.Name", "floodmar");
+        readInitialOxygenProfile_();
+
+        std::cout << "Flood-MAR axisymmetric water-N2-O2 model\n"
+                  << "Open atmospheric gas-pressure boundary\n"
+                  << "O2 surface diffusion coefficient = "
+                  << atmosphericOxygenDiffusionCoefficient_ << " m/s\n"
+                  << "Gas-pressure transmissibility factor = "
+                  << atmosphericGasPressureFactor_ << "\n"
+                  << "Drywell startup ramp time = "
+                  << drywellStartupRampTime_ << " s\n"
+                  << "Drywell injection head = "
+                  << drywellInjectionHeadCm_ << " cm\n"
+                  << "Drywell boundary mode = legacy whole-face midpoint\n"
+                  << "Initial O2 profile = "
+                  << initialOxygenProfileFile_ << "\n"
+                  << "Formal drywell simulation: 3 cycles, 720 h"
+                  << std::endl;
+    }
+
+    const std::string& name() const
+    { return name_; }
+
+    Scalar temperatureAtPos(const GlobalPosition&) const
+    { return 298.15; }
+
+    void setTime(Scalar time)
+    { time_ = time; }
+
+    // Keep time-dependent boundary conditions synchronized with the time
+    // step currently tried by DuMuX. NewtonSolver::solve(x, timeLoop) may
+    // reduce dt internally after a failed Newton attempt. Reading the shared
+    // time loop here ensures the retry uses t + the reduced dt, not the end
+    // time of the failed larger step.
+    void setTimeLoop(const std::shared_ptr<TimeLoop>& timeLoop)
+    { timeLoop_ = timeLoop; }
+
+    Scalar nextBoundaryEventTime(Scalar currentTimeSeconds) const
+    {
+
+        constexpr Scalar eps = 1.0e-8;
+
+        const Scalar c1 =
+            getParam<Scalar>(
+                "Problem.Cycle1WetEndHours",
+                163.125247592924
+            )*3600.0;
+
+        const Scalar c2 =
+            getParam<Scalar>(
+                "Problem.Cycle2WetEndHours",
+                737.084098745400
+            )*3600.0;
+
+        const Scalar c3 =
+            getParam<Scalar>(
+                "Problem.Cycle3WetEndHours",
+                1233.636146520033
+            )*3600.0;
+
+        const Scalar c4 =
+            getParam<Scalar>(
+                "Problem.Cycle4WetEndHours",
+                1750.0
+            )*3600.0;
+
+        const Scalar events[] = {
+            drywellStartupRampTime_,
+            c1,
+
+            480.0*3600.0,
+            480.0*3600.0 + drywellStartupRampTime_,
+            c2,
+
+            960.0*3600.0,
+            960.0*3600.0 + drywellStartupRampTime_,
+            c3,
+
+            1440.0*3600.0,
+            1440.0*3600.0 + drywellStartupRampTime_,
+            c4,
+
+            1920.0*3600.0
+        };
+
+        Scalar next = Scalar(1.0e100);
+
+        for (const Scalar eventTime : events)
+        {
+            if (
+                eventTime > currentTimeSeconds + eps
+                && eventTime < next
+            )
+                next = eventTime;
+        }
+
+        return next;
+    }
+
+
+    // ---------------------------------------------------------------------
+    // Finite drywell reservoir used only after external supply stops at 96 h.
+    //
+    // Sign convention:
+    //   liquidVolumeFlux < 0 : reservoir -> porous medium
+    //   liquidVolumeFlux > 0 : porous medium -> reservoir
+    //
+    // The reservoir state is updated exactly once after an accepted DuMuX
+    // time step. It is never modified during Newton iterations.
+    // ---------------------------------------------------------------------
+
+    Scalar reservoirHeadCm() const
+    {
+        return reservoirHeadCm_;
+    }
+
+    Scalar reservoirStorageM3() const
+    {
+        constexpr Scalar pi =
+            3.1415926535897932384626433832795;
+
+        const Scalar area =
+            pi*drywellRadius_*drywellRadius_;
+
+        return area
+               *std::max(Scalar(0.0), reservoirHeadCm_)
+               /100.0;
+    }
+
+    Scalar lastReservoirNetFluxM3s() const
+    {
+        return lastReservoirNetFluxM3s_;
+    }
+
+    struct DrywellFluxDiagnostics
+    {
+        Scalar netFluxToWellM3s = 0.0;
+        Scalar wellToSoilFluxM3s = 0.0;
+        Scalar soilToWellFluxM3s = 0.0;
+        Scalar boundaryHeadCm = 0.0;
+        Scalar boundaryStorageM3 = 0.0;
+    };
+
+    bool externalSupplyActive(Scalar timeSeconds) const
+    {
+        const Scalar epsTime = 1.0e-8;
+
+        return
+            timeSeconds <= 163.125247592924*3600.0 + epsTime
+            ||
+            (
+                timeSeconds > 480.0*3600.0 + epsTime
+                &&
+                timeSeconds <= 737.084098745400*3600.0 + epsTime
+            )
+            ||
+            (
+                timeSeconds > 960.0*3600.0 + epsTime
+                &&
+                timeSeconds <= 1233.636146520033*3600.0 + epsTime
+            );
+    }
+
+
+    // HYDROFIX_4CYCLE_EQUAL_VOLUME_FROM0
+    //
+    // Four 20-day cycles. Wetting cutoff times are runtime parameters
+    // calibrated from model-native gross well->soil injection.
+    bool externallySupplied4Cycle_(Scalar timeSeconds) const
+    {
+        constexpr Scalar eps = 1.0e-8;
+
+        const Scalar c1End =
+            getParam<Scalar>(
+                "Problem.Cycle1WetEndHours",
+                163.125247592924
+            )*3600.0;
+
+        const Scalar c2End =
+            getParam<Scalar>(
+                "Problem.Cycle2WetEndHours",
+                737.084098745400
+            )*3600.0;
+
+        const Scalar c3End =
+            getParam<Scalar>(
+                "Problem.Cycle3WetEndHours",
+                1233.636146520033
+            )*3600.0;
+
+        const Scalar c4End =
+            getParam<Scalar>(
+                "Problem.Cycle4WetEndHours",
+                1750.0
+            )*3600.0;
+
+        if (timeSeconds <= c1End + eps)
+            return true;
+
+        if (
+            timeSeconds > 480.0*3600.0 + eps
+            && timeSeconds <= c2End + eps
+        )
+            return true;
+
+        if (
+            timeSeconds > 960.0*3600.0 + eps
+            && timeSeconds <= c3End + eps
+        )
+            return true;
+
+        if (
+            timeSeconds > 1440.0*3600.0 + eps
+            && timeSeconds <= c4End + eps
+        )
+            return true;
+
+        return false;
+    }
+
+    Scalar cycleStartSeconds4Cycle_(Scalar timeSeconds) const
+    {
+        constexpr Scalar eps = 1.0e-8;
+
+        if (timeSeconds > 1440.0*3600.0 + eps)
+            return 1440.0*3600.0;
+
+        if (timeSeconds > 960.0*3600.0 + eps)
+            return 960.0*3600.0;
+
+        if (timeSeconds > 480.0*3600.0 + eps)
+            return 480.0*3600.0;
+
+        return 0.0;
+    }
+
+    int cycleNumber(Scalar timeSeconds) const
+    {
+
+        constexpr Scalar eps = 1.0e-8;
+
+        if (timeSeconds <= 480.0*3600.0 + eps)
+            return 1;
+
+        if (timeSeconds <= 960.0*3600.0 + eps)
+            return 2;
+
+        if (timeSeconds <= 1440.0*3600.0 + eps)
+            return 3;
+
+        return 4;
+    }
+
+    Scalar appliedDrywellHeadCm(Scalar timeSeconds) const
+    {
+
+        const Scalar cycleStart =
+            cycleStartSeconds4Cycle_(timeSeconds);
+
+        const Scalar localWettingTime =
+            std::max(
+                Scalar(0.0),
+                timeSeconds - cycleStart
+            );
+
+        const Scalar startupFactor =
+            drywellStartupRampTime_ > 0.0
+            ? std::clamp(
+                  localWettingTime/drywellStartupRampTime_,
+                  Scalar(0.0),
+                  Scalar(1.0)
+              )
+            : Scalar(1.0);
+
+        const Scalar scheduledHeadCm =
+            drywellHeadCm_(timeSeconds);
+
+        return scheduledHeadCm > 0.0
+               ? startupFactor*scheduledHeadCm
+               : scheduledHeadCm;
+    }
+
+    template<class GridVariables, class SolutionVector>
+    DrywellFluxDiagnostics drywellFluxDiagnostics(
+        const GridVariables& gridVariables,
+        const SolutionVector& sol,
+        Scalar acceptedEndTimeSeconds) const
+    {
+        DrywellFluxDiagnostics result;
+
+        result.boundaryHeadCm =
+            appliedDrywellHeadCm(
+                acceptedEndTimeSeconds
+            );
+
+        constexpr Scalar pi =
+            3.1415926535897932384626433832795;
+
+        const Scalar reservoirArea =
+            pi*drywellRadius_*drywellRadius_;
+
+        result.boundaryStorageM3 =
+            reservoirArea
+            *std::max(
+                Scalar(0.0),
+                result.boundaryHeadCm
+            )
+            /100.0;
+
+        const auto& gridGeometry =
+            this->gridGeometry();
+
+        auto fvGeometry =
+            localView(gridGeometry);
+
+        auto elemVolVars =
+            localView(
+                gridVariables.curGridVolVars()
+            );
+
+        constexpr Scalar waterDensity = 1000.0;
+        constexpr Scalar gravity = 9.81;
+        constexpr Scalar atmosphericPressure = 1.0e5;
+
+        for (const auto& element :
+             elements(gridGeometry.gridView()))
+        {
+            fvGeometry.bindElement(element);
+
+            elemVolVars.bindElement(
+                element,
+                fvGeometry,
+                sol
+            );
+
+            for (const auto& scvf :
+                 scvfs(fvGeometry))
+            {
+                if (!scvf.boundary())
+                    continue;
+
+                const auto& globalPos =
+                    scvf.ipGlobal();
+
+                if (!isVariHeadBoundary_(globalPos))
+                    continue;
+
+                const Scalar localDrywellHeadCm =
+                    result.boundaryHeadCm
+                    - (globalPos[1]
+                       - drywellBottomElevation_)*100.0;
+
+                if (localDrywellHeadCm <= 0.0)
+                    continue;
+
+                const auto& volVars =
+                    elemVolVars[
+                        scvf.insideScvIdx()
+                    ];
+
+                const int liquidPhaseIdx =
+                    FluidSystem::liquidPhaseIdx;
+
+                const Scalar density =
+                    volVars.density(
+                        liquidPhaseIdx
+                    );
+
+                const Scalar mobility =
+                    volVars.mobility(
+                        liquidPhaseIdx
+                    );
+
+                const auto permeability =
+                    volVars.permeability();
+
+                const Scalar drywellFreeSurfaceElevation =
+                globalPos[1]
+                + localDrywellHeadCm/100.0;
+
+            const Scalar boundaryAtmosphericPressure =
+                atmosphericPressureAtElevation_(
+                    drywellFreeSurfaceElevation
+                );
+
+            const Scalar boundaryLiquidPressure =
+                boundaryAtmosphericPressure
+                + waterDensity*gravity
+                    *(localDrywellHeadCm/100.0);
+
+                const auto& insideScv =
+                    fvGeometry.scv(
+                        scvf.insideScvIdx()
+                    );
+
+                const Scalar distance =
+                    (insideScv.center()
+                     - globalPos).two_norm();
+
+                const auto normal =
+                    scvf.unitOuterNormal();
+
+                const Scalar liquidVolumeFlux =
+                    permeability*mobility
+                    *((volVars.pressure(
+                           liquidPhaseIdx
+                       )
+                       - boundaryLiquidPressure)
+                       /distance
+                      - density*gravity*normal[1]);
+
+                const Scalar physicalArea =
+                    Extrusion::area(
+                        fvGeometry,
+                        scvf
+                    );
+
+                const Scalar faceFluxM3s =
+                    liquidVolumeFlux
+                    *physicalArea;
+
+                result.netFluxToWellM3s +=
+                    faceFluxM3s;
+
+                if (faceFluxM3s < 0.0)
+                    result.wellToSoilFluxM3s +=
+                        -faceFluxM3s;
+                else
+                    result.soilToWellFluxM3s +=
+                        faceFluxM3s;
+            }
+        }
+
+        return result;
+    }
+
+    template<class GridVariables, class SolutionVector>
+    void updateReservoirAfterAcceptedStep(
+        const GridVariables& gridVariables,
+        const SolutionVector& sol,
+        Scalar acceptedEndTimeSeconds,
+        Scalar dtSeconds)
+    {
+
+        // HYDROFIX_4CYCLE_EQUAL_VOLUME_FROM0
+        //
+        // While external supply is active, the drywell is maintained by the
+        // prescribed 12-m source. Once the calibrated gross-volume target has
+        // been reached, finite-reservoir drainage resumes.
+        if (externallySupplied4Cycle_(acceptedEndTimeSeconds))
+        {
+            reservoirHeadCm_ = drywellInjectionHeadCm_;
+            lastReservoirNetFluxM3s_ = 0.0;
+            return;
+        }
+
+if (reservoirHeadCm_ <= 0.0)
+        {
+            reservoirHeadCm_ = 0.0;
+            lastReservoirNetFluxM3s_ = 0.0;
+            return;
+        }
+
+        const auto& gridGeometry = this->gridGeometry();
+
+        auto fvGeometry =
+            localView(gridGeometry);
+
+        auto elemVolVars =
+            localView(gridVariables.curGridVolVars());
+
+        Scalar reservoirNetFluxM3s = 0.0;
+
+        constexpr Scalar waterDensity = 1000.0;
+        constexpr Scalar gravity = 9.81;
+        constexpr Scalar atmosphericPressure = 1.0e5;
+
+        for (const auto& element :
+             elements(gridGeometry.gridView()))
+        {
+            fvGeometry.bindElement(element);
+            elemVolVars.bindElement(
+                element,
+                fvGeometry,
+                sol
+            );
+
+            for (const auto& scvf :
+                 scvfs(fvGeometry))
+            {
+                if (!scvf.boundary())
+                    continue;
+
+                const auto& globalPos =
+                    scvf.ipGlobal();
+
+                if (!isVariHeadBoundary_(globalPos))
+                    continue;
+
+                const Scalar localDrywellHeadCm =
+                    reservoirHeadCm_
+                    - (globalPos[1]
+                       - drywellBottomElevation_)*100.0;
+
+                // Boundary face is above the instantaneous reservoir surface.
+                if (localDrywellHeadCm <= 0.0)
+                    continue;
+
+                const auto& volVars =
+                    elemVolVars[scvf.insideScvIdx()];
+
+                const int liquidPhaseIdx =
+                    FluidSystem::liquidPhaseIdx;
+
+                const Scalar density =
+                    volVars.density(liquidPhaseIdx);
+
+                const Scalar mobility =
+                    volVars.mobility(liquidPhaseIdx);
+
+                const auto permeability =
+                    volVars.permeability();
+
+                const Scalar drywellFreeSurfaceElevation =
+                globalPos[1]
+                + localDrywellHeadCm/100.0;
+
+            const Scalar boundaryAtmosphericPressure =
+                atmosphericPressureAtElevation_(
+                    drywellFreeSurfaceElevation
+                );
+
+            const Scalar boundaryLiquidPressure =
+                boundaryAtmosphericPressure
+                + waterDensity*gravity
+                    *(localDrywellHeadCm/100.0);
+
+                const auto& insideScv =
+                    fvGeometry.scv(
+                        scvf.insideScvIdx()
+                    );
+
+                const Scalar distance =
+                    (insideScv.center()
+                     - globalPos).two_norm();
+
+                const auto normal =
+                    scvf.unitOuterNormal();
+
+                // EXACT same liquid Robin expression as production BC.
+                const Scalar liquidVolumeFlux =
+                    permeability*mobility
+                    *((volVars.pressure(liquidPhaseIdx)
+                       - boundaryLiquidPressure)/distance
+                      - density*gravity*normal[1]);
+
+                // RotationalExtrusion<0> physical axisymmetric area.
+                const Scalar physicalArea =
+                    Extrusion::area(
+                        fvGeometry,
+                        scvf
+                    );
+
+                reservoirNetFluxM3s +=
+                    liquidVolumeFlux*physicalArea;
+            }
+        }
+
+        constexpr Scalar pi =
+            3.1415926535897932384626433832795;
+
+        const Scalar reservoirArea =
+            pi*drywellRadius_*drywellRadius_;
+
+        const Scalar oldStorage =
+            reservoirArea
+            *reservoirHeadCm_/100.0;
+
+        // q > 0 adds water to well;
+        // q < 0 removes water from well.
+        const Scalar trialStorage =
+            oldStorage
+            + reservoirNetFluxM3s*dtSeconds;
+
+        const Scalar newStorage =
+            std::max(
+                Scalar(0.0),
+                trialStorage
+            );
+
+        reservoirHeadCm_ =
+            100.0*newStorage/reservoirArea;
+
+        lastReservoirNetFluxM3s_ =
+            reservoirNetFluxM3s;
+    }
+
+    BoundaryTypes boundaryTypesAtPos(const GlobalPosition& globalPos) const
+    {
+        BoundaryTypes bcTypes;
+        bcTypes.setAllNeumann();
+
+        return bcTypes;
+    }
+
+    PrimaryVariables dirichletAtPos(const GlobalPosition& globalPos) const
+    {
+        if (isVariHeadBoundary_(globalPos))
+            return drywellState_(globalPos);
+
+        return initial_(globalPos);
+    }
+
+    template<class ElementVolumeVariables, class ElementFluxVariablesCache>
+    NumEqVector neumann(const Element&,
+                        const FVElementGeometry& fvGeometry,
+                        const ElementVolumeVariables& elemVolVars,
+                        const ElementFluxVariablesCache&,
+                        const SubControlVolumeFace& scvf) const
+    {
+        NumEqVector values(0.0);
+        const auto& globalPos = scvf.ipGlobal();
+        const auto& volVars = elemVolVars[scvf.insideScvIdx()];
+
+        if (isAtmosphere_(globalPos))
+        {
+            const int gasPhaseIdx = FluidSystem::gasPhaseIdx;
+            constexpr Scalar atmosphericPressure = 1.0e5;
+            constexpr Scalar temperature = 298.15;
+            constexpr Scalar gasConstant = 8.31446261815324;
+            constexpr Scalar atmosphericWaterVaporPressure = 3169.0;
+
+            const Scalar cO2Atmosphere =
+                atmosphericOxygenMassConcentration_
+                /FluidSystem::molarMass(FluidSystem::O2Idx);
+
+            const Scalar cH2OAtmosphere =
+                atmosphericWaterVaporPressure
+                /(gasConstant*temperature);
+
+            const Scalar cDryAtmosphere =
+                (atmosphericPressure - atmosphericWaterVaporPressure)
+                /(gasConstant*temperature);
+
+            const Scalar cN2Atmosphere =
+                std::max(Scalar(0.0), cDryAtmosphere - cO2Atmosphere);
+
+            const Scalar gasMolarDensity = volVars.molarDensity(gasPhaseIdx);
+            const Scalar xH2OSoil =
+                volVars.moleFraction(gasPhaseIdx, FluidSystem::H2OIdx);
+            const Scalar xO2Soil =
+                volVars.moleFraction(gasPhaseIdx, FluidSystem::O2Idx);
+            const Scalar xN2Soil =
+                volVars.moleFraction(gasPhaseIdx, FluidSystem::N2Idx);
+            const Scalar cO2Soil = gasMolarDensity*xO2Soil;
+
+            // Outward Darcy gas volume flux [m/s]. Positive values vent
+            // soil gas; negative values draw atmospheric gas into the soil.
+            const auto& insideScv = fvGeometry.scv(scvf.insideScvIdx());
+            const Scalar distance =
+                (insideScv.center() - globalPos).two_norm();
+
+            // HYDROFIX: hydrostatic-consistent atmospheric gas Darcy BC.
+            constexpr Scalar gasGravity = 9.81;
+
+            const Scalar atmosphericPressureAtFace =
+                atmosphericPressureAtElevation_(globalPos[1]);
+
+            const auto gasBoundaryNormal =
+                scvf.unitOuterNormal();
+
+            const Scalar gasDensity =
+                volVars.density(gasPhaseIdx);
+
+            const Scalar gasVolumeFlux =
+                atmosphericGasPressureFactor_
+                *volVars.permeability()
+                *volVars.mobility(gasPhaseIdx)
+                *((volVars.pressure(gasPhaseIdx)
+                   - atmosphericPressureAtFace)/distance
+                  - gasDensity*gasGravity
+                    *gasBoundaryNormal[1]);
+
+            Scalar advectiveH2OFlux = 0.0;
+            Scalar advectiveN2Flux = 0.0;
+            Scalar advectiveO2Flux = 0.0;
+
+            if (gasVolumeFlux >= 0.0)
+            {
+                // Gas leaving the domain carries the local soil composition.
+                advectiveH2OFlux =
+                    gasVolumeFlux*gasMolarDensity*xH2OSoil;
+                advectiveN2Flux =
+                    gasVolumeFlux*gasMolarDensity*xN2Soil;
+                advectiveO2Flux =
+                    gasVolumeFlux*gasMolarDensity*xO2Soil;
+            }
+            else
+            {
+                // Gas entering the domain carries the complete atmospheric
+                // H2O-N2-O2 composition at 25 degrees Celsius.
+                advectiveH2OFlux = gasVolumeFlux*cH2OAtmosphere;
+                advectiveN2Flux = gasVolumeFlux*cN2Atmosphere;
+                advectiveO2Flux = gasVolumeFlux*cO2Atmosphere;
+            }
+
+            // Stagnant-O2 diagnostic: preserve the total advective gas
+            // molar flux by treating the suppressed advective O2 as inert N2.
+            // Gas pressure can therefore vent normally while O2 itself is
+            // transported in the gas phase only by diffusion.
+            if (!enableGasPhaseOxygenAdvection_)
+            {
+                advectiveN2Flux += advectiveO2Flux;
+                advectiveO2Flux = 0.0;
+            }
+
+            // Molecular O2 exchange with the atmospheric reservoir.
+            // Positive is outward according to the DuMuX Neumann convention.
+            const Scalar diffusiveO2Flux =
+                atmosphericOxygenDiffusionCoefficient_
+                *(cO2Soil - cO2Atmosphere);
+
+            values[Indices::conti0EqIdx + FluidSystem::H2OIdx] =
+                advectiveH2OFlux;
+            values[Indices::conti0EqIdx + FluidSystem::N2Idx] =
+                advectiveN2Flux;
+            values[Indices::conti0EqIdx + FluidSystem::O2Idx] =
+                advectiveO2Flux + diffusiveO2Flux;
+
+            // There is no imposed liquid rainfall or evaporation flux. The
+            // H2O flux above is only the water vapor transported with the
+            // pressure-driven gas mixture.
+        }
+        else if (isVariHeadBoundary_(globalPos))
+        {
+            // CCTpfa requires a pure boundary type on each boundary face.
+            // Therefore, impose the variable hydraulic head as a Robin flux
+            // for all component balances. This is the flux equivalent of the
+            // former pressure/state Dirichlet condition, while retaining the
+            // HYDRUS third-type oxygen condition.
+            const int liquidPhaseIdx = FluidSystem::liquidPhaseIdx;
+            const Scalar density = volVars.density(liquidPhaseIdx);
+            const Scalar molarDensity = volVars.molarDensity(liquidPhaseIdx);
+            const Scalar mobility = volVars.mobility(liquidPhaseIdx);
+            const auto permeability = volVars.permeability();
+
+            constexpr Scalar waterDensity = 1000.0;
+            constexpr Scalar gravity = 9.81;
+            constexpr Scalar atmosphericPressure = 1.0e5;
+
+            const Scalar boundaryTime = boundaryTime_();
+
+            // During startup, ramp the water level/head itself instead of
+            // activating the complete drywell wall immediately and merely
+            // scaling its flux. This makes the wetted boundary grow upward
+            // from the drywell bottom and avoids a simultaneous phase switch
+            // along the full 12 m injection interval.
+            const Scalar startupFactor =
+                drywellStartupRampTime_ > 0.0
+                ? std::clamp(boundaryTime/drywellStartupRampTime_, Scalar(0.0), Scalar(1.0))
+                : Scalar(1.0);
+
+            const Scalar rampedDrywellHeadCm =
+                appliedDrywellHeadCm(boundaryTime);
+
+            // Legacy boundary used by the earlier HYDRUS-comparison model:
+            // evaluate the hydrostatic head at the integration point of the
+            // boundary face. A complete face is wet when this midpoint head
+            // is positive and dry otherwise. There is deliberately no
+            // partial-face wetted-fraction weighting in this variant.
+            const Scalar localDrywellHeadCm =
+                rampedDrywellHeadCm
+                - (globalPos[1] - drywellBottomElevation_)*100.0;
+
+            const Scalar drywellFreeSurfaceElevation =
+                globalPos[1]
+                + localDrywellHeadCm/100.0;
+
+            const Scalar boundaryAtmosphericPressure =
+                atmosphericPressureAtElevation_(
+                    drywellFreeSurfaceElevation
+                );
+
+            const Scalar boundaryLiquidPressure =
+                boundaryAtmosphericPressure
+                + waterDensity*gravity
+                    *(localDrywellHeadCm/100.0);
+
+            const auto& insideScv = fvGeometry.scv(scvf.insideScvIdx());
+            const Scalar distance =
+                (insideScv.center() - globalPos).two_norm();
+            const auto normal = scvf.unitOuterNormal();
+
+            // HYDRUS option: "Atmospheric BC when the specified nodal
+            // pressure head is negative". Rainfall and evaporation are zero,
+            // so a face whose midpoint is above the water level receives no
+            // imposed liquid-water flux.
+            const Scalar liquidVolumeFlux =
+                localDrywellHeadCm > 0.0
+                ? permeability*mobility
+                    *((volVars.pressure(liquidPhaseIdx)
+                       - boundaryLiquidPressure)/distance
+                      - density*gravity*normal[1])
+                : Scalar(0.0);
+
+            std::array<Scalar, FluidSystem::numComponents>
+                componentMolarConcentration{};
+
+            if (liquidVolumeFlux >= 0.0)
+            {
+                // Water leaving the domain carries the complete local liquid
+                // composition, including dissolved N2 and O2.
+                for (int compIdx = 0;
+                     compIdx < FluidSystem::numComponents;
+                     ++compIdx)
+                {
+                    componentMolarConcentration[compIdx] =
+                        molarDensity
+                        *volVars.moleFraction(liquidPhaseIdx, compIdx);
+                }
+            }
+            else
+            {
+                // Inflow carries HYDRUS cValue2 = 8e-6 g/cm3
+                // = 0.008 kg/m3. Incoming water contains no imposed N2;
+                // the remaining liquid molar concentration is H2O.
+                const Scalar oxygenMolarConcentration =
+                    drywellInfluentOxygenMassConcentration_
+                    /FluidSystem::molarMass(FluidSystem::O2Idx);
+
+                componentMolarConcentration[FluidSystem::O2Idx] =
+                    oxygenMolarConcentration;
+                componentMolarConcentration[FluidSystem::N2Idx] = 0.0;
+                componentMolarConcentration[FluidSystem::H2OIdx] =
+                    std::max(
+                        Scalar(0.0),
+                        molarDensity - oxygenMolarConcentration
+                    );
+            }
+
+            for (int compIdx = 0;
+                 compIdx < FluidSystem::numComponents;
+                 ++compIdx)
+            {
+                values[Indices::conti0EqIdx + compIdx] =
+                    liquidVolumeFlux
+                    *componentMolarConcentration[compIdx];
+            }
+        }
+        else if (isBottom_(globalPos))
+        {
+            constexpr Scalar gravity = 9.81;
+            const int liquidPhaseIdx = FluidSystem::liquidPhaseIdx;
+
+            const Scalar density = volVars.density(liquidPhaseIdx);
+            const Scalar molarDensity = volVars.molarDensity(liquidPhaseIdx);
+            const Scalar mobility = volVars.mobility(liquidPhaseIdx);
+            const auto permeability = volVars.permeability();
+
+            // Free drainage: unit hydraulic gradient.
+            const Scalar liquidVolumeFlux =
+                permeability*mobility*density*gravity;
+
+            for (int compIdx = 0;
+                 compIdx < FluidSystem::numComponents;
+                 ++compIdx)
+            {
+                values[Indices::conti0EqIdx + compIdx] =
+                    liquidVolumeFlux
+                    *molarDensity
+                    *volVars.moleFraction(liquidPhaseIdx, compIdx);
+            }
+        }
+
+        return values;
+    }
+
+    // Allow the prescribed drywell liquid flux to participate in
+    // near-boundary mechanical-dispersion velocity reconstruction.
+    // This does not add a separate boundary dispersive component flux.
+    bool isDrywellLiquidBoundaryForDispersion(
+        const GlobalPosition& globalPos) const
+    { return isVariHeadBoundary_(globalPos); }
+
+    PrimaryVariables initialAtPos(const GlobalPosition& globalPos) const
+    { return initial_(globalPos); }
+
+    template<class ElementVolumeVariables>
+    NumEqVector source(const Element&,
+                       const FVElementGeometry&,
+                       const ElementVolumeVariables& elemVolVars,
+                       const SubControlVolume& scv) const
+    {
+        NumEqVector values(0.0);
+        const auto& volVars = elemVolVars[scv];
+        const int liquidPhaseIdx = FluidSystem::liquidPhaseIdx;
+        const int gasPhaseIdx = FluidSystem::gasPhaseIdx;
+
+        const Scalar porosity = volVars.porosity();
+        const Scalar liquidSaturation = volVars.saturation(liquidPhaseIdx);
+        const Scalar gasSaturation = volVars.saturation(gasPhaseIdx);
+        const Scalar waterContent = porosity*liquidSaturation;
+        const Scalar moistureFactor = moistureDecayFactor_(waterContent);
+
+        constexpr Scalar oxygenRegularization = 1.0e-12;
+        const auto regularizedOxygenMoleFraction =
+            [=](Scalar x)
+            {
+                const Scalar ratio = x/oxygenRegularization;
+                return x*(Scalar(1.0) - std::exp(-ratio*ratio));
+            };
+
+        const Scalar xO2Liquid = regularizedOxygenMoleFraction(
+            volVars.moleFraction(liquidPhaseIdx, FluidSystem::O2Idx));
+        const Scalar xO2Gas = regularizedOxygenMoleFraction(
+            volVars.moleFraction(gasPhaseIdx, FluidSystem::O2Idx));
+
+        const Scalar liquidOxygenInventory =
+            porosity*liquidSaturation
+            *volVars.molarDensity(liquidPhaseIdx)*xO2Liquid;
+        const Scalar gasOxygenInventory =
+            porosity*gasSaturation
+            *volVars.molarDensity(gasPhaseIdx)*xO2Gas;
+
+        // HYDRUS first-order constants, converted from 1/h to 1/s.
+        constexpr Scalar liquidDecayRate = 0.06/3600.0;
+        constexpr Scalar gasDecayRate = 0.002/3600.0;
+
+        values[Indices::conti0EqIdx + FluidSystem::O2Idx] =
+            -moistureFactor
+            *(liquidDecayRate*liquidOxygenInventory
+              + gasDecayRate*gasOxygenInventory);
+
+        return values;
+    }
+
+private:
+    Scalar boundaryTime_() const
+    {
+        if (timeLoop_)
+            return timeLoop_->time() + timeLoop_->timeStepSize();
+
+        return time_;
+    }
+
+    static Scalar liquidMoleFractionFromLiquidMassConcentration_(Scalar c)
+    {
+        constexpr Scalar waterDensity = 1000.0;
+        const Scalar oxygenMolarConcentration =
+            c/FluidSystem::molarMass(FluidSystem::O2Idx);
+        const Scalar waterMolarConcentration =
+            waterDensity/FluidSystem::molarMass(FluidSystem::H2OIdx);
+        return oxygenMolarConcentration
+               /(waterMolarConcentration + oxygenMolarConcentration);
+    }
+
+    static Scalar moistureDecayFactor_(Scalar theta)
+    {
+        constexpr Scalar minimumDryRate = 0.1;
+        constexpr Scalar theta0 = 0.06;
+        constexpr Scalar theta1 = 0.15;
+        constexpr Scalar theta2 = 0.25;
+        constexpr Scalar theta3 = 0.37;
+        constexpr Scalar minimumWetRate = 0.3;
+
+        if (theta <= theta0) return minimumDryRate;
+        if (theta < theta1)
+        {
+            const Scalar f = (theta - theta0)/(theta1 - theta0);
+            return minimumDryRate + f*(1.0 - minimumDryRate);
+        }
+        if (theta <= theta2) return 1.0;
+        if (theta < theta3)
+        {
+            const Scalar f = (theta - theta2)/(theta3 - theta2);
+            return 1.0 + f*(minimumWetRate - 1.0);
+        }
+        return minimumWetRate;
+    }
+
+    PrimaryVariables initial_(const GlobalPosition& globalPos) const
+    {
+        const Scalar depthCm = (30.0 - globalPos[1])*100.0;
+        Scalar headCm = -55.0;
+
+        if (depthCm <= 1750.0)
+            headCm = -55.0 + depthCm/1750.0*30.0;
+        else if (depthCm <= 2090.0)
+            headCm = -25.0
+                     + (depthCm - 1750.0)/(2090.0 - 1750.0)*(-125.0);
+        else
+            headCm = -150.0
+                     + (depthCm - 2090.0)/(3000.0 - 2090.0)*50.0;
+
+        return stateFromHead_(
+            globalPos,
+            headCm,
+            initialOxygenMoleFractionAtPosition_(globalPos)
+        );
+    }
+
+    void readInitialOxygenProfile_()
+    {
+        std::ifstream input(initialOxygenProfileFile_);
+        if (!input)
+            throw std::runtime_error(
+                "Cannot open 2-D initial oxygen field: "
+                + initialOxygenProfileFile_
+            );
+
+        Scalar radius = 0.0;
+        Scalar elevation = 0.0;
+        Scalar liquidOxygenMoleFraction = 0.0;
+        std::string line;
+
+        while (std::getline(input, line))
+        {
+            if (line.empty() || line[0] == '#')
+                continue;
+
+            std::istringstream stream(line);
+            if (!(stream >> radius >> elevation >> liquidOxygenMoleFraction))
+                continue;
+
+            oxygenProfileRadius_.push_back(radius);
+            oxygenProfileElevation_.push_back(elevation);
+            oxygenProfileLiquidMoleFraction_.push_back(liquidOxygenMoleFraction);
+        }
+
+        if (oxygenProfileRadius_.empty())
+            throw std::runtime_error("2-D initial oxygen field contains no usable rows");
+
+        std::cout << "Loaded 2-D O2 IC cells = "
+                  << oxygenProfileRadius_.size() << std::endl;
+    }
+
+    Scalar initialOxygenMoleFractionAtPosition_(const GlobalPosition& globalPos) const
+    {
+        const Scalar radius = globalPos[0];
+        const Scalar elevation = globalPos[1];
+        Scalar bestDistanceSquared = std::numeric_limits<Scalar>::max();
+        Scalar bestValue = oxygenProfileLiquidMoleFraction_.front();
+
+        for (std::size_t i = 0; i < oxygenProfileRadius_.size(); ++i)
+        {
+            const Scalar dr = radius - oxygenProfileRadius_[i];
+            const Scalar dz = elevation - oxygenProfileElevation_[i];
+            const Scalar d2 = dr*dr + dz*dz;
+            if (d2 < bestDistanceSquared)
+            {
+                bestDistanceSquared = d2;
+                bestValue = oxygenProfileLiquidMoleFraction_[i];
+                if (d2 < 1.0e-24) break;
+            }
+        }
+        return bestValue;
+    }
+
+    
+    // ==================================================================
+    // HYDROFIX: hydrostatic atmospheric pressure reference.
+    //
+    // z = 30 m is the reference ground elevation:
+    //     p_atm(30 m) = 100000 Pa
+    //
+    // Pressure increases downward according to the reference atmospheric
+    // mixture density used by the atmospheric gas reservoir.
+    // ==================================================================
+    Scalar atmosphericPressureAtElevation_(Scalar elevation) const
+    {
+        constexpr Scalar pRef = 1.0e5;
+        constexpr Scalar zRef = 30.0;
+        constexpr Scalar temperature = 298.15;
+        constexpr Scalar gasConstant = 8.31446261815324;
+        constexpr Scalar waterVaporPressure = 3169.0;
+        constexpr Scalar gravity = 9.81;
+
+        const Scalar cO2 =
+            atmosphericOxygenMassConcentration_
+            /FluidSystem::molarMass(FluidSystem::O2Idx);
+
+        const Scalar cH2O =
+            waterVaporPressure/(gasConstant*temperature);
+
+        const Scalar cDry =
+            (pRef - waterVaporPressure)
+            /(gasConstant*temperature);
+
+        const Scalar cN2 =
+            std::max(
+                Scalar(0.0),
+                cDry - cO2
+            );
+
+        const Scalar rhoAtmosphere =
+            cH2O*FluidSystem::molarMass(FluidSystem::H2OIdx)
+            + cN2*FluidSystem::molarMass(FluidSystem::N2Idx)
+            + cO2*FluidSystem::molarMass(FluidSystem::O2Idx);
+
+        return
+            pRef
+            + rhoAtmosphere*gravity*(zRef - elevation);
+    }
+
+PrimaryVariables stateFromHead_(const GlobalPosition& globalPos,
+                                    Scalar headCm,
+                                    Scalar liquidOxygenMoleFraction) const
+    {
+        PrimaryVariables priVars(0.0);
+        const Scalar localAtmosphericPressure =
+            atmosphericPressureAtElevation_(globalPos[1]);
+        constexpr Scalar waterDensity = 1000.0;
+        constexpr Scalar gravity = 9.81;
+
+        const Scalar liquidPressure =
+            localAtmosphericPressure
+            + waterDensity*gravity*(headCm/100.0);
+
+        if (headCm >= 0.0)
+        {
+            priVars.setState(wPhaseOnly);
+            priVars[pressureIdx] = liquidPressure;
+            priVars[switchIdx] = 0.0;
+            priVars[oxygenIdx] = liquidOxygenMoleFraction;
+        }
+        else
+        {
+            const Scalar capillaryPressure =
+                localAtmosphericPressure - liquidPressure;
+            const auto interaction =
+                this->spatialParams().fluidMatrixInteractionAtPos(globalPos);
+            Scalar liquidSaturation = interaction.sw(capillaryPressure);
+            liquidSaturation = std::clamp(
+                liquidSaturation, Scalar(0.0), Scalar(1.0));
+
+            priVars.setState(bothPhases);
+            priVars[pressureIdx] = liquidPressure;
+            priVars[switchIdx] = 1.0 - liquidSaturation;
+            priVars[oxygenIdx] = liquidOxygenMoleFraction;
+        }
+
+        return priVars;
+    }
+
+    PrimaryVariables drywellState_(const GlobalPosition& globalPos) const
+    {
+        return stateFromHead_(
+            globalPos,
+            drywellHeadCm_(boundaryTime_()),
+            initialOxygenMoleFractionAtPosition_(globalPos)
+        );
+    }
+
+    Scalar drywellHeadCm_(Scalar timeSeconds) const
+    {
+
+        if (externallySupplied4Cycle_(timeSeconds))
+            return drywellInjectionHeadCm_;
+
+        // After external supply stops, the finite drywell reservoir controls
+        // the remaining water head exactly as in the trusted HYDROFIX model.
+        return reservoirHeadCm_;
+    }
+
+    bool isAtmosphere_(const GlobalPosition& globalPos) const
+    { return globalPos[1] > 30.0 - eps_; }
+
+    bool isBottom_(const GlobalPosition& globalPos) const
+    { return globalPos[1] < eps_; }
+
+    bool isVariHeadBoundary_(const GlobalPosition& globalPos) const
+    {
+        const Scalar x = globalPos[0];
+        const Scalar y = globalPos[1];
+
+        const bool mainWall =
+            std::abs(x - 0.61) < eps_
+            && y >= 14.0 - eps_ && y <= 27.0 + eps_;
+        const bool wellBottom =
+            std::abs(y - 14.0) < eps_ && x <= 0.61 + eps_;
+
+        // Match the blue HYDRUS VariHead boundary: the complete lower
+        // 1.22 m-diameter section, i.e. both its vertical wall and bottom.
+        // The upper black 1.23 m-diameter casing wall (ground to 3 m depth)
+        // and its 5 mm radial shoulder are intentionally no-flow.
+        return mainWall || wellBottom;
+    }
+
+    static constexpr Scalar eps_ = 1.0e-6;
+    static constexpr Scalar drywellRadius_ = 0.61;
+    static constexpr Scalar drywellBottomElevation_ = 14.0;
+    Scalar time_ = 0.0;
+    std::shared_ptr<const TimeLoop> timeLoop_;
+    std::string name_;
+    Scalar atmosphericOxygenDiffusionCoefficient_;
+    Scalar atmosphericGasPressureFactor_;
+    bool enableGasPhaseOxygenAdvection_;
+    Scalar drywellStartupRampTime_;
+    Scalar drywellInjectionHeadCm_;
+
+    Scalar reservoirHeadCm_ = 0.0;
+    Scalar lastReservoirNetFluxM3s_ = 0.0;
+
+    static constexpr Scalar reservoirShutoffTimeSeconds_ =
+        163.125247592924*3600.0;
+
+    std::string initialOxygenProfileFile_;
+    std::vector<Scalar> oxygenProfileRadius_;
+    std::vector<Scalar> oxygenProfileElevation_;
+    std::vector<Scalar> oxygenProfileLiquidMoleFraction_;
+
+    // HYDRUS cValue2: 8e-6 g/cm3 = 0.008 kg/m3 inflowing water.
+    static constexpr Scalar drywellInfluentOxygenMassConcentration_ = 0.008;
+    // 0.000261 g/cm3 = 0.261 kg/m3 gas.
+    static constexpr Scalar atmosphericOxygenMassConcentration_ = 0.261;
+};
+
+} // namespace Dumux
+
+#endif
+
+===== LAST 250 LOG LINES: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/calibration/C1_formal_to_480h/run.log =====
+Newton iteration  1 done, maximum relative shift = 2.8565e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 2.1920e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  3 done, maximum relative shift = 9.8985e-05
+Assemble/solve/update time: 0.089(20.03%)/0.35(78.63%)/0.006(1.34%)
+[100%] Time step 5504 done in 0.48 seconds. Wall clock time: 2751.5, time: 1.7242e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.8245e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 1.5140e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  3 done, maximum relative shift = 6.8922e-07
+Assemble/solve/update time: 0.045(11.31%)/0.35(86.97%)/0.0069(1.72%)
+[100%] Time step 5505 done in 0.44 seconds. Wall clock time: 2751.9, time: 1.7245e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.7902e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 2.7683e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  3 done, maximum relative shift = 5.9876e-06
+Assemble/solve/update time: 0.04(10.15%)/0.35(88.22%)/0.0065(1.63%)
+[100%] Time step 5506 done in 0.44 seconds. Wall clock time: 2752.4, time: 1.7249e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.7528e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 4.2392e-05
+Assemble/solve/update time: 0.026(9.87%)/0.23(88.13%)/0.0053(2.00%)
+[100%] Time step 5507 done in 0.29 seconds. Wall clock time: 2752.7, time: 1.7252e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.7877e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 1.9862e-05
+Assemble/solve/update time: 0.029(10.79%)/0.23(87.30%)/0.0051(1.91%)
+[100%] Time step 5508 done in 0.29 seconds. Wall clock time: 2753, time: 1.7256e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.8388e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 2.0527e-05
+Assemble/solve/update time: 0.029(10.98%)/0.23(87.10%)/0.0052(1.92%)
+[100%] Time step 5509 done in 0.29 seconds. Wall clock time: 2753.3, time: 1.726e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.8861e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 1.8074e-05
+Assemble/solve/update time: 0.029(10.60%)/0.24(87.69%)/0.0046(1.71%)
+[100%] Time step 5510 done in 0.29 seconds. Wall clock time: 2753.6, time: 1.7263e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 9.3789e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 9.0438e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  3 done, maximum relative shift = 3.6533e-05
+Assemble/solve/update time: 0.038(9.79%)/0.35(88.65%)/0.0061(1.55%)
+[100%] Time step 5511 done in 0.43 seconds. Wall clock time: 2754, time: 1.7267e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 4.3874e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 5.1467e-05
+Assemble/solve/update time: 0.025(9.62%)/0.23(88.40%)/0.0052(1.98%)
+[100%] Time step 5512 done in 0.29 seconds. Wall clock time: 2754.3, time: 1.727e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 3.1378e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 1.9027e-05
+Assemble/solve/update time: 0.035(12.80%)/0.23(85.31%)/0.0051(1.89%)
+[100%] Time step 5513 done in 0.3 seconds. Wall clock time: 2754.6, time: 1.7274e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 3.0325e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 1.1517e-05
+Assemble/solve/update time: 0.026(10.03%)/0.23(88.20%)/0.0047(1.78%)
+[100%] Time step 5514 done in 0.29 seconds. Wall clock time: 2754.9, time: 1.7278e+06, time step size: 360
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  1 done, maximum relative shift = 2.0473e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  2 done, maximum relative shift = 2.6670e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad r
+Solve: M deltax^k = r[K
+Update: x^(k+1) = x^k - deltax^k[K
+Newton iteration  3 done, maximum relative shift = 2.6470e-05
+Assemble/solve/update time: 0.038(9.46%)/0.35(88.63%)/0.0076(1.90%)
+[100%] Time step 5515 done in 0.44 seconds. Wall clock time: 2755.3, time: 1.728e+06, time step size: 241.75
+Writing output for problem "drywell_HYDROFIX_C1_formal". Took 0.36 seconds.
+Simulation took 2755.7 seconds on 1 processes.
+The cumulative CPU time was 2755.7 seconds.
+
+# Runtime-specified parameters used:
+[ Dispersion ]
+ApplyToGasPhase = "false"
+LongitudinalDispersivity = "0.50"
+TransverseDispersivity = "0.05"
+[ Grid ]
+File = "/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/floodmar_nonames.msh"
+[ LinearSolver ]
+ResidualReduction = "1e-8"
+[ Newton ]
+ChopMaxGasMoleFractionChange = "0.05"
+ChopMaxLiquidMoleFractionChange = "1e-5"
+ChopMaxPressureChange = "2e4"
+ChopMaxSaturationChange = "0.10"
+ChopSaturationBuffer = "0"
+EnableChop = "true"
+MaxRelativeShift = "1e-4"
+MaxSteps = "40"
+MaxTimeStepDivisions = "15"
+TargetSteps = "6"
+UseLineSearch = "false"
+[ PrimaryVariableSwitch ]
+AppearanceSaturation = "1e-4"
+GasAppearanceTolerance = "0.02"
+LiquidAppearanceTolerance = "0.02"
+Verbosity = "0"
+[ Problem ]
+AtmosphericGasPressureFactor = "1.0"
+AtmosphericOxygenDiffusionCoefficient = "1e-6"
+Cycle1WetEndHours = "190.924177951269"
+Cycle2WetEndHours = "959.999"
+Cycle3WetEndHours = "1439.999"
+Cycle4WetEndHours = "1919.999"
+DrywellInjectionHead = "1200"
+DrywellStartupRampTime = "1800"
+EnableGasPhaseOxygenAdvection = "true"
+EnableGravity = "true"
+InitialOxygenProfileFile = "/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/oxygenIC_trueStagnantO2_2880h_2d_xO2.dat"
+Name = "drywell_HYDROFIX_C1_formal"
+[ Restart ]
+Enable = "false"
+[ SpatialParams ]
+Temperature = "298.15"
+[ SpatialParams.Loam ]
+Snr = "0.0"
+Swr = "0.13300"
+VanGenuchtenAlpha = "1.0197e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "1.49217"
+[ SpatialParams.LoamySand ]
+Snr = "0.0"
+Swr = "0.11077"
+VanGenuchtenAlpha = "3.9769e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "2.03252"
+[ SpatialParams.Sand1 ]
+Snr = "0.0"
+Swr = "0.12737"
+VanGenuchtenAlpha = "3.2631e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "3.47614"
+[ SpatialParams.Sand2 ]
+Snr = "0.0"
+Swr = "0.12576"
+VanGenuchtenAlpha = "7.2400e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "3.01351"
+[ SpatialParams.Sand3 ]
+Snr = "0.0"
+Swr = "0.11077"
+VanGenuchtenAlpha = "3.5690e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "2.03252"
+[ SpatialParams.SandyLoam ]
+Snr = "0.0"
+Swr = "0.13203"
+VanGenuchtenAlpha = "2.0394e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "1.40886"
+[ TimeLoop ]
+DtInitial = "1.08"
+MaxTimeStepSize = "360"
+OutputInterval = "21600"
+TEnd = "1728000.000000000000"
+[ Vtk ]
+AddVelocity = "true"
+Precision = "Float64"
+
+# Global default parameters used:
+[ Assembly ]
+NumericDifferenceMethod = "1"
+[ Flux ]
+UpwindWeight = "1.0"
+
+# Unused parameters:
+Grid.Verbose = "true"
+Dispersion.IncludeDrywellBoundaryVelocity = "false"
+PrimaryVariableSwitch.GasPhaseHoldIterations = "48"
+PrimaryVariableSwitch.GasDisappearanceTolerance = "0.01"
+Restart.WriteAtEnd = "true"
+Restart.OutputFile = "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/restarts/restart_480h.dat"
+Output.PlotFluidMatrixInteractions = "false"
+Component.SolidDensity = "2700"
+Component.SolidThermalConductivity = "2.8"
+Component.SolidHeatCapacity = "790"
+
+[We see that] science is eminently perfectible, and that each theory has constantly to give way to a fresh one.
+ - Jules Verne, Journey to the Center of the Earth
+
+
+===== CSV HEADER / LAST ROWS: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_4cycle_equalVolume_80d_FROM0/calibration/C1_formal_to_480h/drywell_HYDROFIX_C1_formal_injection_history.csv =====
+time_h,cycle,phase,dt_s,applied_boundary_head_cm,drywell_net_flux_to_well_m3_s,well_to_soil_flux_m3_s,soil_to_well_flux_m3_s,step_well_to_soil_m3,step_soil_to_well_m3,step_net_to_soil_m3,step_well_storage_change_m3,step_external_supply_m3,cumulative_wetting_well_to_soil_m3,cumulative_wetting_soil_to_well_m3,cumulative_wetting_net_to_soil_m3,cumulative_drainage_well_to_soil_m3,cumulative_drainage_soil_to_well_m3,cumulative_drainage_net_to_soil_m3,cumulative_total_well_to_soil_m3,cumulative_total_soil_to_well_m3,cumulative_total_net_to_soil_m3,cumulative_external_supply_m3,reservoir_state_head_cm,reservoir_state_storage_m3
+0.0003,1,wetting,1.08,0.72,-1.58021137218621e-06,1.58021137218621e-06,0,1.70662828196111e-06,0,1.70662828196111e-06,0.00841670371008549,0.00841841033836745,1.70662828196111e-06,0,1.70662828196111e-06,0,0,0,1.70662828196111e-06,0,1.70662828196111e-06,0.00841841033836745,1200,14.0278395168091
+479.632846088287,1,drainage,360,572.393443431346,-3.80956169815372e-06,0.000116252637864684,0.00011244307616653,0.0418509496312861,0.0404795074199508,0.00137144221133534,0,0,3617.77166025081,0.830025659373323,3616.94163459144,676.535630886998,345.767908669845,330.767722217153,4294.30729113779,346.597934329218,3947.7093568086,3630.96947410825,572.27612453476,6.68983136189592
+479.732846088287,1,drainage,360,572.27612453476,-4.40633689022857e-06,0.000116676320315314,0.000112269983425086,0.0420034753135131,0.0404171940330308,0.00158628128048228,0,0,3617.77166025081,0.830025659373323,3616.94163459144,676.577634362312,345.808325863878,330.769308498434,4294.3492946131,346.638351523251,3947.71094308988,3630.96947410825,572.14042740661,6.68824508061543
+479.832846088287,1,drainage,360,572.14042740661,-4.65095456294435e-06,0.000116816578340782,0.000112165623777837,0.0420539682026814,0.0403796245600214,0.00167434364265997,0,0,3617.77166025081,0.830025659373323,3616.94163459144,676.619688330514,345.848705488438,330.770982842077,4294.3913485813,346.678731147811,3947.71261743352,3630.96947410825,571.997197056079,6.68657073697277
+479.932846088287,1,drainage,360,571.997197056079,-4.78199802993506e-06,0.000116857632050639,0.000112075634020704,0.04206874753823,0.0403472282474533,0.00172151929077662,0,0,3617.77166025081,0.830025659373323,3616.94163459144,676.661757078053,345.889052716685,330.772704361367,4294.43341732884,346.719078376059,3947.71433895281,3630.96947410825,571.84993110351,6.684849217682
+480,1,drainage,241.75408216659,571.84993110351,-4.41039923849396e-06,0.000116561515228632,0.000112151115990138,0.0281792221300449,0.0271129901101546,0.00106623201989033,0,0,3617.77166025081,0.830025659373323,3616.94163459144,676.689936300183,345.916165706795,330.773770593387,4294.46159655097,346.746191366169,3947.71540518483,3630.96947410825,571.758721161855,6.68378298566211
+
+===== RESTART CANDIDATES =====
+/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/test/porousmediumflow/2p2c/drywell_head12m_reservoir_from_production/floodmarchoppednewtonsolver_restart_v4.hh | 7790 bytes
+
+===== FORMAL STAGE FILES =====
+drywell_HYDROFIX_C1_formal-00000.vtu | 6080729 bytes
+drywell_HYDROFIX_C1_formal-00001.vtu | 5375190 bytes
+drywell_HYDROFIX_C1_formal-00002.vtu | 5350310 bytes
+drywell_HYDROFIX_C1_formal-00003.vtu | 5335180 bytes
+drywell_HYDROFIX_C1_formal-00004.vtu | 5322154 bytes
+drywell_HYDROFIX_C1_formal-00005.vtu | 5313322 bytes
+drywell_HYDROFIX_C1_formal-00006.vtu | 5305030 bytes
+drywell_HYDROFIX_C1_formal-00007.vtu | 5296760 bytes
+drywell_HYDROFIX_C1_formal-00008.vtu | 5290250 bytes
+drywell_HYDROFIX_C1_formal-00009.vtu | 5285334 bytes
+drywell_HYDROFIX_C1_formal-00010.vtu | 5280271 bytes
+drywell_HYDROFIX_C1_formal-00011.vtu | 5275227 bytes
+drywell_HYDROFIX_C1_formal-00012.vtu | 5270643 bytes
+drywell_HYDROFIX_C1_formal-00013.vtu | 5267070 bytes
+drywell_HYDROFIX_C1_formal-00014.vtu | 5262235 bytes
+drywell_HYDROFIX_C1_formal-00015.vtu | 5257699 bytes
+drywell_HYDROFIX_C1_formal-00016.vtu | 5255016 bytes
+drywell_HYDROFIX_C1_formal-00017.vtu | 5252235 bytes
+drywell_HYDROFIX_C1_formal-00018.vtu | 5250650 bytes
+drywell_HYDROFIX_C1_formal-00019.vtu | 5250596 bytes
+drywell_HYDROFIX_C1_formal-00020.vtu | 5250812 bytes
+drywell_HYDROFIX_C1_formal-00021.vtu | 5252641 bytes
+drywell_HYDROFIX_C1_formal-00022.vtu | 5255026 bytes
+drywell_HYDROFIX_C1_formal-00023.vtu | 5258913 bytes
+drywell_HYDROFIX_C1_formal-00024.vtu | 5262556 bytes
+drywell_HYDROFIX_C1_formal-00025.vtu | 5266870 bytes
+drywell_HYDROFIX_C1_formal-00026.vtu | 5271515 bytes
+drywell_HYDROFIX_C1_formal-00027.vtu | 5272238 bytes
+drywell_HYDROFIX_C1_formal-00028.vtu | 5274271 bytes
+drywell_HYDROFIX_C1_formal-00029.vtu | 5275569 bytes
+drywell_HYDROFIX_C1_formal-00030.vtu | 5281172 bytes
+drywell_HYDROFIX_C1_formal-00031.vtu | 5286460 bytes
+drywell_HYDROFIX_C1_formal-00032.vtu | 5359833 bytes
+drywell_HYDROFIX_C1_formal-00033.vtu | 5408391 bytes
+drywell_HYDROFIX_C1_formal-00034.vtu | 5528949 bytes
+drywell_HYDROFIX_C1_formal-00035.vtu | 5732437 bytes
+drywell_HYDROFIX_C1_formal-00036.vtu | 5806254 bytes
+drywell_HYDROFIX_C1_formal-00037.vtu | 5872838 bytes
+drywell_HYDROFIX_C1_formal-00038.vtu | 5930542 bytes
+drywell_HYDROFIX_C1_formal-00039.vtu | 5965860 bytes
+drywell_HYDROFIX_C1_formal-00040.vtu | 5989855 bytes
+drywell_HYDROFIX_C1_formal-00041.vtu | 6007697 bytes
+drywell_HYDROFIX_C1_formal-00042.vtu | 6023305 bytes
+drywell_HYDROFIX_C1_formal-00043.vtu | 6039296 bytes
+drywell_HYDROFIX_C1_formal-00044.vtu | 6059423 bytes
+drywell_HYDROFIX_C1_formal-00045.vtu | 6064168 bytes
+drywell_HYDROFIX_C1_formal-00046.vtu | 6067748 bytes
+drywell_HYDROFIX_C1_formal-00047.vtu | 6069396 bytes
+drywell_HYDROFIX_C1_formal-00048.vtu | 6069042 bytes
+drywell_HYDROFIX_C1_formal-00049.vtu | 6068162 bytes
+drywell_HYDROFIX_C1_formal-00050.vtu | 6067362 bytes
+drywell_HYDROFIX_C1_formal-00051.vtu | 6065898 bytes
+drywell_HYDROFIX_C1_formal-00052.vtu | 6063882 bytes
+drywell_HYDROFIX_C1_formal-00053.vtu | 6062402 bytes
+drywell_HYDROFIX_C1_formal-00054.vtu | 6059565 bytes
+drywell_HYDROFIX_C1_formal-00055.vtu | 6058220 bytes
+drywell_HYDROFIX_C1_formal-00056.vtu | 6055279 bytes
+drywell_HYDROFIX_C1_formal-00057.vtu | 6053140 bytes
+drywell_HYDROFIX_C1_formal-00058.vtu | 6051388 bytes
+drywell_HYDROFIX_C1_formal-00059.vtu | 6050250 bytes
+drywell_HYDROFIX_C1_formal-00060.vtu | 6049802 bytes
+drywell_HYDROFIX_C1_formal-00061.vtu | 6051219 bytes
+drywell_HYDROFIX_C1_formal-00062.vtu | 6051732 bytes
+drywell_HYDROFIX_C1_formal-00063.vtu | 6052682 bytes
+drywell_HYDROFIX_C1_formal-00064.vtu | 6054051 bytes
+drywell_HYDROFIX_C1_formal-00065.vtu | 6055196 bytes
+drywell_HYDROFIX_C1_formal-00066.vtu | 6056339 bytes
+drywell_HYDROFIX_C1_formal-00067.vtu | 6056936 bytes
+drywell_HYDROFIX_C1_formal-00068.vtu | 6057159 bytes
+drywell_HYDROFIX_C1_formal-00069.vtu | 6058745 bytes
+drywell_HYDROFIX_C1_formal-00070.vtu | 6059819 bytes
+drywell_HYDROFIX_C1_formal-00071.vtu | 6061691 bytes
+drywell_HYDROFIX_C1_formal-00072.vtu | 6062129 bytes
+drywell_HYDROFIX_C1_formal-00073.vtu | 6063673 bytes
+drywell_HYDROFIX_C1_formal-00074.vtu | 6065149 bytes
+drywell_HYDROFIX_C1_formal-00075.vtu | 6066027 bytes
+drywell_HYDROFIX_C1_formal-00076.vtu | 6067549 bytes
+drywell_HYDROFIX_C1_formal-00077.vtu | 6069378 bytes
+drywell_HYDROFIX_C1_formal-00078.vtu | 6071408 bytes
+drywell_HYDROFIX_C1_formal-00079.vtu | 6071975 bytes
+drywell_HYDROFIX_C1_formal-00080.vtu | 6074231 bytes
+drywell_HYDROFIX_C1_formal.pvd | 8392 bytes
+drywell_HYDROFIX_C1_formal_injection_history.csv | 1848587 bytes
+drywell_HYDROFIX_C1_formal_reservoir_history.csv | 272262 bytes
+run.log | 4234009 bytes

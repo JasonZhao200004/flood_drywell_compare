@@ -1,0 +1,748 @@
+
+I'll be in my bedroom, making no noise and pretending I'm not there.
+ - Harry Potter 
+
+Reading parameters from file /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_calibration/params_calibration.input.
+UGGrid loaded successfully: 12908 elements and 6705 vertices.
+Computed bounding box tree with 25815 nodes for 12908 grid entities in 0.0028754 seconds.
+The H2O-N2-O2 fluid system was configured with the following policy:
+ - use H2O density as liquid mixture density: false
+ - use ideal gas density: false
+ - use N2 viscosity as gas mixture viscosity: false
+ - use N2 heat conductivity as gas mixture heat conductivity: false
+ - use ideal gas heat capacities: false
+-------------------------------------------------------------------------
+Initializing tables for the H2O fluid properties (20000 entries).
+Temperature -> min: 2.731e+02, max: 6.231e+02, n: 100
+Pressure    -> min: 0.000e+00, max: 2.000e+07, n: 200
+-------------------------------------------------------------------------
+Loaded 2-D O2 IC cells = 12908
+Flood-MAR axisymmetric water-N2-O2 model
+Open atmospheric gas-pressure boundary
+O2 surface diffusion coefficient = 1.000e-06 m/s
+Gas-pressure transmissibility factor = 1.000e+00
+Drywell startup ramp time = 4.320e+04 s
+Drywell injection head = 1.200e+03 cm
+Drywell boundary mode = legacy whole-face midpoint
+Initial O2 profile = oxygen_initial_2880.dat
+Formal drywell simulation: 3 cycles, 720 h
+Loaded FloodMAR restart: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/restarts/drywell_HYDROFIX_restart_1440h_fromVTU.dat
+Restart time = 5.184e+06 s (1.440e+03 h)
+Writing output for problem "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_calibration/drywell_C4_calibration". Took 0.22 seconds.
+Colored 12908 elements with 8 colors in 0.005754202 seconds.
+
+Newton solver configured with the following options and parameters:
+ -- Newton.EnableShiftCriterion = true (relative shift convergence criterion)
+ -- Newton.MaxRelativeShift = 1.000e-08
+ -- Newton.MinSteps = 2
+ -- Newton.MaxSteps = 18
+ -- Newton.TargetSteps = 10
+ -- Newton.RetryTimeStepReductionFactor = 5.000e-01
+ -- Newton.MaxTimeStepDivisions = 10
+
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 2.1208e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 7.8858e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.4137e-08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.4952e-12
+Assemble/solve/update time: 0.054(10.12%)/0.47(88.53%)/0.0072(1.35%)
+[  0%] Time step 1 done in 0.59 seconds. Wall clock time: 0.58595, time: 5.184e+06, time step size: 1.08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 5.2175e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.0271e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 3.7688e-08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 8.7112e-13
+Assemble/solve/update time: 0.054(10.36%)/0.46(88.18%)/0.0076(1.46%)
+[  0%] Time step 2 done in 0.57 seconds. Wall clock time: 1.1547, time: 5.184e+06, time step size: 1.62
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 2.3466e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 6.3925e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 8.0233e-08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 4.2995e-13
+Assemble/solve/update time: 0.05(9.54%)/0.46(89.01%)/0.0075(1.44%)
+[  0%] Time step 3 done in 0.57 seconds. Wall clock time: 1.7238, time: 5.184e+06, time step size: 2.43
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.8222e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 5.6559e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.9358e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 5.6558e-13
+Assemble/solve/update time: 0.051(9.78%)/0.46(88.70%)/0.008(1.52%)
+[  0%] Time step 4 done in 0.57 seconds. Wall clock time: 2.2974, time: 5.184e+06, time step size: 3.645
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 3.3684e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 9.7064e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.7374e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.5320e-12
+Assemble/solve/update time: 0.048(9.22%)/0.47(89.30%)/0.0077(1.48%)
+[  0%] Time step 5 done in 0.57 seconds. Wall clock time: 2.8685, time: 5.184e+06, time step size: 5.4675
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.9039e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.2394e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 6.3926e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.4541e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 2.8524e-09
+Assemble/solve/update time: 0.06(9.35%)/0.57(89.26%)/0.0089(1.39%)
+[  0%] Time step 6 done in 0.7 seconds. Wall clock time: 3.5689, time: 5.184e+06, time step size: 8.2013
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 7.6200e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.9819e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 3.1516e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 6.6298e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.2741e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.3576e-10
+Assemble/solve/update time: 0.073(9.04%)/0.72(89.55%)/0.011(1.40%)
+[  0%] Time step 7 done in 0.88 seconds. Wall clock time: 4.4494, time: 5.184e+06, time step size: 11.618
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 7 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.0973e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 4.0117e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.3652e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.3389e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.0976e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.8379e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 2.0879e-12
+Assemble/solve/update time: 0.089(9.47%)/0.83(88.82%)/0.016(1.70%)
+[  0%] Time step 8 done in 1 seconds. Wall clock time: 5.4716, time: 5.184e+06, time step size: 15.491
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.7752e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 5.4358e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.2873e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.0386e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.5634e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.5426e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 7.2334e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 3.9880e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 3.7121e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 3.1315e-10
+Assemble/solve/update time: 0.13(9.65%)/1.2(88.94%)/0.018(1.41%)
+[  0%] Time step 9 done in 1.4 seconds. Wall clock time: 6.9059, time: 5.1841e+06, time step size: 19.364
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.4632e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.2757e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.5481e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.3030e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 7.6226e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 5.4592e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.6191e-10
+Assemble/solve/update time: 0.086(9.38%)/0.81(88.87%)/0.016(1.75%)
+[  0%] Time step 10 done in 1 seconds. Wall clock time: 7.9098, time: 5.1841e+06, time step size: 19.364
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 15 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.5850e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.1293e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.5912e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.1864e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 7.7260e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 8.9464e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.5378e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 1.1746e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 6.6970e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 2.2052e-11
+Assemble/solve/update time: 0.12(9.44%)/1.1(89.15%)/0.018(1.41%)
+[  0%] Time step 11 done in 1.4 seconds. Wall clock time: 9.3161, time: 5.1841e+06, time step size: 24.205
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 13 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.6649e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 8 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.7037e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 1.0526e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.3016e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 34 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 2.5812e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 271 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 6.2493e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1417 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 7.8228e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3350 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 9.0940e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 24.205078125000007 seconds. Retrying with time step of dt = 12.102539062500004 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.4022e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 1.5910e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.2040e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 5.9313e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 3.0721e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 8.1255e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 2.1045e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 1.0985e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 4.4195e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 6.1937e-12
+Assemble/solve/update time: 0.12(9.51%)/1.2(88.92%)/0.021(1.57%)
+[  0%] Time step 12 done in 3 seconds. Wall clock time: 12.345, time: 5.1841e+06, time step size: 12.103
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.1741e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.3830e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 3.0646e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 7.1015e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.4323e-08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.0329e-13
+Assemble/solve/update time: 0.079(10.01%)/0.69(87.95%)/0.016(2.04%)
+[  0%] Time step 13 done in 0.86 seconds. Wall clock time: 13.205, time: 5.1841e+06, time step size: 12.103
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 3.4951e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 5.4953e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.9526e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 3.7980e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.6857e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 5.5143e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 7.6902e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 1.5375e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 6.0715e-09
+Assemble/solve/update time: 0.12(10.23%)/1(88.21%)/0.018(1.56%)
+[  0%] Time step 14 done in 1.2 seconds. Wall clock time: 14.441, time: 5.1842e+06, time step size: 16.137
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 16 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 4.4995e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 7.2999e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.3973e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.1549e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.9359e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.9281e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.4662e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 4.6764e-11
+Assemble/solve/update time: 0.1(10.33%)/0.9(88.08%)/0.016(1.59%)
+[  0%] Time step 15 done in 1.1 seconds. Wall clock time: 15.555, time: 5.1842e+06, time step size: 17.481
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 15 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 4.8669e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 7.2837e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 5.1312e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.8011e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 5.7739e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 4.8933e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 2.5590e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 7.6067e-11
+Assemble/solve/update time: 0.1(10.01%)/0.89(88.20%)/0.018(1.79%)
+[  0%] Time step 16 done in 1.1 seconds. Wall clock time: 16.657, time: 5.1842e+06, time step size: 20.395
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 25 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.9578e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 8 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.0729e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 3.1379e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 4.6684e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.4877e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.1314e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.0155e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 4.0310e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 1.9350e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 3.8234e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 11 done, maximum relative shift = 2.0321e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 12 done, maximum relative shift = 1.1201e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 13 done, maximum relative shift = 6.5366e-11
+Assemble/solve/update time: 0.17(10.07%)/1.4(88.28%)/0.027(1.65%)
+[  0%] Time step 17 done in 1.8 seconds. Wall clock time: 18.46, time: 5.1842e+06, time step size: 23.794
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 17 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 3.8741e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 12 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.3199e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 6.0802e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 5.7393e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.4195e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 4.8134e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.3973e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 1.0652e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 2.6582e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 1.8216e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 11 done, maximum relative shift = 9.4772e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 12 done, maximum relative shift = 2.6162e-11
+Assemble/solve/update time: 0.16(10.31%)/1.3(88.09%)/0.024(1.60%)
+[  0%] Time step 18 done in 1.7 seconds. Wall clock time: 20.126, time: 5.1842e+06, time step size: 18.303
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.3033e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 5.1014e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 3.4404e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.7686e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 3.2509e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.9390e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 6.7972e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 7.5500e-12
+Assemble/solve/update time: 0.1(10.13%)/0.88(88.16%)/0.017(1.71%)
+[  0%] Time step 19 done in 1.1 seconds. Wall clock time: 21.226, time: 5.1842e+06, time step size: 15.253
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 27 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.8434e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 15 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 2.9731e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 194 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 3.5511e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 908 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 1.0316e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1622 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.0609e+04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5125 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 2.0189e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 17.79479980468751 seconds. Retrying with time step of dt = 8.897399902343755 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 8 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.3547e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 4.7452e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 4.0812e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 9.1615e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 4.0820e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.2634e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 7.1485e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 8.2559e-12
+Assemble/solve/update time: 0.11(10.61%)/0.88(87.76%)/0.016(1.63%)
+[  0%] Time step 20 done in 3.3 seconds. Wall clock time: 24.566, time: 5.1843e+06, time step size: 8.8974
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 16 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.7894e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 7.3257e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 7.0333e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 6.7915e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.7702e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 38 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 5.2683e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 344 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 2.8882e+04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1482 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 1.1132e+04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 10.380299886067716 seconds. Retrying with time step of dt = 5.190149943033858 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 9.0946e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 2.3905e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 3.2599e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.9019e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.5060e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.7046e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 4.0115e-09
+Assemble/solve/update time: 0.093(9.79%)/0.85(88.77%)/0.014(1.44%)
+[  0%] Time step 21 done in 2.5 seconds. Wall clock time: 27.053, time: 5.1843e+06, time step size: 5.1901
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.0150e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 8.9085e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.7888e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 3.8542e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 3.0698e-08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.0767e-13
+Assemble/solve/update time: 0.08(9.93%)/0.71(88.65%)/0.011(1.42%)
+[  0%] Time step 22 done in 0.88 seconds. Wall clock time: 27.934, time: 5.1843e+06, time step size: 6.4877
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.5137e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 3.8520e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 2.9522e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 5.2152e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 5.9020e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 6.2172e-10
+Assemble/solve/update time: 0.08(10.48%)/0.67(87.86%)/0.013(1.67%)
+[  0%] Time step 23 done in 0.83 seconds. Wall clock time: 28.769, time: 5.1843e+06, time step size: 8.6502
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 20 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.0447e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 3.3546e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 1.1512e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.4706e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.6303e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 7.1889e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.3375e-11
+Assemble/solve/update time: 0.1(11.23%)/0.78(87.02%)/0.016(1.76%)
+[  0%] Time step 24 done in 0.98 seconds. Wall clock time: 29.752, time: 5.1843e+06, time step size: 11.534
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 19 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.5615e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 2.7688e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.2670e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 3.4650e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.5829e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 4.7563e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 5.6147e-12
+Assemble/solve/update time: 0.092(10.50%)/0.77(87.87%)/0.014(1.63%)
+[  0%] Time step 25 done in 0.97 seconds. Wall clock time: 30.719, time: 5.1843e+06, time step size: 14.417
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 17 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 4.4141e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.0459e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 6.1470e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 1.9933e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.1227e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 5.8342e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 4.9887e-10
+Assemble/solve/update time: 0.097(10.80%)/0.79(87.57%)/0.015(1.62%)
+[  0%] Time step 26 done in 0.98 seconds. Wall clock time: 31.702, time: 5.1843e+06, time step size: 18.021
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 38 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.4203e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 142 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 2.6352e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 330 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 7.3191e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 884 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.5513e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3089 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 2.9287e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 8005 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.4033e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 22.526692461084462 seconds. Retrying with time step of dt = 11.263346230542231 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 20 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 3.4983e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 4.5515e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 2.7053e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 1.3293e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.0834e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 3.7533e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 4.5779e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 3.1353e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 7.8888e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 6.2031e-09
+Assemble/solve/update time: 0.13(10.55%)/1.1(87.59%)/0.023(1.86%)
+[  0%] Time step 27 done in 5.2 seconds. Wall clock time: 36.927, time: 5.1843e+06, time step size: 11.263
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 17 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.4194e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.7899e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 3.3205e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 2.1337e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 2.7573e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 4.1494e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 3.1764e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 2.4580e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 1.3959e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 10 done, maximum relative shift = 7.9018e-07
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration 11 done, maximum relative shift = 2.1875e-11
+Assemble/solve/update time: 0.14(10.01%)/1.2(88.20%)/0.025(1.79%)
+[  0%] Time step 28 done in 1.5 seconds. Wall clock time: 38.439, time: 5.1843e+06, time step size: 11.263
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 16 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.2770e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.2666e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.5445e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 5.7423e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 5.9032e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 1.0047e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 1.2819e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 2.3472e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 7.8709e-09
+Assemble/solve/update time: 0.12(10.71%)/0.98(87.74%)/0.017(1.55%)
+[  0%] Time step 29 done in 1.2 seconds. Wall clock time: 39.661, time: 5.1844e+06, time step size: 10.239
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 13 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 5.6987e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 6.0454e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 1.7933e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  4 done, maximum relative shift = 9.3299e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 1.2870e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  6 done, maximum relative shift = 2.5747e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  7 done, maximum relative shift = 8.5234e-05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  8 done, maximum relative shift = 9.6094e-08
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  9 done, maximum relative shift = 7.7027e-14
+Assemble/solve/update time: 0.12(10.11%)/1(88.29%)/0.018(1.60%)
+[  0%] Time step 30 done in 1.2 seconds. Wall clock time: 40.908, time: 5.1844e+06, time step size: 11.093
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 11 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.7835e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.8306e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 7 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 1.5433e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.3159e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 73 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 6.4488e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 571 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.4816e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1610 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 8.8828e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5284 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 2.7932e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 12.017080258596192 seconds. Retrying with time step of dt = 6.008540129298096 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.0098e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 7.9301e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 8.9630e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 8.2374e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  5 done, maximum relative shift = 7.9676e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 9.4903e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 44 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 4.7608e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 385 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 3.6498e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1350 dof locations on processor 0.
+Newton iteration  9 done, maximum relative shift = 2.4484e+04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5662 dof locations on processor 0.
+Newton iteration 10 done, maximum relative shift = 4.0135e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 6.008540129298096 seconds. Retrying with time step of dt = 3.004270064649048 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 6.1604e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.9998e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 2.4978e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.4426e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 247 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.3177e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1492 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.6230e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9175 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 3.6722e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 3.004270064649048 seconds. Retrying with time step of dt = 1.502135032324524 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 4.1206e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 7 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.9999e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 2.5911e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.5798e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 35 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 2.1413e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 221 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.8623e+04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1207 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 2.8672e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5289 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 3.9443e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 1.502135032324524 seconds. Retrying with time step of dt = 0.751067516162262 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 4.0339e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 89 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 8.5732e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 211 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 8.2090e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 497 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 4.0553e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1793 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 2.4481e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 0.751067516162262 seconds. Retrying with time step of dt = 0.375533758081131 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 5.8986e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.1498e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 3.3915e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 20 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.8533e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 22 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 6.8081e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 26 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 2.8818e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 200 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 7.2617e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 688 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 3.6850e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 2581 dof locations on processor 0.
+Newton iteration  9 done, maximum relative shift = 6.8508e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 0.375533758081131 seconds. Retrying with time step of dt = 0.1877668790405655 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.0640e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 3.5427e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 7 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 3.4749e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 28 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 1.3401e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 64 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.7853e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 139 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 2.8467e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 383 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 1.9015e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1210 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 5.4540e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 0.1877668790405655 seconds. Retrying with time step of dt = 0.09388343952028275 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 1.6681e-01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 6.3372e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 14 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 9.4369e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 52 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 1.3656e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 102 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 3.7248e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 432 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.2550e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1836 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 4.9658e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 0.09388343952028275 seconds. Retrying with time step of dt = 0.04694171976014137 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 5.6626e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 6 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 2.0001e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 5 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 1.1934e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 29 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 8.6309e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 87 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 1.3986e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 265 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 6.5319e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 828 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 7.0281e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 0.04694171976014137 seconds. Retrying with time step of dt = 0.023470859880070687 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 2.2121e-02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.9999e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 9 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 6.5709e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 12 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 1.6358e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 15 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 2.2115e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 10 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.8975e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 39 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 5.3727e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 195 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 9.8828e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 435 dof locations on processor 0.
+Newton iteration  9 done, maximum relative shift = 1.3679e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 904 dof locations on processor 0.
+Newton iteration 10 done, maximum relative shift = 2.5776e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1970 dof locations on processor 0.
+Newton iteration 11 done, maximum relative shift = 2.4136e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[K
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+
+UMFPACK V6.3.2 (Jan 20, 2024): WARNING: matrix is singular
+
+Newton caught exception: "NumericalProblem [solveLinearSystem:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:516]: Linear solver did not converge"
+Newton solver did not converge with dt = 0.023470859880070687 seconds. Retrying with time step of dt = 0.011735429940035343 seconds.
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  1 done, maximum relative shift = 9.6301e-03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 3 dof locations on processor 0.
+Newton iteration  2 done, maximum relative shift = 1.9999e+00
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 8 dof locations on processor 0.
+Newton iteration  3 done, maximum relative shift = 1.8461e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 11 dof locations on processor 0.
+Newton iteration  4 done, maximum relative shift = 2.0975e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 4 dof locations on processor 0.
+Newton iteration  5 done, maximum relative shift = 3.3024e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 14 dof locations on processor 0.
+Newton iteration  6 done, maximum relative shift = 1.2586e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 41 dof locations on processor 0.
+Newton iteration  7 done, maximum relative shift = 8.7051e+02
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 194 dof locations on processor 0.
+Newton iteration  8 done, maximum relative shift = 1.8892e+05
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 389 dof locations on processor 0.
+Newton iteration  9 done, maximum relative shift = 1.0454e+03
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KSwitched primary variables at 1059 dof locations on processor 0.
+Newton iteration 10 done, maximum relative shift = 8.9524e+01
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[Kterminate called after throwing an instance of 'Dumux::NumericalProblem'
+  what():  NumericalProblem [solve:/home/zhe_zhao/dumux-work/dumux/dumux-floodmar/dumux/nonlinear/newtonsolver.hh:350]: Newton solver didn't converge after 10 time-step divisions; dt = 0.011735429940035343.
+
+[DESKTOP-1P3EKVS:00694] *** Process received signal ***
+[DESKTOP-1P3EKVS:00694] Signal: Aborted (6)
+[DESKTOP-1P3EKVS:00694] Signal code:  (-6)
+[DESKTOP-1P3EKVS:00694] [ 0] /lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x752dcfe45330]
+[DESKTOP-1P3EKVS:00694] [ 1] /lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c)[0x752dcfe9ec0c]
+[DESKTOP-1P3EKVS:00694] [ 2] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e)[0x752dcfe4527e]
+[DESKTOP-1P3EKVS:00694] [ 3] /lib/x86_64-linux-gnu/libc.so.6(abort+0xdf)[0x752dcfe288ff]
+[DESKTOP-1P3EKVS:00694] [ 4] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xa5ff5)[0x752dd02a5ff5]
+[DESKTOP-1P3EKVS:00694] [ 5] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xbb0da)[0x752dd02bb0da]
+[DESKTOP-1P3EKVS:00694] [ 6] /lib/x86_64-linux-gnu/libstdc++.so.6(_ZSt10unexpectedv+0x0)[0x752dd02a5a55]
+[DESKTOP-1P3EKVS:00694] [ 7] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xbb391)[0x752dd02bb391]
+[DESKTOP-1P3EKVS:00694] [ 8] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x12ec9)[0x5aaa29ec8ec9]
+[DESKTOP-1P3EKVS:00694] [ 9] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x153c1)[0x5aaa29ecb3c1]
+[DESKTOP-1P3EKVS:00694] [10] /lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x752dcfe2a1ca]
+[DESKTOP-1P3EKVS:00694] [11] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x752dcfe2a28b]
+[DESKTOP-1P3EKVS:00694] [12] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x18625)[0x5aaa29ece625]
+[DESKTOP-1P3EKVS:00694] *** End of error message ***

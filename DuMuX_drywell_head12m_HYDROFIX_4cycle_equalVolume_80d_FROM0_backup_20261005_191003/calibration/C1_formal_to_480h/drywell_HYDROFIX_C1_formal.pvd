@@ -1,0 +1,37 @@
+<?xml version="1.0"?> 
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian"> 
+<Collection> 
+<DataSet timestep="0" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00000.vtu"/> 
+<DataSet timestep="21817.9" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00001.vtu"/> 
+<DataSet timestep="43417.9" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00002.vtu"/> 
+<DataSet timestep="65017.9" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00003.vtu"/> 
+<DataSet timestep="86617.9" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00004.vtu"/> 
+<DataSet timestep="108218" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00005.vtu"/> 
+<DataSet timestep="129818" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00006.vtu"/> 
+<DataSet timestep="151418" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00007.vtu"/> 
+<DataSet timestep="173018" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00008.vtu"/> 
+<DataSet timestep="194618" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00009.vtu"/> 
+<DataSet timestep="216218" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00010.vtu"/> 
+<DataSet timestep="237818" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00011.vtu"/> 
+<DataSet timestep="259418" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00012.vtu"/> 
+<DataSet timestep="281018" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00013.vtu"/> 
+<DataSet timestep="302618" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00014.vtu"/> 
+<DataSet timestep="324218" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00015.vtu"/> 
+<DataSet timestep="345818" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00016.vtu"/> 
+<DataSet timestep="367418" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00017.vtu"/> 
+<DataSet timestep="389018" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00018.vtu"/> 
+<DataSet timestep="410618" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00019.vtu"/> 
+<DataSet timestep="432218" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00020.vtu"/> 
+<DataSet timestep="453818" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00021.vtu"/> 
+<DataSet timestep="475418" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00022.vtu"/> 
+<DataSet timestep="497018" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00023.vtu"/> 
+<DataSet timestep="518618" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00024.vtu"/> 
+<DataSet timestep="540218" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00025.vtu"/> 
+<DataSet timestep="561818" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00026.vtu"/> 
+<DataSet timestep="583418" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00027.vtu"/> 
+<DataSet timestep="605018" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00028.vtu"/> 
+<DataSet timestep="626618" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00029.vtu"/> 
+<DataSet timestep="648218" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00030.vtu"/> 
+<DataSet timestep="669818" group="" part="0" name="" file="drywell_HYDROFIX_C1_formal-00031.vtu"/> 
+</Collection> 
+</VTKFile> 

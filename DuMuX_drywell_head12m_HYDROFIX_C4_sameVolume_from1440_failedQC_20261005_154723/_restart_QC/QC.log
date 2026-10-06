@@ -1,0 +1,135 @@
+
+Chuck Norris has successfully compiled DuMuX.
+
+Reading parameters from file /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_restart_QC/params_QC.input.
+UGGrid loaded successfully: 12908 elements and 6705 vertices.
+Computed bounding box tree with 25815 nodes for 12908 grid entities in 0.00270309 seconds.
+The H2O-N2-O2 fluid system was configured with the following policy:
+ - use H2O density as liquid mixture density: false
+ - use ideal gas density: false
+ - use N2 viscosity as gas mixture viscosity: false
+ - use N2 heat conductivity as gas mixture heat conductivity: false
+ - use ideal gas heat capacities: false
+-------------------------------------------------------------------------
+Initializing tables for the H2O fluid properties (20000 entries).
+Temperature -> min: 2.731e+02, max: 6.231e+02, n: 100
+Pressure    -> min: 0.000e+00, max: 2.000e+07, n: 200
+-------------------------------------------------------------------------
+Loaded 2-D O2 IC cells = 12908
+Flood-MAR axisymmetric water-N2-O2 model
+Open atmospheric gas-pressure boundary
+O2 surface diffusion coefficient = 1.000e-06 m/s
+Gas-pressure transmissibility factor = 1.000e+00
+Drywell startup ramp time = 4.320e+04 s
+Drywell injection head = 1.200e+03 cm
+Drywell boundary mode = legacy whole-face midpoint
+Initial O2 profile = oxygen_initial_2880.dat
+Formal drywell simulation: 3 cycles, 720 h
+Loaded FloodMAR restart: /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/restarts/drywell_HYDROFIX_restart_1440h_fromVTU.dat
+Restart time = 5.184e+06 s (1.440e+03 h)
+Writing output for problem "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_restart_QC/drywell_C4_QC". Took 0.23 seconds.
+Colored 12908 elements with 8 colors in 0.00657102 seconds.
+
+Newton solver configured with the following options and parameters:
+ -- Newton.EnableShiftCriterion = true (relative shift convergence criterion)
+ -- Newton.MaxRelativeShift = 1.000e-08
+ -- Newton.MinSteps = 2
+ -- Newton.MaxSteps = 18
+ -- Newton.TargetSteps = 10
+ -- Newton.RetryTimeStepReductionFactor = 5.000e-01
+ -- Newton.MaxTimeStepDivisions = 10
+
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  1 done, maximum relative shift = 1.8636e-04
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  2 done, maximum relative shift = 6.3790e-06
+Assemble: r(x^k) = dS/dt + div F - q;   M = grad rSolve: M deltax^k = r[KUpdate: x^(k+1) = x^k - deltax^k[KNewton iteration  3 done, maximum relative shift = 3.4850e-09
+Assemble/solve/update time: 0.035(8.57%)/0.37(89.73%)/0.007(1.70%)
+[100%] Time step 1 done in 0.45 seconds. Wall clock time: 0.45172, time: 5.184e+06, time step size: 1
+Writing output for problem "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_restart_QC/drywell_C4_QC". Took 0.22 seconds.
+Simulation took 0.66911 seconds on 1 processes.
+The cumulative CPU time was 0.66911 seconds.
+
+# Runtime-specified parameters used:
+[ Dispersion ]
+ApplyToGasPhase = "false"
+LongitudinalDispersivity = "0.50"
+TransverseDispersivity = "0.05"
+[ Grid ]
+File = "floodmar.msh"
+[ LinearSolver ]
+ResidualReduction = "1e-8"
+[ Newton ]
+MaxRelativeShift = "1e-8"
+MaxSteps = "18"
+[ Problem ]
+AtmosphericGasPressureFactor = "1.0"
+AtmosphericOxygenDiffusionCoefficient = "1e-6"
+DrywellInjectionHead = "1200"
+DrywellStartupRampTime = "43200"
+EnableGravity = "true"
+InitialOxygenProfileFile = "oxygen_initial_2880.dat"
+Name = "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/_restart_QC/drywell_C4_QC"
+[ Restart ]
+Enable = "true"
+File = "/mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/restarts/drywell_HYDROFIX_restart_1440h_fromVTU.dat"
+[ SpatialParams ]
+Temperature = "298.15"
+[ SpatialParams.Loam ]
+Snr = "0.0"
+Swr = "0.13300"
+VanGenuchtenAlpha = "1.0197e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "1.49217"
+[ SpatialParams.LoamySand ]
+Snr = "0.0"
+Swr = "0.11077"
+VanGenuchtenAlpha = "3.9769e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "2.03252"
+[ SpatialParams.Sand1 ]
+Snr = "0.0"
+Swr = "0.12737"
+VanGenuchtenAlpha = "3.2631e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "3.47614"
+[ SpatialParams.Sand2 ]
+Snr = "0.0"
+Swr = "0.12576"
+VanGenuchtenAlpha = "7.2400e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "3.01351"
+[ SpatialParams.Sand3 ]
+Snr = "0.0"
+Swr = "0.11077"
+VanGenuchtenAlpha = "3.5690e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "2.03252"
+[ SpatialParams.SandyLoam ]
+Snr = "0.0"
+Swr = "0.13203"
+VanGenuchtenAlpha = "2.0394e-4"
+VanGenuchtenL = "0.5"
+VanGenuchtenN = "1.40886"
+[ TimeLoop ]
+DtInitial = "1.08"
+MaxTimeStepSize = "360"
+OutputInterval = "21600"
+TEnd = "5184001"
+[ Vtk ]
+AddVelocity = "true"
+
+# Global default parameters used:
+[ Assembly ]
+NumericDifferenceMethod = "1"
+[ Flux ]
+UpwindWeight = "1.0"
+
+# Unused parameters:
+Grid.Verbose = "true"
+Output.PlotFluidMatrixInteractions = "false"
+Component.SolidDensity = "2700"
+Component.SolidThermalConductivity = "2.8"
+Component.SolidHeatCapacity = "790"
+Restart.WriteAtEnd = "false"
+
+Chuck Norris has compiled DuMuX even two times in a row!
+

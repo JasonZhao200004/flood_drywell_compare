@@ -1,0 +1,26 @@
+
+You'll find I'm full of surprises.
+ - Luke Skywalker, Star Wars: The Empire Strikes Back 
+
+terminate called after throwing an instance of 'Dune::IOError'
+  what():  Dune::IOError [read:/home/zhe_zhao/dumux-work/dumux/dune-grid/dune/grid/io/file/gmshreader.hh:386]: Could not open floodmar.msh
+[DESKTOP-1P3EKVS:01467] *** Process received signal ***
+[DESKTOP-1P3EKVS:01467] Signal: Aborted (6)
+[DESKTOP-1P3EKVS:01467] Signal code:  (-6)
+[DESKTOP-1P3EKVS:01467] [ 0] /lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x7b1363a45330]
+[DESKTOP-1P3EKVS:01467] [ 1] /lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c)[0x7b1363a9ec0c]
+[DESKTOP-1P3EKVS:01467] [ 2] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e)[0x7b1363a4527e]
+[DESKTOP-1P3EKVS:01467] [ 3] /lib/x86_64-linux-gnu/libc.so.6(abort+0xdf)[0x7b1363a288ff]
+[DESKTOP-1P3EKVS:01467] [ 4] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xa5ff5)[0x7b1363ea5ff5]
+[DESKTOP-1P3EKVS:01467] [ 5] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xbb0da)[0x7b1363ebb0da]
+[DESKTOP-1P3EKVS:01467] [ 6] /lib/x86_64-linux-gnu/libstdc++.so.6(_ZSt10unexpectedv+0x0)[0x7b1363ea5a55]
+[DESKTOP-1P3EKVS:01467] [ 7] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xbb391)[0x7b1363ebb391]
+[DESKTOP-1P3EKVS:01467] [ 8] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x80680)[0x5d8794b7f680]
+[DESKTOP-1P3EKVS:01467] [ 9] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x899c9)[0x5d8794b889c9]
+[DESKTOP-1P3EKVS:01467] [10] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0xfee84)[0x5d8794bfde84]
+[DESKTOP-1P3EKVS:01467] [11] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x100b22)[0x5d8794bffb22]
+[DESKTOP-1P3EKVS:01467] [12] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x1403c)[0x5d8794b1303c]
+[DESKTOP-1P3EKVS:01467] [13] /lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7b1363a2a1ca]
+[DESKTOP-1P3EKVS:01467] [14] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7b1363a2a28b]
+[DESKTOP-1P3EKVS:01467] [15] /mnt/d/flood_drywell_compare/DuMuX_drywell_head12m_HYDROFIX_C4_sameVolume_from1440/bin/drywell_HYDROFIX_C4_sameVolume(+0x18625)[0x5d8794b17625]
+[DESKTOP-1P3EKVS:01467] *** End of error message ***
